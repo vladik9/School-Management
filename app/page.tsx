@@ -1,9 +1,5 @@
-import SchoolDashboard from '../components/school-dashboard';
+import LoginPage from '@/components/login-page';
 
 export default function Home() {
-  return (
-    <main>
-      <SchoolDashboard />
-    </main>
-  );
+  return <LoginPage />;
 }

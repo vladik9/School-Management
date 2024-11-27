@@ -6,11 +6,11 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Input } from "./ui/input";
 import { Label } from "@/components/ui/label";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { School, GraduationCap, Plus, Users } from 'lucide-react';
-
+import { School, Users } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { logout } from '@/utils/auth';
 type Student = {
   id: number;
   points: number;
@@ -134,6 +134,8 @@ export default function SchoolDashboard() {
   const [selectedInterval, setSelectedInterval] = useState<Interval | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isStudentModalOpen, setIsStudentModalOpen] = useState(false);
+  const router = useRouter();
+
 
   const handleSchoolChange = (value: string) => {
     const school = schools.find(s => s.id === parseInt(value));
@@ -141,6 +143,10 @@ export default function SchoolDashboard() {
       setSelectedSchool(school);
       setSelectedYear(null);
     }
+  };
+  const handleLogout = () => {
+    logout();
+    router.push('/');
   };
 
   const handleYearChange = (value: string) => {
@@ -152,11 +158,12 @@ export default function SchoolDashboard() {
   return (
     <div className="min-h-screen bg-gray-100 p-8">
       <Card className="max-w-6xl mx-auto">
-        <CardHeader>
+        <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle className="text-2xl font-bold flex items-center">
             <School className="mr-2 h-6 w-6" />
             School Management
           </CardTitle>
+          <Button variant="outline" onClick={handleLogout}>Logout</Button>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">

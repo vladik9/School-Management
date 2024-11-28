@@ -11,6 +11,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { School, Users } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { logout } from '@/utils/auth';
+import translations from "../lib/translations";
 type Student = {
   id: number;
   points: number;
@@ -99,32 +100,6 @@ const initialSchoolsData: SchoolData[] = [
       ]
     }))
   },
-  {
-    id: 2,
-    name: "Riverside Academy",
-    years: Array.from({ length: 5 }, (_, i) => ({
-      year: i + 1,
-      disciplines: [
-        {
-          id: 1,
-          name: "Biology",
-          teacher: "Dr. Brown",
-          hours: 4,
-          tasks: [
-            {
-              id: 1,
-              name: "Cell Biology",
-              intervals: Array.from({ length: 5 }, (_, i) => ({
-                id: i + 1,
-                name: `Interval ${i + 1}`,
-                students: mockStudents
-              }))
-            }
-          ]
-        }
-      ]
-    }))
-  }
 ];
 
 export default function SchoolDashboard() {
@@ -161,9 +136,9 @@ export default function SchoolDashboard() {
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle className="text-2xl font-bold flex items-center">
             <School className="mr-2 h-6 w-6" />
-            School Management
+            {translations.dashboardTitle}
           </CardTitle>
-          <Button variant="outline" onClick={handleLogout}>Logout</Button>
+          <Button variant="outline" onClick={handleLogout}>{translations.logout}</Button>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
@@ -218,23 +193,23 @@ export default function SchoolDashboard() {
                             <CardContent>
                               <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
                                 <DialogTrigger asChild>
-                                  <Button variant="outline">View Intervals</Button>
+                                  <Button variant="outline">{translations.viewIntervals}</Button>
                                 </DialogTrigger>
                                 <DialogContent className="sm:max-w-[600px]">
                                   <DialogHeader>
-                                    <DialogTitle>{task.name} - Intervals</DialogTitle>
+                                    <DialogTitle>{task.name} - {translations.intervals}</DialogTitle>
                                   </DialogHeader>
                                   <Table>
                                     <TableHeader>
                                       <TableRow>
-                                        <TableHead>Interval Number</TableHead>
-                                        <TableHead>Actions</TableHead>
+                                        <TableHead>{translations.intervalName}</TableHead>
+                                        <TableHead>{translations.action}</TableHead>
                                       </TableRow>
                                     </TableHeader>
                                     <TableBody>
                                       {task.intervals.map((interval) => (
                                         <TableRow key={interval.id}>
-                                          <TableCell>Interval {interval.id}</TableCell>
+                                          <TableCell>{translations.inter} {interval.id}</TableCell>
                                           <TableCell>
                                             <Dialog open={isStudentModalOpen && selectedInterval?.id === interval.id}
                                               onOpenChange={(open) => {
@@ -244,20 +219,20 @@ export default function SchoolDashboard() {
                                               <DialogTrigger asChild>
                                                 <Button variant="outline" size="sm">
                                                   <Users className="h-4 w-4 mr-2" />
-                                                  View Students
+                                                  {translations.view}
                                                 </Button>
                                               </DialogTrigger>
                                               <DialogContent className="sm:max-w-[800px]">
                                                 <DialogHeader>
-                                                  <DialogTitle>Students - Interval {interval.id}</DialogTitle>
+                                                  <DialogTitle>{translations.inter} {interval.id}</DialogTitle>
                                                 </DialogHeader>
                                                 <Table>
                                                   <TableHeader>
                                                     <TableRow>
-                                                      <TableHead>Student ID</TableHead>
-                                                      <TableHead>Points</TableHead>
-                                                      <TableHead>Final Time</TableHead>
-                                                      <TableHead>Average</TableHead>
+                                                      <TableHead>{translations.studentId}</TableHead>
+                                                      <TableHead>{translations.points}</TableHead>
+                                                      <TableHead>{translations.finalTime}</TableHead>
+                                                      <TableHead>{translations.average}</TableHead>
                                                     </TableRow>
                                                   </TableHeader>
                                                   <TableBody>

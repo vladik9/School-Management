@@ -60,14 +60,14 @@ const mockStudents: Student[] = [
 ];
 
 function toRoman(num: number): string {
-  const romanNumerals = ['I', 'II', 'III', 'IV', 'V'];
+  const romanNumerals = ['Pregatitor', 'I', 'II', 'III', 'IV'];
   return romanNumerals[num - 1] || num.toString();
 }
 
 const initialSchoolsData: SchoolData[] = [
   {
     id: 1,
-    name: "Scoala din Dumbraveni",
+    name: "Liceul Tehnologic \"Iorgu Vârnav Liteanu\"",
     years: Array.from({ length: 5 }, (_, i) => ({
       year: i + 1,
       disciplines: [
@@ -92,6 +92,58 @@ const initialSchoolsData: SchoolData[] = [
               intervals: Array.from({ length: 5 }, (_, i) => ({
                 id: i + 1,
                 name: `Interval ${i + 1}`,
+                students: mockStudents
+              }))
+            }
+          ]
+        },
+        {
+          id: 2,
+          name: "Document",
+          teacher: "Docs",
+          hours: 5,
+          tasks: [
+            {
+              id: 1,
+              name: "Doc1",
+              intervals: Array.from({ length: 5 }, (_, i) => ({
+                id: i + 1,
+                name: `Interval ${i + 1}`,
+                students: mockStudents
+              }))
+            },
+            {
+              id: 2,
+              name: "Doc2",
+              intervals: Array.from({ length: 5 }, (_, i) => ({
+                id: i + 1,
+                name: `Interval ${i + 1}`,
+                students: mockStudents
+              }))
+            }
+          ]
+        },
+        {
+          id: 3,
+          name: "Tabele",
+          teacher: "Table",
+          hours: 5,
+          tasks: [
+            {
+              id: 1,
+              name: "Tabel 1 ",
+              intervals: Array.from({ length: 5 }, (_, i) => ({
+                id: i + 1,
+                name: `Tabel ${i + 1}`,
+                students: mockStudents
+              }))
+            },
+            {
+              id: 2,
+              name: "Tabel 9",
+              intervals: Array.from({ length: 5 }, (_, i) => ({
+                id: i + 1,
+                name: `Tabel ${i + 1}`,
                 students: mockStudents
               }))
             }

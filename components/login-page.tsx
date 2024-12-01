@@ -28,7 +28,8 @@ export default function LoginPage() {
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <Card className="w-full max-w-md">
         <CardHeader>
-          <CardTitle className="text-2xl font-bold text-center">{translations.login}</CardTitle>
+          <CardTitle className="text-2xl font-bold text-center">
+            {translations.login}</CardTitle>
           <CardDescription className="text-center">{translations.loginDescription}</CardDescription>
         </CardHeader>
         <form onSubmit={handleSubmit}>

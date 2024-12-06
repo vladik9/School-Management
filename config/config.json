@@ -1,7 +1,7 @@
 {
   "development": {
-    "username": "school_app_user",
-    "password": "shool_db_acces",
+    "username": "root",
+    "password": "0000",
     "database": "school_management",
     "host": "127.0.0.1",
     "dialect": "mysql"

@@ -12,6 +12,7 @@ import { School, Users } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { logout } from '@/utils/auth';
 import translations from "../lib/translations";
+import AddStudent from "./add-student";
 type Student = {
   id: number;
   points: number;
@@ -126,7 +127,7 @@ const initialSchoolsData: SchoolData[] = [
         {
           id: 3,
           name: "Tabele",
-          teacher: "Table",
+          teacher: "performanta",
           hours: 5,
           tasks: [
             {
@@ -159,7 +160,7 @@ export default function SchoolDashboard() {
   const [selectedSchool, setSelectedSchool] = useState<SchoolData | null>(null);
   const [selectedYear, setSelectedYear] = useState<number | null>(null);
   const [selectedInterval, setSelectedInterval] = useState<Interval | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(true);
   const [isStudentModalOpen, setIsStudentModalOpen] = useState(false);
   const router = useRouter();
 
@@ -182,6 +183,12 @@ export default function SchoolDashboard() {
 
   const selectedYearData = selectedSchool?.years.find(y => y.year === selectedYear);
 
+  const handleCloseModal = () => setIsModalOpen(false);
+  const handleSaveModal = () => {
+    // Your save logic here
+    setIsModalOpen(false);
+  };
+
   return (
     <div className="min-h-screen bg-gray-100 p-8">
       <Card className="max-w-6xl mx-auto">
@@ -195,10 +202,10 @@ export default function SchoolDashboard() {
         <CardContent>
           <div className="space-y-4">
             <div>
-              <Label htmlFor="school-select">Alege Scoala</Label>
+              <Label htmlFor="school-select">{translations.chooseSchool}</Label>
               <Select onValueChange={handleSchoolChange}>
                 <SelectTrigger id="school-select">
-                  <SelectValue placeholder="Alege Scoala" />
+                  <SelectValue placeholder={translations.chooseSchool} />
                 </SelectTrigger>
                 <SelectContent>
                   {schools.map((school) => (
@@ -212,10 +219,10 @@ export default function SchoolDashboard() {
 
             {selectedSchool && (
               <div>
-                <Label htmlFor="year-select">Alege clasa</Label>
+                <Label htmlFor="year-select">{translations.chooseSchool}</Label>
                 <Select onValueChange={handleYearChange}>
                   <SelectTrigger id="year-select">
-                    <SelectValue placeholder="Alege clasa" />
+                    <SelectValue placeholder={translations.chooseSchool} />
                   </SelectTrigger>
                   <SelectContent>
                     {selectedSchool.years.map((yearData) => (
@@ -225,6 +232,8 @@ export default function SchoolDashboard() {
                     ))}
                   </SelectContent>
                 </Select>
+                {/* //TODO - FIX this button */}
+                {/* <Button variant="outline" onClick={() => setIsModalOpen(true)}>{translations.addStudent}</Button> */}
               </div>
             )}
 
@@ -317,6 +326,7 @@ export default function SchoolDashboard() {
               </Accordion>
             )}
           </div>
+          <AddStudent isModalOpen={isModalOpen} handleCloseModal={handleCloseModal} handleSaveModal={handleSaveModal} />
         </CardContent>
       </Card>
     </div>

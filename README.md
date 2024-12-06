@@ -52,3 +52,9 @@ npx sequelize-cli db:seed:all
 ```bash
 npx sequelize-cli db:migrate
 ```
+
+# Undo Migration
+
+```bash
+npx sequelize-cli db:migrate:undo
+```

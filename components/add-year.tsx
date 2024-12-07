@@ -1,37 +1,34 @@
 'use client';
-import React from 'react';
 import GenericModal from '@/components/generic-modal';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import translations from '@/lib/translations';
 
-interface AddClassProps {
+interface AddYearProps {
   isModalOpen: boolean;
   handleCloseModal: () => void;
   handleSaveModal: () => void;
   newRecord: any;
-  setNewRecord: (data: { name: string; }) => void;
+  setNewRecord: (data: { year: number; }) => void;
 }
 
 
-export default function AddClass({ isModalOpen, handleCloseModal, handleSaveModal, newRecord, setNewRecord }: AddClassProps) {
+export default function AddYear({ isModalOpen, handleCloseModal, handleSaveModal, newRecord, setNewRecord }: AddYearProps) {
   return (
     <GenericModal
       isOpen={isModalOpen}
       onClose={handleCloseModal}
       onSave={handleSaveModal}
-      title={translations.addClass}
+      title={translations.addANewYear}
       description={translations.addDescription}
     >
-      {/* Your modal content goes here */}
       <div className="space-y-4">
         <div>
-          <Label htmlFor="name">Name</Label>
-          <Input id="name" placeholder={translations.addNewClass} value={newRecord.name || ''} onChange={(e) =>
-            setNewRecord((prev: any) => ({ ...prev, name: e.target.value }))
+          <Label htmlFor="year">{translations.year}</Label>
+          <Input id="year" placeholder={translations.addYear} value={newRecord.year || ''} onChange={(e) =>
+            setNewRecord((prev: any) => ({ ...prev, year: e.target.value }))
           } />
         </div>
-
       </div>
     </GenericModal>
   );

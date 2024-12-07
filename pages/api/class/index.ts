@@ -2,20 +2,37 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import Class from '../../../models/class.model';
 
 // Handle GET (read all schools)
+
 const getClasses = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    const classes = await Class.findAll();
-    res.status(200).json(classes);
+    const { yearId } = req.query;
+    // Ensure schoolId is provided
+    if (!yearId) {
+      return res.status(400).json({ message: 'YearId is required' });
+    }
+
+    // Query the 'Year' table to find all years for the given schoolId
+    const years = await Class.findAll({
+      where: { yearId },  // Use `where` to filter by schoolId
+    });
+
+    // If no years found, return 404
+    if (!years || years.length === 0) {
+      return res.status(404).json({ message: 'Years not found for the given yearId' });
+    }
+    // Return the found years
+    res.status(200).json(years);
   } catch (error) {
     res.status(500).json({ message: 'Error fetching classes', error });
   }
 };
 
+
 // Handle POST (create school)
 const createClass = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    const { name, schoolId } = req.body.data;
-    const newClass = await Class.create({ name, schoolId });
+    const { name, yearId } = req.body.data;
+    const newClass = await Class.create({ name, yearId });
     res.status(201).json(newClass);
   } catch (error) {
     res.status(500).json({ message: 'Error creating class', error });

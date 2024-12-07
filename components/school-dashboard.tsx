@@ -16,49 +16,11 @@ import AddStudent from "./add-student";
 import AddSchool from "./add-school";
 import { handleGetSchools, handleCreateSchool } from "@/controllers/schools";
 import { handleGetClasses, handleCreateClass } from "@/controllers/classes";
-type Student = {
-  id: number;
-  points: number;
-  finalTime: string;
-  average: number;
-};
-
-type Interval = {
-  id: number;
-  name: string;
-  students: Student[];
-};
-
-type Task = {
-  id: number;
-  name: string;
-  intervals: Interval[];
-};
-
-type Discipline = {
-  id: number;
-  name: string;
-  teacher: string;
-  hours: number;
-  tasks: Task[];
-};
-
-type YearData = {
-  year: number;
-  disciplines: Discipline[];
-};
-
-type ClassData = {
-  id: number;
-  name: string;
-  schoolId: number;
-};
-
-type SchoolData = {
-  id: number;
-  name: string;
-};
-
+import { handleGetYears, handleCreateYear } from "@/controllers/years";
+import AddYear from "./add-year";
+import { toRoman } from "@/utils/functions";
+import { Student, Interval, Task, Discipline, YearData, ClassData, SchoolData } from "@/types/types";
+import AddClass from "./add-class";
 // Mock student data
 const mockStudents: Student[] = [
   { id: 1, points: 85, finalTime: "45:30", average: 82.5 },
@@ -67,11 +29,6 @@ const mockStudents: Student[] = [
   { id: 4, points: 95, finalTime: "38:45", average: 91.0 },
   { id: 5, points: 88, finalTime: "43:20", average: 85.5 },
 ];
-
-function toRoman(num: number): string {
-  const romanNumerals = ['Pregatitor', 'I', 'II', 'III', 'IV'];
-  return romanNumerals[num - 1] || num.toString();
-}
 
 // const initialSchoolsData: SchoolData[] = [
 //   {
@@ -168,9 +125,11 @@ export default function SchoolDashboard() {
   const [selectedSchool, setSelectedSchool] = useState<SchoolData | null>(null);
   const [classes, setClasses] = useState<ClassData[]>([]);
   const [selectedClass, setSelectedClass] = useState<ClassData | null>(null);
+  const [years, setYears] = useState<YearData[]>([]);
   const [selectedYear, setSelectedYear] = useState<number | null>(null);
   const [selectedInterval, setSelectedInterval] = useState<Interval | null>(null);
   const [isSchoolModalOpen, setIsSchoolModalOpen] = useState(false);
+  const [isYearModalOpen, setIsYearModalOpen] = useState(false);
   const [isClassModalOpen, setIsClassModalOpen] = useState(false);
   const [isStudentModalOpen, setIsStudentModalOpen] = useState(false);
   const [newRecord, setNewRecord] = useState({});
@@ -193,19 +152,26 @@ export default function SchoolDashboard() {
     setSchools(schools);
 
   };
+
+  const fetchYears = async () => {
+    const years = await handleGetYears(selectedSchool?.id || '') || [];
+    setYears(years);
+    fetchClasses();
+  };
+
   const fetchClasses = async () => {
-    const classes = await handleGetClasses() || [];
+    const classes = await handleGetClasses(selectedYear?.id || '') || [];
     setClasses(classes);
 
   };
 
 
-  const handleSchoolChange = (value: string) => {
+  const handleSchoolChange = async (value: string) => {
     const school = schools.find(s => s.id === parseInt(value));
     if (school) {
-      setSelectedSchool(school);
-      // setSelectedYear(null);
-      fetchClasses();
+      await setSelectedSchool(school);
+      setSelectedYear(null);
+      fetchYears();
     }
   };
 
@@ -216,9 +182,16 @@ export default function SchoolDashboard() {
     // fetchSchools();
 
   };
+  const handleYearSave = async () => {
+    handleCreateYear(newRecord, selectedSchool?.id || '');
+    setIsYearModalOpen(false);
+    setNewRecord({});
+
+  };
 
   const handleClassSave = () => {
     setIsClassModalOpen(false);
+    handleCreateClass(newRecord, selectedYear?.id || '');
 
   };
 
@@ -226,6 +199,7 @@ export default function SchoolDashboard() {
 
   const handleYearChange = (value: string) => {
     setSelectedYear(parseInt(value));
+    fetchClasses();
   };
 
   // const selectedYearData = selectedSchool?.years.find(y => y.year === selectedYear);
@@ -266,21 +240,47 @@ export default function SchoolDashboard() {
             {selectedSchool && (
               <div>
                 <Label htmlFor="year-select">{translations.chooseYear}</Label>
-                {/* <Select onValueChange={handleYearChange}>
-                  <SelectTrigger id="year-select">
-                    <SelectValue placeholder={translations.chooseSchool} />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {selectedSchool.years.map((yearData) => (
-                      <SelectItem key={yearData.year} value={yearData.year.toString()}>
-                        {toRoman(yearData.year)}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select> */}
+                {years.length > 0 &&
+                  <Select onValueChange={handleYearChange}>
+                    <SelectTrigger id="year-select">
+                      <SelectValue placeholder={translations.chooseSchool} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {years.map((yearData) => (
+                        <SelectItem key={yearData.id} value={yearData.id.toString()}>
+                          {toRoman(yearData.id)}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                }
+                <div style={{ marginTop: '10px', textAlign: 'right' }}>
+                  <Button variant="outline" onClick={() => setIsYearModalOpen(true)}>{translations.addYear}</Button>
+                </div>
+              </div>
+            )}
+
+            {selectedYear && (
+              <div>
+                <Label htmlFor="year-select">{translations.chooseClass}</Label>
+                {classes.length > 0 &&
+                  <Select onValueChange={handleYearChange}>
+                    <SelectTrigger id="year-select">
+                      <SelectValue placeholder={translations.chooseClass} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {classes.map((ClassData) => (
+                        <SelectItem key={ClassData.id} value={ClassData.id.toString()}>
+                          {toRoman(ClassData.id)}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                }
+
                 {/* //TODO - FIX this button */}
                 <div style={{ marginTop: '10px', textAlign: 'right' }}>
-                  <Button variant="outline" onClick={() => setIsClassModalOpen(true)}>{translations.addStudent}</Button>
+                  <Button variant="outline" onClick={() => setIsClassModalOpen(true)}>{translations.addClass}</Button>
                 </div>
               </div>
             )}
@@ -377,8 +377,14 @@ export default function SchoolDashboard() {
           <AddSchool isModalOpen={isSchoolModalOpen} handleCloseModal={() => setIsSchoolModalOpen(false)} handleSaveModal={handleSchoolSave} setNewRecord={setNewRecord}
             newRecord={newRecord} />
 
+          <AddYear isModalOpen={isYearModalOpen} handleCloseModal={() => setIsYearModalOpen(false)} handleSaveModal={handleYearSave} setNewRecord={setNewRecord}
+            newRecord={newRecord} />
 
-          <AddStudent isModalOpen={isClassModalOpen} handleCloseModal={() => setIsClassModalOpen(false)} handleSaveModal={handleClassSave} />
+
+          <AddClass isModalOpen={isClassModalOpen} handleCloseModal={() => setIsClassModalOpen(false)} handleSaveModal={handleClassSave} setNewRecord={setNewRecord}
+            newRecord={newRecord} />
+          {/*
+          <AddStudent isModalOpen={isClassModalOpen} handleCloseModal={() => setIsStudentModalOpen(false)} handleSaveModal={handleClassSave} /> */}
         </CardContent>
       </Card>
     </div>

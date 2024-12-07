@@ -20,7 +20,7 @@ export default function AddSchool({ isModalOpen, handleCloseModal, handleSaveMod
       onClose={handleCloseModal}
       onSave={handleSaveModal}
       title={translations.addSchool}
-      description={translations.addSchoolDescription}
+      description={translations.addDescription}
     >
       <div className="space-y-4">
         <div>

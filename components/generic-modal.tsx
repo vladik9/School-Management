@@ -3,6 +3,7 @@
 import { ReactNode } from 'react';
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import translations from '@/lib/translations';
 
 interface GenericModalProps {
   isOpen: boolean;
@@ -22,8 +23,7 @@ export default function GenericModal({
   title = 'Modal Title',
   description,
   children,
-  cancelText = 'Cancel',
-  saveText = 'Save'
+
 }: GenericModalProps) {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -37,10 +37,10 @@ export default function GenericModal({
         </div>
         <DialogFooter>
           <Button variant="outline" onClick={onClose}>
-            {cancelText}
+            {translations.cancelText}
           </Button>
           <Button onClick={onSave}>
-            {saveText}
+            {translations.saveText}
           </Button>
         </DialogFooter>
       </DialogContent>

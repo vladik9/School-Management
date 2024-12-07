@@ -1,7 +1,7 @@
 'use client';
 export const login = async (email: string, password: string): Promise<boolean> => {
 
-  const response = await fetch('/api/user', {
+  const response = await fetch('/api/users', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

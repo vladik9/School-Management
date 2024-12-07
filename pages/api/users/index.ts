@@ -1,17 +1,8 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import User from '@/models/user.model';
 import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
 import cookie from 'cookie';
 
-// Helper function to generate JWT token
-const generateToken = (userId: number, email: string) => {
-  return jwt.sign(
-    { userId, email },
-    process.env.JWT_SECRET as string, // Secret key should be stored in an env variable
-    { expiresIn: '1h' } // Token expires in 1 hour
-  );
-};
 
 const login = async (req: NextApiRequest, res: NextApiResponse) => {
   const { email, password } = req.body;
@@ -48,6 +39,7 @@ const logout = (req: NextApiRequest, res: NextApiResponse) => {
   res.status(200).json({ message: 'Logged out successfully' });
 };
 
+//FIXME - fix logout as now is not connected to main application and will fix this just as a bonus as not really required for the app
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   switch (req.method) {
     case 'POST':

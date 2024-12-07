@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -13,6 +13,8 @@ import { useRouter } from 'next/navigation';
 import { logout } from '@/utils/auth';
 import translations from "../lib/translations";
 import AddStudent from "./add-student";
+import AddSchool from "./add-school";
+import { handleGetSchools, handleCreateSchool } from "@/controllers/schools";
 type Student = {
   id: number;
   points: number;
@@ -160,9 +162,25 @@ export default function SchoolDashboard() {
   const [selectedSchool, setSelectedSchool] = useState<SchoolData | null>(null);
   const [selectedYear, setSelectedYear] = useState<number | null>(null);
   const [selectedInterval, setSelectedInterval] = useState<Interval | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(true);
+  const [isSchoolModalOpen, setIsSchoolModalOpen] = useState(false);
+  const [isClassModalOpen, setIsClassModalOpen] = useState(false);
   const [isStudentModalOpen, setIsStudentModalOpen] = useState(false);
+  const [newRecord, setNewRecord] = useState({});
+
   const router = useRouter();
+
+  useEffect(() => {
+
+    fetchSchools();
+
+  }, []);
+
+
+  const fetchSchools = async () => {
+    const schools = await handleGetSchools() || [];
+
+    // setSchools(schools);
+  };
 
 
   const handleSchoolChange = (value: string) => {
@@ -183,11 +201,17 @@ export default function SchoolDashboard() {
 
   const selectedYearData = selectedSchool?.years.find(y => y.year === selectedYear);
 
-  const handleCloseModal = () => setIsModalOpen(false);
-  const handleSaveModal = () => {
-    // Your save logic here
-    setIsModalOpen(false);
+
+  const handleSchoolSave = async () => {
+    handleCreateSchool(newRecord);
+    setIsSchoolModalOpen(false);
   };
+
+  const handleClassSave = () => {
+    setIsClassModalOpen(false);
+
+  };
+
 
   return (
     <div className="min-h-screen bg-gray-100 p-8">
@@ -215,6 +239,9 @@ export default function SchoolDashboard() {
                   ))}
                 </SelectContent>
               </Select>
+              <div style={{ marginTop: '10px', textAlign: 'right' }}>
+                <Button variant="outline" onClick={() => setIsSchoolModalOpen(true)}>{translations.addSchool}</Button>
+              </div>
             </div>
 
             {selectedSchool && (
@@ -233,7 +260,9 @@ export default function SchoolDashboard() {
                   </SelectContent>
                 </Select>
                 {/* //TODO - FIX this button */}
-                {/* <Button variant="outline" onClick={() => setIsModalOpen(true)}>{translations.addStudent}</Button> */}
+                <div style={{ marginTop: '10px', textAlign: 'right' }}>
+                  <Button variant="outline" onClick={() => setIsClassModalOpen(true)}>{translations.addStudent}</Button>
+                </div>
               </div>
             )}
 
@@ -252,7 +281,7 @@ export default function SchoolDashboard() {
                               <CardTitle className="text-lg">{task.name}</CardTitle>
                             </CardHeader>
                             <CardContent>
-                              <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+                              <Dialog open={isSchoolModalOpen} onOpenChange={setIsClassModalOpen}>
                                 <DialogTrigger asChild>
                                   <Button variant="outline">{translations.viewIntervals}</Button>
                                 </DialogTrigger>
@@ -326,7 +355,11 @@ export default function SchoolDashboard() {
               </Accordion>
             )}
           </div>
-          <AddStudent isModalOpen={isModalOpen} handleCloseModal={handleCloseModal} handleSaveModal={handleSaveModal} />
+          <AddSchool isModalOpen={isSchoolModalOpen} handleCloseModal={() => setIsSchoolModalOpen(false)} handleSaveModal={handleSchoolSave} setNewRecord={setNewRecord}
+            newRecord={newRecord} />
+
+
+          <AddStudent isModalOpen={isClassModalOpen} handleCloseModal={() => setIsClassModalOpen(false)} handleSaveModal={handleClassSave} />
         </CardContent>
       </Card>
     </div>

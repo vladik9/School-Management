@@ -1,11 +1,11 @@
 import { DataTypes, Model, Optional } from 'sequelize';
 import sequelize from '../db/sequelize';
-import Year from './year.model';
+import School from './school.model';
 
 interface ClassAttributes {
   id: number;
   name: string;
-  yearId: number;
+  schoolId: number;
 }
 
 interface ClassCreationAttributes extends Optional<ClassAttributes, 'id'> {}
@@ -13,7 +13,7 @@ interface ClassCreationAttributes extends Optional<ClassAttributes, 'id'> {}
 class Class extends Model<ClassAttributes, ClassCreationAttributes> implements ClassAttributes {
   public id!: number;
   public name!: string;
-  public yearId!: number;
+  public schoolId!: number;
 }
 
 Class.init(
@@ -27,21 +27,21 @@ Class.init(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    yearId: {
+    schoolId: {
       type: DataTypes.INTEGER,
       references: {
-        model: Year,
+        model: School,
         key: 'id',
       },
     },
   },
   {
     sequelize,
-    tableName: 'classes',
+    tableName: 'years',
   }
 );
 
-Year.hasMany(Class, { foreignKey: 'yearId' });
-Class.belongsTo(Year, { foreignKey: 'yearId' });
+School.hasMany(Class, { foreignKey: 'schoolId' });
+Class.belongsTo(School, { foreignKey: 'schoolId' });
 
 export default Class;

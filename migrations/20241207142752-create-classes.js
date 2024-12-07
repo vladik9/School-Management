@@ -13,10 +13,10 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      schoolId: {
+      yearId: {
         type: Sequelize.INTEGER,
         references: {
-          model: 'schools', // Name of the table you're referencing
+          model: 'years', // Name of the table you're referencing
           key: 'id',
         },
         allowNull: false,

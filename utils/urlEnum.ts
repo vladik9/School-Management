@@ -1,12 +1,12 @@
-import Config from './Config';
 
 export const urlEnum = {
-  login: `${Config.apiUrl}/api/auth/login`,
-  logout: `${Config.apiUrl}/api/auth/logout`,
-  register: `${Config.apiUrl}/api/auth/register`,
-  users: `${Config.apiUrl}/user`,
-  category: `${Config.apiUrl}/api/category`,
-  categories: `${Config.apiUrl}/api/categories`,
+  login: '/api/schools',
+  school: '/api/schools',
+  class: '/api/class',
+  discipline: '/api/discipline',
+  test: '/api/test',
+  interval: '/api/interval',
+  docs: '/api/docs',
 };
 
 export const basicOperationsEnum = {

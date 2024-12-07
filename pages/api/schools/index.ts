@@ -3,7 +3,6 @@ import School from '../../../models/school.model';
 
 // Handle GET (read all schools)
 const getSchools = async (req: NextApiRequest, res: NextApiResponse) => {
-  console.log('get schhols');
   try {
     const schools = await School.findAll();
     res.status(200).json(schools);

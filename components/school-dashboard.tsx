@@ -15,6 +15,7 @@ import translations from "../lib/translations";
 import AddStudent from "./add-student";
 import AddSchool from "./add-school";
 import { handleGetSchools, handleCreateSchool } from "@/controllers/schools";
+import { handleGetClasses, handleCreateClass } from "@/controllers/classes";
 type Student = {
   id: number;
   points: number;
@@ -47,10 +48,15 @@ type YearData = {
   disciplines: Discipline[];
 };
 
+type ClassData = {
+  id: number;
+  name: string;
+  schoolId: number;
+};
+
 type SchoolData = {
   id: number;
   name: string;
-  years: YearData[];
 };
 
 // Mock student data
@@ -67,99 +73,101 @@ function toRoman(num: number): string {
   return romanNumerals[num - 1] || num.toString();
 }
 
-const initialSchoolsData: SchoolData[] = [
-  {
-    id: 1,
-    name: "Liceul Tehnologic \"Iorgu Vârnav Liteanu\"",
-    years: Array.from({ length: 5 }, (_, i) => ({
-      year: i + 1,
-      disciplines: [
-        {
-          id: 1,
-          name: "Educatia fizica",
-          teacher: "Doamna Turcanu",
-          hours: 5,
-          tasks: [
-            {
-              id: 1,
-              name: "Fotbal",
-              intervals: Array.from({ length: 5 }, (_, i) => ({
-                id: i + 1,
-                name: `Interval ${i + 1}`,
-                students: mockStudents
-              }))
-            },
-            {
-              id: 2,
-              name: "Gimnastica",
-              intervals: Array.from({ length: 5 }, (_, i) => ({
-                id: i + 1,
-                name: `Interval ${i + 1}`,
-                students: mockStudents
-              }))
-            }
-          ]
-        },
-        {
-          id: 2,
-          name: "Document",
-          teacher: "Docs",
-          hours: 5,
-          tasks: [
-            {
-              id: 1,
-              name: "Doc1",
-              intervals: Array.from({ length: 5 }, (_, i) => ({
-                id: i + 1,
-                name: `Interval ${i + 1}`,
-                students: mockStudents
-              }))
-            },
-            {
-              id: 2,
-              name: "Doc2",
-              intervals: Array.from({ length: 5 }, (_, i) => ({
-                id: i + 1,
-                name: `Interval ${i + 1}`,
-                students: mockStudents
-              }))
-            }
-          ]
-        },
-        {
-          id: 3,
-          name: "Tabele",
-          teacher: "performanta",
-          hours: 5,
-          tasks: [
-            {
-              id: 1,
-              name: "Tabel 1 ",
-              intervals: Array.from({ length: 5 }, (_, i) => ({
-                id: i + 1,
-                name: `Tabel ${i + 1}`,
-                students: mockStudents
-              }))
-            },
-            {
-              id: 2,
-              name: "Tabel 9",
-              intervals: Array.from({ length: 5 }, (_, i) => ({
-                id: i + 1,
-                name: `Tabel ${i + 1}`,
-                students: mockStudents
-              }))
-            }
-          ]
-        }
-      ]
-    }))
-  },
-];
+// const initialSchoolsData: SchoolData[] = [
+//   {
+//     id: 1,
+//     name: "Liceul Tehnologic \"Iorgu Vârnav Liteanu\"",
+//     years: Array.from({ length: 5 }, (_, i) => ({
+//       year: i + 1,
+//       disciplines: [
+//         {
+//           id: 1,
+//           name: "Educatia fizica",
+//           teacher: "Doamna Turcanu",
+//           hours: 5,
+//           tasks: [
+//             {
+//               id: 1,
+//               name: "Fotbal",
+//               intervals: Array.from({ length: 5 }, (_, i) => ({
+//                 id: i + 1,
+//                 name: `Interval ${i + 1}`,
+//                 students: mockStudents
+//               }))
+//             },
+//             {
+//               id: 2,
+//               name: "Gimnastica",
+//               intervals: Array.from({ length: 5 }, (_, i) => ({
+//                 id: i + 1,
+//                 name: `Interval ${i + 1}`,
+//                 students: mockStudents
+//               }))
+//             }
+//           ]
+//         },
+//         {
+//           id: 2,
+//           name: "Document",
+//           teacher: "Docs",
+//           hours: 5,
+//           tasks: [
+//             {
+//               id: 1,
+//               name: "Doc1",
+//               intervals: Array.from({ length: 5 }, (_, i) => ({
+//                 id: i + 1,
+//                 name: `Interval ${i + 1}`,
+//                 students: mockStudents
+//               }))
+//             },
+//             {
+//               id: 2,
+//               name: "Doc2",
+//               intervals: Array.from({ length: 5 }, (_, i) => ({
+//                 id: i + 1,
+//                 name: `Interval ${i + 1}`,
+//                 students: mockStudents
+//               }))
+//             }
+//           ]
+//         },
+//         {
+//           id: 3,
+//           name: "Tabele",
+//           teacher: "performanta",
+//           hours: 5,
+//           tasks: [
+//             {
+//               id: 1,
+//               name: "Tabel 1 ",
+//               intervals: Array.from({ length: 5 }, (_, i) => ({
+//                 id: i + 1,
+//                 name: `Tabel ${i + 1}`,
+//                 students: mockStudents
+//               }))
+//             },
+//             {
+//               id: 2,
+//               name: "Tabel 9",
+//               intervals: Array.from({ length: 5 }, (_, i) => ({
+//                 id: i + 1,
+//                 name: `Tabel ${i + 1}`,
+//                 students: mockStudents
+//               }))
+//             }
+//           ]
+//         }
+//       ]
+//     }))
+//   },
+// ];
 
 export default function SchoolDashboard() {
-  const [schools, setSchools] = useState<SchoolData[]>(initialSchoolsData);
+  const [schools, setSchools] = useState<SchoolData[]>([]);
   const [selectedSchool, setSelectedSchool] = useState<SchoolData | null>(null);
+  const [classes, setClasses] = useState<ClassData[]>([]);
+  const [selectedClass, setSelectedClass] = useState<ClassData | null>(null);
   const [selectedYear, setSelectedYear] = useState<number | null>(null);
   const [selectedInterval, setSelectedInterval] = useState<Interval | null>(null);
   const [isSchoolModalOpen, setIsSchoolModalOpen] = useState(false);
@@ -169,17 +177,26 @@ export default function SchoolDashboard() {
 
   const router = useRouter();
 
+  const handleLogout = () => {
+    logout();
+    router.push('/');
+  };
+
+
   useEffect(() => {
-
     fetchSchools();
-
   }, []);
 
 
   const fetchSchools = async () => {
     const schools = await handleGetSchools() || [];
+    setSchools(schools);
 
-    // setSchools(schools);
+  };
+  const fetchClasses = async () => {
+    const classes = await handleGetClasses() || [];
+    setClasses(classes);
+
   };
 
 
@@ -187,30 +204,32 @@ export default function SchoolDashboard() {
     const school = schools.find(s => s.id === parseInt(value));
     if (school) {
       setSelectedSchool(school);
-      setSelectedYear(null);
+      // setSelectedYear(null);
+      fetchClasses();
     }
   };
-  const handleLogout = () => {
-    logout();
-    router.push('/');
-  };
-
-  const handleYearChange = (value: string) => {
-    setSelectedYear(parseInt(value));
-  };
-
-  const selectedYearData = selectedSchool?.years.find(y => y.year === selectedYear);
-
 
   const handleSchoolSave = async () => {
     handleCreateSchool(newRecord);
     setIsSchoolModalOpen(false);
+    setNewRecord({});
+    // fetchSchools();
+
   };
 
   const handleClassSave = () => {
     setIsClassModalOpen(false);
 
   };
+
+
+
+  const handleYearChange = (value: string) => {
+    setSelectedYear(parseInt(value));
+  };
+
+  // const selectedYearData = selectedSchool?.years.find(y => y.year === selectedYear);
+
 
 
   return (
@@ -246,8 +265,8 @@ export default function SchoolDashboard() {
 
             {selectedSchool && (
               <div>
-                <Label htmlFor="year-select">{translations.chooseSchool}</Label>
-                <Select onValueChange={handleYearChange}>
+                <Label htmlFor="year-select">{translations.chooseYear}</Label>
+                {/* <Select onValueChange={handleYearChange}>
                   <SelectTrigger id="year-select">
                     <SelectValue placeholder={translations.chooseSchool} />
                   </SelectTrigger>
@@ -258,7 +277,7 @@ export default function SchoolDashboard() {
                       </SelectItem>
                     ))}
                   </SelectContent>
-                </Select>
+                </Select> */}
                 {/* //TODO - FIX this button */}
                 <div style={{ marginTop: '10px', textAlign: 'right' }}>
                   <Button variant="outline" onClick={() => setIsClassModalOpen(true)}>{translations.addStudent}</Button>
@@ -266,9 +285,9 @@ export default function SchoolDashboard() {
               </div>
             )}
 
-            {selectedYearData && (
-              <Accordion type="single" collapsible>
-                {selectedYearData.disciplines.map((discipline) => (
+            {/* {selectedYearData && ( */}
+            {/* <Accordion type="single" collapsible> */}
+            {/* {selectedYearData.disciplines.map((discipline) => (
                   <AccordionItem key={discipline.id} value={discipline.id.toString()}>
                     <AccordionTrigger>
                       {discipline.name} - {discipline.teacher}
@@ -351,9 +370,9 @@ export default function SchoolDashboard() {
                       </div>
                     </AccordionContent>
                   </AccordionItem>
-                ))}
-              </Accordion>
-            )}
+                ))} */}
+            {/* </Accordion> */}
+            {/* )} */}
           </div>
           <AddSchool isModalOpen={isSchoolModalOpen} handleCloseModal={() => setIsSchoolModalOpen(false)} handleSaveModal={handleSchoolSave} setNewRecord={setNewRecord}
             newRecord={newRecord} />

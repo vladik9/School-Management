@@ -1,8 +1,7 @@
 'use client';
 import { urlEnum } from '../utils/urlEnum';
-
-export const handleGetSchools = async () => {
-  const response = await fetch(`${urlEnum.school}`, {
+export const handleGetClasses = async () => {
+  const response = await fetch(`${urlEnum.class}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -12,8 +11,8 @@ export const handleGetSchools = async () => {
   return data;
 };
 
-export const handleCreateSchool = async (data: object) => {
-  const response = await fetch(`${urlEnum.school}`, {
+export const handleCreateClass = async (data: object) => {
+  const response = await fetch(`${urlEnum.class}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

@@ -13,6 +13,10 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
+      teacher: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
       yearId: {
         type: Sequelize.INTEGER,
         references: {

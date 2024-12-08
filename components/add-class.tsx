@@ -26,9 +26,13 @@ export default function AddClass({ isModalOpen, handleCloseModal, handleSaveModa
       {/* Your modal content goes here */}
       <div className="space-y-4">
         <div>
-          <Label htmlFor="name">Name</Label>
+          <Label htmlFor="name">{translations.className}</Label>
           <Input id="name" placeholder={translations.addNewClass} value={newRecord.name || ''} onChange={(e) =>
             setNewRecord((prev: any) => ({ ...prev, name: e.target.value }))
+          } />
+          <Label htmlFor="name">{translations.teacherName}</Label>
+          <Input id="name" placeholder={translations.teacherName} value={newRecord.teacher || ''} onChange={(e) =>
+            setNewRecord((prev: any) => ({ ...prev, teacher: e.target.value }))
           } />
         </div>
 

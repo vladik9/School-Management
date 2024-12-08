@@ -9,14 +9,15 @@ export const handleGetClasses = async (yearId: string) => {
         'Content-Type': 'application/json',
       },
     });
-
     if (!response.ok) {
       throw new Error('Failed to fetch classes');
     }
 
+
     const data = await response.json();
     return data;  // This will return the list of years
   } catch (error) {
+
     console.error(error);
     return { message: 'Error fetching classes' };  // Handle error gracefully
   }

@@ -19,7 +19,7 @@ import { handleGetClasses, handleCreateClass } from "@/controllers/classes";
 import { handleGetYears, handleCreateYear } from "@/controllers/years";
 import AddYear from "./add-year";
 import { toRoman } from "@/utils/functions";
-import { Student, Interval, Task, Discipline, YearData, ClassData, SchoolData } from "@/types/types";
+import { Student, Interval, Test, Discipline, YearData, ClassData, SchoolData } from "@/types/types";
 import AddClass from "./add-class";
 // Mock student data
 const mockStudents: Student[] = [
@@ -224,7 +224,6 @@ export default function SchoolDashboard() {
   // const selectedYearData = selectedSchool?.years.find(y => y.year === selectedYear);
 
 
-
   return (
     <div className="min-h-screen bg-gray-100 p-8">
       <Card className="max-w-6xl mx-auto">
@@ -263,7 +262,7 @@ export default function SchoolDashboard() {
                 {years.length > 0 &&
                   <Select onValueChange={handleYearChange}>
                     <SelectTrigger id="year-select">
-                      <SelectValue placeholder={translations.chooseSchool} />
+                      <SelectValue placeholder={translations.chooseYear} />
                     </SelectTrigger>
                     <SelectContent>
                       {years.map((yearData) => (
@@ -304,6 +303,99 @@ export default function SchoolDashboard() {
                 </div>
               </div>
             )}
+
+
+
+            {classes.length > 0 && (
+              <Accordion type="single" collapsible>
+                {classes.map((discipline) => (
+                  <AccordionItem key={discipline.id} value={discipline.id.toString()}>
+                    <AccordionTrigger>
+                      {/* {discipline.name} - {discipline.teacher} */}
+                      {discipline.name}
+                    </AccordionTrigger>
+                    <AccordionContent>
+                      <div className="space-y-4">
+                        {/* {discipline.map((disciplineItem) => (
+                          <Card key={disciplineItem.id}>
+                            <CardHeader>
+                              <CardTitle className="text-lg">{disciplineItem.name}</CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                              <Dialog open={isSchoolModalOpen} onOpenChange={setIsClassModalOpen}>
+                                <DialogTrigger asChild>
+                                  <Button variant="outline">{translations.viewIntervals}</Button>
+                                </DialogTrigger>
+                                <DialogContent className="sm:max-w-[600px]">
+                                  <DialogHeader>
+                                    <DialogTitle>{disciplineItem.name} - {translations.intervals}</DialogTitle>
+                                  </DialogHeader>
+                                  <Table>
+                                    <TableHeader>
+                                      <TableRow>
+                                        <TableHead>{translations.intervalName}</TableHead>
+                                        <TableHead>{translations.action}</TableHead>
+                                      </TableRow>
+                                    </TableHeader>
+                                    <TableBody>
+                                      {disciplineItem.intervals.map((interval) => (
+                                        <TableRow key={interval.id}>
+                                          <TableCell>{translations.inter} {interval.id}</TableCell>
+                                          <TableCell>
+                                            <Dialog open={isStudentModalOpen && selectedInterval?.id === interval.id}
+                                              onOpenChange={(open) => {
+                                                setIsStudentModalOpen(open);
+                                                if (open) setSelectedInterval(interval);
+                                              }}>
+                                              <DialogTrigger asChild>
+                                                <Button variant="outline" size="sm">
+                                                  <Users className="h-4 w-4 mr-2" />
+                                                  {translations.view}
+                                                </Button>
+                                              </DialogTrigger>
+                                              <DialogContent className="sm:max-w-[800px]">
+                                                <DialogHeader>
+                                                  <DialogTitle>{translations.inter} {interval.id}</DialogTitle>
+                                                </DialogHeader>
+                                                <Table>
+                                                  <TableHeader>
+                                                    <TableRow>
+                                                      <TableHead>{translations.studentId}</TableHead>
+                                                      <TableHead>{translations.points}</TableHead>
+                                                      <TableHead>{translations.finalTime}</TableHead>
+                                                      <TableHead>{translations.average}</TableHead>
+                                                    </TableRow>
+                                                  </TableHeader>
+                                                  <TableBody>
+                                                    {interval.students.map((student) => (
+                                                      <TableRow key={student.id}>
+                                                        <TableCell>{student.id}</TableCell>
+                                                        <TableCell>{student.points}</TableCell>
+                                                        <TableCell>{student.finalTime}</TableCell>
+                                                        <TableCell>{student.average}</TableCell>
+                                                      </TableRow>
+                                                    ))}
+                                                  </TableBody>
+                                                </Table>
+                                              </DialogContent>
+                                            </Dialog>
+                                          </TableCell>
+                                        </TableRow>
+                                      ))}
+                                    </TableBody>
+                                  </Table>
+                                </DialogContent>
+                              </Dialog>
+                            </CardContent>
+                          </Card>
+                        ))} */}
+                      </div>
+                    </AccordionContent>
+                  </AccordionItem>
+                ))}
+              </Accordion>
+            )}
+
 
             {/* {selectedYearData && ( */}
             {/* <Accordion type="single" collapsible> */}

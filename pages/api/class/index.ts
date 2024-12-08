@@ -1,40 +1,59 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import Class from '../../../models/class.model';
+import Class from '@/models/class.model';
+import Discipline from '@/models/discipline.model';
 
 // Handle GET (read all schools)
 
 const getClasses = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const { yearId } = req.query;
-    // Ensure schoolId is provided
+
+    // Validate yearId
     if (!yearId) {
-      return res.status(400).json({ message: 'YearId is required' });
+      return res.status(400).json({ message: 'YearId is required for the given classes' });
     }
 
-    // Query the 'Year' table to find all years for the given schoolId
-    const years = await Class.findAll({
-      where: { yearId },  // Use `where` to filter by schoolId
+    // Fetch all classes for the given yearId
+    const classes = await Class.findAll({
+      where: { yearId },
     });
 
-    // If no years found, return 404
-    if (!years || years.length === 0) {
-      return res.status(404).json({ message: 'Years not found for the given yearId' });
+    // If no classes found, return 404
+    if (!classes || classes.length === 0) {
+      return res.status(404).json( [] );
     }
-    // Return the found years
-    res.status(200).json(years);
+
+    // Fetch disciplines for each class
+    const classesWithDisciplines = await Promise.all(
+      classes.map(async (classData) => {
+        const disciplines = await Discipline.findAll({
+          where: { classId: classData.id }, // Use classId to fetch related disciplines
+          attributes: ['id', 'name' ], // Select relevant fields
+        });
+
+        return {
+          ...classData.toJSON(), // Convert Sequelize instance to plain object
+          disciplines,
+        };
+      })
+    );
+
+    // Return the result
+    res.status(200).json(classesWithDisciplines);
   } catch (error) {
+    console.error("Error in getClasses:", error);
     res.status(500).json({ message: 'Error fetching classes', error });
   }
 };
 
 
+
 // Handle POST (create school)
 const createClass = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    const { name, yearId } = req.body;
-    console.log("🚀 ~ createClass ~ name, yearId:", name, yearId)
+    const { name, teacher,  yearId } = req.body;
 
-    const newClass = await Class.create({ name, yearId });
+    const newClass = await Class.create({ name,teacher, yearId });
     res.status(201).json(newClass);
   } catch (error) {
     res.status(500).json({ message: 'Error creating class', error });

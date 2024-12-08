@@ -5,6 +5,7 @@ import Year from './year.model';
 interface ClassAttributes {
   id: number;
   name: string;
+  teacher: string;
   yearId: number;
 }
 
@@ -13,6 +14,7 @@ interface ClassCreationAttributes extends Optional<ClassAttributes, 'id'> {}
 class Class extends Model<ClassAttributes, ClassCreationAttributes> implements ClassAttributes {
   public id!: number;
   public name!: string;
+  public teacher!: string;
   public yearId!: number;
 }
 
@@ -24,6 +26,10 @@ Class.init(
       primaryKey: true,
     },
     name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    teacher: {
       type: DataTypes.STRING,
       allowNull: false,
     },

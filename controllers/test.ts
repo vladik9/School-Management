@@ -1,9 +1,9 @@
 'use client';
 
 import { urlEnum } from '../utils/urlEnum';
-export const handleGetDisciplines = async (classId: string) => {
+export const handleGetTests = async (classId: string) => {
   try {
-    const response = await fetch(`${urlEnum.discipline}?classId=${classId}`, {
+    const response = await fetch(`${urlEnum.test}?classId=${classId}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -11,20 +11,20 @@ export const handleGetDisciplines = async (classId: string) => {
     });
 
     if (!response.ok) {
-      throw new Error('Failed to fetch disciplines');
+      throw new Error('Failed to fetch tests');
     }
 
     const data = await response.json();
     return data;  // This will return the list of years
   } catch (error) {
     console.error(error);
-    return { message: 'Error fetching discipline' };  // Handle error gracefully
+    return { message: 'Error fetching tests' };  // Handle error gracefully
   }
 };
 
 
-export const handleCreateDiscipline = async (data: object, classId: string) => {
-  const response = await fetch(`${urlEnum.discipline}`, {
+export const handleCreateTest = async (data: object, classId: string) => {
+  const response = await fetch(`${urlEnum.test}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

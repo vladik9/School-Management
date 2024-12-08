@@ -50,7 +50,6 @@ const translations = {
   addDiscipline: "Adaugă disciplină",
   addNewDiscipline: "Adaugă disciplină nouă",
   disciplineName: "Nume disciplină",
-  noDisciplinesAdded: "Nu sunt discipline adaugate",
 
   //Class
   chooseClass: "Alege clasă",
@@ -72,6 +71,8 @@ const translations = {
   name: "Nume",
   title: "Titlu",
   addTest: "Adaugă test",
+  testName: "Numele testului",
+  noTestAdded: "Nu sunt teste adaugate",
 
   //Interval
   viewIntervals: "Vizualizare intervaluri",

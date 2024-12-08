@@ -17,12 +17,12 @@ import AddSchool from "./add-school";
 import { handleGetSchools, handleCreateSchool } from "@/controllers/schools";
 import { handleGetClasses, handleCreateClass } from "@/controllers/classes";
 import { handleGetYears, handleCreateYear } from "@/controllers/years";
-import { handleCreateDiscipline } from "@/controllers/discipline";
+import { handleCreateTest } from "@/controllers/test";
 import AddYear from "./add-year";
 import { toRoman } from "@/utils/functions";
-import { Student, Interval, Test, Discipline, YearData, ClassData, SchoolData } from "@/types/types";
+import { Student, Interval, Test, YearData, ClassData, SchoolData } from "@/types/types";
 import AddClass from "./add-class";
-import AddDiscipline from "./add-discipline";
+import AddTest from "./add-test";
 // Mock student data
 const mockStudents: Student[] = [
   { id: 1, points: 85, finalTime: "45:30", average: 82.5 },
@@ -134,7 +134,7 @@ export default function SchoolDashboard() {
   const [isSchoolModalOpen, setIsSchoolModalOpen] = useState(false);
   const [isYearModalOpen, setIsYearModalOpen] = useState(false);
   const [isClassModalOpen, setIsClassModalOpen] = useState(false);
-  const [isDisciplineModalOpen, setIsDisciplineModalOpen] = useState(false);
+  const [isTestModalOpen, setIsTestModalOpen] = useState(false);
   const [isStudentModalOpen, setIsStudentModalOpen] = useState(false);
   const [newRecord, setNewRecord] = useState({});
 
@@ -211,17 +211,16 @@ export default function SchoolDashboard() {
     setIsClassModalOpen(false);
     handleCreateClass(newRecord, selectedYear);
   };
-  const handleSelectingDiscipline = (disciplineId: number) => {
-    setIsDisciplineModalOpen(true);
-    setSelectedClassId(disciplineId);
-    console.log("disciplineId", disciplineId);
+  const handleSelectingTest = (testId: number) => {
+    setIsTestModalOpen(true);
+    setSelectedClassId(testId);
 
   };
 
-  const handleDisciplineSave = () => {
+  const handleTestSave = () => {
     console.log(selectedClassId);
-    setIsDisciplineModalOpen(false);
-    handleCreateDiscipline(newRecord, selectedClassId);
+    setIsTestModalOpen(false);
+    handleCreateTest(newRecord, selectedClassId);
   };
 
 
@@ -299,27 +298,29 @@ export default function SchoolDashboard() {
             {classes.length > 0 && (
               <div>
                 <Accordion type="single" collapsible>
-                  {classes.map((discipline) => (
-                    <AccordionItem key={discipline.id} value={discipline.id.toString()}>
+                  {classes.map((the_class) => (
+                    <AccordionItem key={the_class.id} value={the_class.id.toString()}>
                       <AccordionTrigger>
-                        {discipline.name} - {discipline.teacher}
+                        {the_class.name} - {the_class.teacher}
                       </AccordionTrigger>
                       <AccordionContent>
                         <div className="space-y-4">
-                          {discipline.disciplines.length > 0 ? (
-                            discipline.disciplines.map((disciplineItem) => (
-                              <Card key={disciplineItem.id}>
+                          {the_class.tests.length > 0 ? (
+                            the_class.tests.map((testItem) => (
+                              <Card key={testItem.id}>
                                 <CardHeader>
-                                  <CardTitle className="text-lg">{disciplineItem.name}</CardTitle>
+                                  <CardTitle className="text-lg">{testItem.name}</CardTitle>
                                 </CardHeader>
                                 <CardContent>
                                   <Dialog open={isSchoolModalOpen} onOpenChange={setIsClassModalOpen}>
                                     <DialogTrigger asChild>
-                                      <Button variant="outline">{translations.viewIntervals}</Button>
+                                      <div style={{ marginTop: '10px', textAlign: 'center' }}>
+                                        <Button variant="outline">{translations.viewIntervals}</Button>
+                                      </div>
                                     </DialogTrigger>
                                     <DialogContent className="sm:max-w-[600px]">
                                       <DialogHeader>
-                                        <DialogTitle>{disciplineItem.name} - {translations.intervals}</DialogTitle>
+                                        <DialogTitle>{testItem.name} - {translations.intervals}</DialogTitle>
                                       </DialogHeader>
                                       <Table>
                                         <TableHeader>
@@ -382,32 +383,32 @@ export default function SchoolDashboard() {
                             ))
                           ) :
                             (<div className="text-center">
-                              <p>{translations.noDisciplinesAdded}</p></div>
+                              <p>{translations.noTestAdded}</p></div>
                             )}
                         </div>
                         <div style={{ marginTop: '10px', textAlign: 'right' }}>
-                          <Button variant="outline" onClick={() => handleSelectingDiscipline(discipline.id)}>{translations.addTest}</Button>
+                          <Button variant="outline" onClick={() => handleSelectingTest(the_class.id)}>{translations.addTest}</Button>
                         </div>
                       </AccordionContent>
                     </AccordionItem>
                   ))}
                 </Accordion>
                 <div style={{ marginTop: '10px', textAlign: 'right' }}>
-                  <Button variant="outline" onClick={() => setIsDisciplineModalOpen(true)}>{translations.addClass}</Button>
+                  <Button variant="outline" onClick={() => setIsClassModalOpen(true)}>{translations.addClass}</Button>
                 </div>
               </div>
             )}
-            {/* TODO fix this at some point  */}
-            {selectedYear && (
+            {/* TODO fix this at some point, remove or make it show only if no class is added  */}
+            {/* {selectedYear && (
               <div>
                 <div className="text-center">
-                  <p>{translations.noDisciplinesAdded}</p>
+                  <p>{translations.noClassesAdded}</p>
                 </div>
                 <div style={{ marginTop: '10px', textAlign: 'right' }}>
-                  <Button variant="outline" onClick={() => setIsDisciplineModalOpen(true)}>{translations.addClass}</Button>
+                  <Button variant="outline" onClick={() => setIsClassModalOpen(true)}>{translations.addClass}</Button>
                 </div>
               </div>
-            )}
+            )} */}
 
 
 
@@ -510,7 +511,7 @@ export default function SchoolDashboard() {
           <AddClass isModalOpen={isClassModalOpen} handleCloseModal={() => setIsClassModalOpen(false)} handleSaveModal={handleClassSave} setNewRecord={setNewRecord}
             newRecord={newRecord} />
 
-          <AddDiscipline isModalOpen={isDisciplineModalOpen} handleCloseModal={() => setIsDisciplineModalOpen(false)} handleSaveModal={handleDisciplineSave} setNewRecord={setNewRecord}
+          <AddTest isModalOpen={isTestModalOpen} handleCloseModal={() => setIsTestModalOpen(false)} handleSaveModal={handleTestSave} setNewRecord={setNewRecord}
             newRecord={newRecord} />
           {/*
           <AddStudent isModalOpen={isClassModalOpen} handleCloseModal={() => setIsStudentModalOpen(false)} handleSaveModal={handleClassSave} /> */}

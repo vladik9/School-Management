@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import Class from '@/models/class.model';
-import Discipline from '@/models/discipline.model';
+import Test from '@/models/test.model';
 
 // Handle GET (read all schools)
 
@@ -24,22 +24,22 @@ const getClasses = async (req: NextApiRequest, res: NextApiResponse) => {
     }
 
     // Fetch disciplines for each class
-    const classesWithDisciplines = await Promise.all(
+    const classesWithTests = await Promise.all(
       classes.map(async (classData) => {
-        const disciplines = await Discipline.findAll({
+        const tests = await Test.findAll({
           where: { classId: classData.id }, // Use classId to fetch related disciplines
           attributes: ['id', 'name' ], // Select relevant fields
         });
 
         return {
           ...classData.toJSON(), // Convert Sequelize instance to plain object
-          disciplines,
+          tests,
         };
       })
     );
 
     // Return the result
-    res.status(200).json(classesWithDisciplines);
+    res.status(200).json(classesWithTests);
   } catch (error) {
     console.error("Error in getClasses:", error);
     res.status(500).json({ message: 'Error fetching classes', error });

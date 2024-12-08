@@ -17,12 +17,6 @@ type Test = {
   intervals: Interval[];
 };
 
-type Discipline = {
-  id: number;
-  name: string;
-  hours: number;
-  test: Test[];
-};
 
 type YearData = {
   id: number;
@@ -34,7 +28,7 @@ type ClassData = {
   name: string;
   schoolId: number;
   teacher: string;
-  disciplines: Discipline[];
+  tests: Test[];
 };
 
 type SchoolData = {
@@ -43,7 +37,6 @@ type SchoolData = {
 };
 
 export {
-  Discipline,
   YearData,
   ClassData,
   SchoolData,

@@ -12,17 +12,18 @@ import { School, Users } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { logout } from '@/utils/auth';
 import translations from "../lib/translations";
-import AddStudent from "./add-student";
-import AddSchool from "./add-school";
+import AddStudent from "./add-modals/add-student";
+import AddSchool from "./add-modals/add-school";
 import { handleGetSchools, handleCreateSchool } from "@/controllers/schools";
 import { handleGetClasses, handleCreateClass } from "@/controllers/classes";
 import { handleGetYears, handleCreateYear } from "@/controllers/years";
 import { handleCreateTest } from "@/controllers/test";
-import AddYear from "./add-year";
+import AddYear from "./add-modals/add-year";
 import { toRoman } from "@/utils/functions";
 import { Student, Interval, Test, YearData, ClassData, SchoolData } from "@/types/types";
-import AddClass from "./add-class";
-import AddTest from "./add-test";
+import AddClass from "./add-modals/add-class";
+import AddTest from "./add-modals/add-test";
+import AddViewIntervals from "./add-modals/add-view-intervals";
 // Mock student data
 const mockStudents: Student[] = [
   { id: 1, points: 85, finalTime: "45:30", average: 82.5 },
@@ -127,7 +128,6 @@ export default function SchoolDashboard() {
   const [selectedSchool, setSelectedSchool] = useState<SchoolData | null>(null);
   const [classes, setClasses] = useState<ClassData[]>([]);
   const [selectedClassId, setSelectedClassId] = useState<number>();
-  const [selectedClass, setSelectedClass] = useState<ClassData | null>(null);
   const [years, setYears] = useState<YearData[]>([]);
   const [selectedYear, setSelectedYear] = useState<number | null>(null);
   const [selectedInterval, setSelectedInterval] = useState<Interval | null>(null);
@@ -135,6 +135,7 @@ export default function SchoolDashboard() {
   const [isYearModalOpen, setIsYearModalOpen] = useState(false);
   const [isClassModalOpen, setIsClassModalOpen] = useState(false);
   const [isTestModalOpen, setIsTestModalOpen] = useState(false);
+  const [isIntervalModalOpen, setIsIntervalModalOpen] = useState(false);
   const [isStudentModalOpen, setIsStudentModalOpen] = useState(false);
   const [newRecord, setNewRecord] = useState({});
 
@@ -513,6 +514,10 @@ export default function SchoolDashboard() {
 
           <AddTest isModalOpen={isTestModalOpen} handleCloseModal={() => setIsTestModalOpen(false)} handleSaveModal={handleTestSave} setNewRecord={setNewRecord}
             newRecord={newRecord} />
+
+          <AddViewIntervals isModalOpen={isIntervalModalOpen} handleCloseModal={() => setIsIntervalModalOpen(false)} handleSaveModal={handleTestSave} setNewRecord={setNewRecord}
+            newRecord={newRecord} />
+
           {/*
           <AddStudent isModalOpen={isClassModalOpen} handleCloseModal={() => setIsStudentModalOpen(false)} handleSaveModal={handleClassSave} /> */}
         </CardContent>

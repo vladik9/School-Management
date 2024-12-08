@@ -1,5 +1,5 @@
 import React from 'react';
-import GenericModal from '@/components/generic-modal';
+import GenericModal from '@/components/generic/generic-modal';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 

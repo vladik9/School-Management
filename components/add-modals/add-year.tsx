@@ -1,5 +1,5 @@
 'use client';
-import GenericModal from '@/components/generic-modal';
+import GenericModal from '@/components/generic/generic-modal';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import translations from '@/lib/translations';

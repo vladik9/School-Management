@@ -31,7 +31,9 @@ const getClasses = async (req: NextApiRequest, res: NextApiResponse) => {
 // Handle POST (create school)
 const createClass = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    const { name, yearId } = req.body.data;
+    const { name, yearId } = req.body;
+    console.log("🚀 ~ createClass ~ name, yearId:", name, yearId)
+
     const newClass = await Class.create({ name, yearId });
     res.status(201).json(newClass);
   } catch (error) {

@@ -154,26 +154,39 @@ export default function SchoolDashboard() {
   };
 
   const fetchYears = async () => {
-    const years = await handleGetYears(selectedSchool?.id || '') || [];
-    setYears(years);
-    fetchClasses();
+    if (!selectedSchool) return;
+    try {
+      const years = await handleGetYears(selectedSchool.id) || [];
+      setYears(years);
+    } catch (error) {
+      console.error("Error fetching years:", error);
+    }
   };
 
   const fetchClasses = async () => {
-    const classes = await handleGetClasses(selectedYear?.id || '') || [];
-    setClasses(classes);
-
-  };
-
-
-  const handleSchoolChange = async (value: string) => {
-    const school = schools.find(s => s.id === parseInt(value));
-    if (school) {
-      await setSelectedSchool(school);
-      setSelectedYear(null);
-      fetchYears();
+    if (!selectedYear) return;
+    try {
+      const classes = await handleGetClasses(selectedYear) || [];
+      setClasses(classes);
+    } catch (error) {
+      console.error("Error fetching classes:", error);
     }
   };
+
+
+  const handleSchoolChange = (value: string) => {
+    const school = schools.find(s => s.id === parseInt(value));
+    if (school) {
+      setSelectedSchool(school); // Update state
+      setSelectedYear(null); // Reset dependent state
+    }
+  };
+  // Trigger fetchYears when selectedSchool changes
+  useEffect(() => {
+    if (selectedSchool) {
+      fetchYears();
+    }
+  }, [selectedSchool]);
 
   const handleSchoolSave = async () => {
     handleCreateSchool(newRecord);
@@ -187,20 +200,26 @@ export default function SchoolDashboard() {
     setIsYearModalOpen(false);
     setNewRecord({});
 
+
   };
 
   const handleClassSave = () => {
     setIsClassModalOpen(false);
-    handleCreateClass(newRecord, selectedYear?.id || '');
-
+    handleCreateClass(newRecord, selectedYear);
   };
 
 
 
   const handleYearChange = (value: string) => {
-    setSelectedYear(parseInt(value));
-    fetchClasses();
+    const year = parseInt(value);
+    setSelectedYear(year); // Update state
   };
+
+  useEffect(() => {
+    if (selectedYear) {
+      fetchClasses();
+    }
+  }, [selectedYear]);
 
   // const selectedYearData = selectedSchool?.years.find(y => y.year === selectedYear);
 
@@ -219,6 +238,7 @@ export default function SchoolDashboard() {
         <CardContent>
           <div className="space-y-4">
             <div>
+              {/* //NOTE - this is for the school */}
               <Label htmlFor="school-select">{translations.chooseSchool}</Label>
               <Select onValueChange={handleSchoolChange}>
                 <SelectTrigger id="school-select">
@@ -236,7 +256,7 @@ export default function SchoolDashboard() {
                 <Button variant="outline" onClick={() => setIsSchoolModalOpen(true)}>{translations.addSchool}</Button>
               </div>
             </div>
-
+            {/* //NOTE - this is for the year */}
             {selectedSchool && (
               <div>
                 <Label htmlFor="year-select">{translations.chooseYear}</Label>
@@ -259,7 +279,7 @@ export default function SchoolDashboard() {
                 </div>
               </div>
             )}
-
+            {/* //NOTE- this is for class */}
             {selectedYear && (
               <div>
                 <Label htmlFor="year-select">{translations.chooseClass}</Label>
@@ -271,7 +291,7 @@ export default function SchoolDashboard() {
                     <SelectContent>
                       {classes.map((ClassData) => (
                         <SelectItem key={ClassData.id} value={ClassData.id.toString()}>
-                          {toRoman(ClassData.id)}
+                          {ClassData.name}
                         </SelectItem>
                       ))}
                     </SelectContent>

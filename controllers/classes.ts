@@ -3,7 +3,7 @@ import { urlEnum } from '../utils/urlEnum';
 
 export const handleGetClasses = async (yearId: string) => {
   try {
-    const response = await fetch(`${urlEnum.class}?schoolId=${yearId}`, {
+    const response = await fetch(`${urlEnum.class}?yearId=${yearId}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -24,7 +24,7 @@ export const handleGetClasses = async (yearId: string) => {
 
 
 export const handleCreateClass = async (data: object, yearId: string) => {
-  const response = await fetch(`${urlEnum.class}`, {
+   const response = await fetch(`${urlEnum.class}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

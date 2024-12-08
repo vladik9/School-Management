@@ -58,6 +58,7 @@ const translations = {
   addNewClass: "Adaugă o clasă nouă",
   teacherName: "Numele profesorului",
   className: "Numele clasei",
+  noClassesAdded: "Nu sunt clase adaugate",
 
   //Student
   studentId: "ID elev",

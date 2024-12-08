@@ -239,6 +239,7 @@ export default function SchoolDashboard() {
 
   // const selectedYearData = selectedSchool?.years.find(y => y.year === selectedYear);
 
+  console.log("classes", classes);
 
   return (
     <div className="min-h-screen bg-gray-100 p-8">
@@ -385,17 +386,29 @@ export default function SchoolDashboard() {
                             )}
                         </div>
                         <div style={{ marginTop: '10px', textAlign: 'right' }}>
-                          <Button variant="outline" onClick={() => handleSelectingDiscipline(discipline.id)}>{translations.addDiscipline}</Button>
+                          <Button variant="outline" onClick={() => handleSelectingDiscipline(discipline.id)}>{translations.addInterval}</Button>
                         </div>
                       </AccordionContent>
                     </AccordionItem>
                   ))}
                 </Accordion>
                 <div style={{ marginTop: '10px', textAlign: 'right' }}>
-                  <Button variant="outline" onClick={() => setIsClassModalOpen(true)}>{translations.addClass}</Button>
+                  <Button variant="outline" onClick={() => setIsDisciplineModalOpen(true)}>{translations.addDiscipline}</Button>
                 </div>
               </div>
             )}
+            {/* TODO fix this at some point  */}
+            {selectedYear && (
+              <div>
+                <div className="text-center">
+                  <p>{translations.noDisciplinesAdded}</p>
+                </div>
+                <div style={{ marginTop: '10px', textAlign: 'right' }}>
+                  <Button variant="outline" onClick={() => setIsDisciplineModalOpen(true)}>{translations.addDiscipline}</Button>
+                </div>
+              </div>
+            )}
+
 
 
             {/* {selectedYearData && ( */}
@@ -503,6 +516,6 @@ export default function SchoolDashboard() {
           <AddStudent isModalOpen={isClassModalOpen} handleCloseModal={() => setIsStudentModalOpen(false)} handleSaveModal={handleClassSave} /> */}
         </CardContent>
       </Card>
-    </div>
+    </div >
   );
 }

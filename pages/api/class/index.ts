@@ -20,7 +20,7 @@ const getClasses = async (req: NextApiRequest, res: NextApiResponse) => {
 
     // If no classes found, return 404
     if (!classes || classes.length === 0) {
-      return res.status(404).json( [] );
+      return res.status(404).json( []);
     }
 
     // Fetch disciplines for each class

@@ -48,6 +48,9 @@ const translations = {
   viewDisciplines: "Vizualizare discipline",
   discipline: "Disciplina",
   addDiscipline: "Adaugă disciplină",
+  addNewDiscipline: "Adaugă disciplină nouă",
+  disciplineName: "Nume disciplină",
+  noDisciplinesAdded: "Nu sunt discipline adaugate",
 
   //Class
   chooseClass: "Alege clasă",

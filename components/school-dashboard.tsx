@@ -17,10 +17,12 @@ import AddSchool from "./add-school";
 import { handleGetSchools, handleCreateSchool } from "@/controllers/schools";
 import { handleGetClasses, handleCreateClass } from "@/controllers/classes";
 import { handleGetYears, handleCreateYear } from "@/controllers/years";
+import { handleCreateDiscipline } from "@/controllers/discipline";
 import AddYear from "./add-year";
 import { toRoman } from "@/utils/functions";
 import { Student, Interval, Test, Discipline, YearData, ClassData, SchoolData } from "@/types/types";
 import AddClass from "./add-class";
+import AddDiscipline from "./add-discipline";
 // Mock student data
 const mockStudents: Student[] = [
   { id: 1, points: 85, finalTime: "45:30", average: 82.5 },
@@ -124,6 +126,7 @@ export default function SchoolDashboard() {
   const [schools, setSchools] = useState<SchoolData[]>([]);
   const [selectedSchool, setSelectedSchool] = useState<SchoolData | null>(null);
   const [classes, setClasses] = useState<ClassData[]>([]);
+  const [selectedClassId, setSelectedClassId] = useState<number>();
   const [selectedClass, setSelectedClass] = useState<ClassData | null>(null);
   const [years, setYears] = useState<YearData[]>([]);
   const [selectedYear, setSelectedYear] = useState<number | null>(null);
@@ -131,6 +134,7 @@ export default function SchoolDashboard() {
   const [isSchoolModalOpen, setIsSchoolModalOpen] = useState(false);
   const [isYearModalOpen, setIsYearModalOpen] = useState(false);
   const [isClassModalOpen, setIsClassModalOpen] = useState(false);
+  const [isDisciplineModalOpen, setIsDisciplineModalOpen] = useState(false);
   const [isStudentModalOpen, setIsStudentModalOpen] = useState(false);
   const [newRecord, setNewRecord] = useState({});
 
@@ -207,13 +211,25 @@ export default function SchoolDashboard() {
     setIsClassModalOpen(false);
     handleCreateClass(newRecord, selectedYear);
   };
+  const handleSelectingDiscipline = (disciplineId: number) => {
+    setIsDisciplineModalOpen(true);
+    setSelectedClassId(disciplineId);
+    console.log("disciplineId", disciplineId);
 
+  };
+
+  const handleDisciplineSave = () => {
+    console.log(selectedClassId);
+    setIsDisciplineModalOpen(false);
+    handleCreateDiscipline(newRecord, selectedClassId);
+  };
 
 
   const handleYearChange = (value: string) => {
     const year = parseInt(value);
-    setSelectedYear(year); // Update state
+    setSelectedYear(year);
   };
+
 
   useEffect(() => {
     if (selectedYear) {
@@ -278,122 +294,107 @@ export default function SchoolDashboard() {
                 </div>
               </div>
             )}
-            {/* //NOTE- this is for class */}
-            {selectedYear && (
+            {/* //NOTE -  this is for the class */}
+            {classes.length > 0 && (
               <div>
-                <Label htmlFor="year-select">{translations.chooseClass}</Label>
-                {classes.length > 0 &&
-                  <Select onValueChange={handleYearChange}>
-                    <SelectTrigger id="year-select">
-                      <SelectValue placeholder={translations.chooseClass} />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {classes.map((ClassData) => (
-                        <SelectItem key={ClassData.id} value={ClassData.id.toString()}>
-                          {ClassData.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                }
-
-                {/* //TODO - FIX this button */}
+                <Accordion type="single" collapsible>
+                  {classes.map((discipline) => (
+                    <AccordionItem key={discipline.id} value={discipline.id.toString()}>
+                      <AccordionTrigger>
+                        {discipline.name} - {discipline.teacher}
+                      </AccordionTrigger>
+                      <AccordionContent>
+                        <div className="space-y-4">
+                          {discipline.disciplines.length > 0 ? (
+                            discipline.disciplines.map((disciplineItem) => (
+                              <Card key={disciplineItem.id}>
+                                <CardHeader>
+                                  <CardTitle className="text-lg">{disciplineItem.name}</CardTitle>
+                                </CardHeader>
+                                <CardContent>
+                                  <Dialog open={isSchoolModalOpen} onOpenChange={setIsClassModalOpen}>
+                                    <DialogTrigger asChild>
+                                      <Button variant="outline">{translations.viewIntervals}</Button>
+                                    </DialogTrigger>
+                                    <DialogContent className="sm:max-w-[600px]">
+                                      <DialogHeader>
+                                        <DialogTitle>{disciplineItem.name} - {translations.intervals}</DialogTitle>
+                                      </DialogHeader>
+                                      <Table>
+                                        <TableHeader>
+                                          <TableRow>
+                                            <TableHead>{translations.intervalName}</TableHead>
+                                            <TableHead>{translations.action}</TableHead>
+                                          </TableRow>
+                                        </TableHeader>
+                                        <TableBody>
+                                          {/* {disciplineItem.intervals.map((interval) => (
+                                          <TableRow key={interval.id}>
+                                            <TableCell>{translations.inter} {interval.id}</TableCell>
+                                            <TableCell>
+                                              <Dialog open={isStudentModalOpen && selectedInterval?.id === interval.id}
+                                                onOpenChange={(open) => {
+                                                  setIsStudentModalOpen(open);
+                                                  if (open) setSelectedInterval(interval);
+                                                }}>
+                                                <DialogTrigger asChild>
+                                                  <Button variant="outline" size="sm">
+                                                    <Users className="h-4 w-4 mr-2" />
+                                                    {translations.view}
+                                                  </Button>
+                                                </DialogTrigger>
+                                                <DialogContent className="sm:max-w-[800px]">
+                                                  <DialogHeader>
+                                                    <DialogTitle>{translations.inter} {interval.id}</DialogTitle>
+                                                  </DialogHeader>
+                                                  <Table>
+                                                    <TableHeader>
+                                                      <TableRow>
+                                                        <TableHead>{translations.studentId}</TableHead>
+                                                        <TableHead>{translations.points}</TableHead>
+                                                        <TableHead>{translations.finalTime}</TableHead>
+                                                        <TableHead>{translations.average}</TableHead>
+                                                      </TableRow>
+                                                    </TableHeader>
+                                                    <TableBody>
+                                                      {interval.students.map((student) => (
+                                                        <TableRow key={student.id}>
+                                                          <TableCell>{student.id}</TableCell>
+                                                          <TableCell>{student.points}</TableCell>
+                                                          <TableCell>{student.finalTime}</TableCell>
+                                                          <TableCell>{student.average}</TableCell>
+                                                        </TableRow>
+                                                      ))}
+                                                    </TableBody>
+                                                  </Table>
+                                                </DialogContent>
+                                              </Dialog>
+                                            </TableCell>
+                                          </TableRow>
+                                        ))} */}
+                                        </TableBody>
+                                      </Table>
+                                    </DialogContent>
+                                  </Dialog>
+                                </CardContent>
+                              </Card>
+                            ))
+                          ) :
+                            (<div className="text-center">
+                              <p>{translations.noDisciplinesAdded}</p></div>
+                            )}
+                        </div>
+                        <div style={{ marginTop: '10px', textAlign: 'right' }}>
+                          <Button variant="outline" onClick={() => handleSelectingDiscipline(discipline.id)}>{translations.addDiscipline}</Button>
+                        </div>
+                      </AccordionContent>
+                    </AccordionItem>
+                  ))}
+                </Accordion>
                 <div style={{ marginTop: '10px', textAlign: 'right' }}>
                   <Button variant="outline" onClick={() => setIsClassModalOpen(true)}>{translations.addClass}</Button>
                 </div>
               </div>
-            )}
-
-
-
-            {classes.length > 0 && (
-              <Accordion type="single" collapsible>
-                {classes.map((discipline) => (
-                  <AccordionItem key={discipline.id} value={discipline.id.toString()}>
-                    <AccordionTrigger>
-                      {/* {discipline.name} - {discipline.teacher} */}
-                      {discipline.name}
-                    </AccordionTrigger>
-                    <AccordionContent>
-                      <div className="space-y-4">
-                        {/* {discipline.map((disciplineItem) => (
-                          <Card key={disciplineItem.id}>
-                            <CardHeader>
-                              <CardTitle className="text-lg">{disciplineItem.name}</CardTitle>
-                            </CardHeader>
-                            <CardContent>
-                              <Dialog open={isSchoolModalOpen} onOpenChange={setIsClassModalOpen}>
-                                <DialogTrigger asChild>
-                                  <Button variant="outline">{translations.viewIntervals}</Button>
-                                </DialogTrigger>
-                                <DialogContent className="sm:max-w-[600px]">
-                                  <DialogHeader>
-                                    <DialogTitle>{disciplineItem.name} - {translations.intervals}</DialogTitle>
-                                  </DialogHeader>
-                                  <Table>
-                                    <TableHeader>
-                                      <TableRow>
-                                        <TableHead>{translations.intervalName}</TableHead>
-                                        <TableHead>{translations.action}</TableHead>
-                                      </TableRow>
-                                    </TableHeader>
-                                    <TableBody>
-                                      {disciplineItem.intervals.map((interval) => (
-                                        <TableRow key={interval.id}>
-                                          <TableCell>{translations.inter} {interval.id}</TableCell>
-                                          <TableCell>
-                                            <Dialog open={isStudentModalOpen && selectedInterval?.id === interval.id}
-                                              onOpenChange={(open) => {
-                                                setIsStudentModalOpen(open);
-                                                if (open) setSelectedInterval(interval);
-                                              }}>
-                                              <DialogTrigger asChild>
-                                                <Button variant="outline" size="sm">
-                                                  <Users className="h-4 w-4 mr-2" />
-                                                  {translations.view}
-                                                </Button>
-                                              </DialogTrigger>
-                                              <DialogContent className="sm:max-w-[800px]">
-                                                <DialogHeader>
-                                                  <DialogTitle>{translations.inter} {interval.id}</DialogTitle>
-                                                </DialogHeader>
-                                                <Table>
-                                                  <TableHeader>
-                                                    <TableRow>
-                                                      <TableHead>{translations.studentId}</TableHead>
-                                                      <TableHead>{translations.points}</TableHead>
-                                                      <TableHead>{translations.finalTime}</TableHead>
-                                                      <TableHead>{translations.average}</TableHead>
-                                                    </TableRow>
-                                                  </TableHeader>
-                                                  <TableBody>
-                                                    {interval.students.map((student) => (
-                                                      <TableRow key={student.id}>
-                                                        <TableCell>{student.id}</TableCell>
-                                                        <TableCell>{student.points}</TableCell>
-                                                        <TableCell>{student.finalTime}</TableCell>
-                                                        <TableCell>{student.average}</TableCell>
-                                                      </TableRow>
-                                                    ))}
-                                                  </TableBody>
-                                                </Table>
-                                              </DialogContent>
-                                            </Dialog>
-                                          </TableCell>
-                                        </TableRow>
-                                      ))}
-                                    </TableBody>
-                                  </Table>
-                                </DialogContent>
-                              </Dialog>
-                            </CardContent>
-                          </Card>
-                        ))} */}
-                      </div>
-                    </AccordionContent>
-                  </AccordionItem>
-                ))}
-              </Accordion>
             )}
 
 
@@ -494,6 +495,9 @@ export default function SchoolDashboard() {
 
 
           <AddClass isModalOpen={isClassModalOpen} handleCloseModal={() => setIsClassModalOpen(false)} handleSaveModal={handleClassSave} setNewRecord={setNewRecord}
+            newRecord={newRecord} />
+
+          <AddDiscipline isModalOpen={isDisciplineModalOpen} handleCloseModal={() => setIsDisciplineModalOpen(false)} handleSaveModal={handleDisciplineSave} setNewRecord={setNewRecord}
             newRecord={newRecord} />
           {/*
           <AddStudent isModalOpen={isClassModalOpen} handleCloseModal={() => setIsStudentModalOpen(false)} handleSaveModal={handleClassSave} /> */}

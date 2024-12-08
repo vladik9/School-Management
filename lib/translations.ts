@@ -71,6 +71,7 @@ const translations = {
   addTask: "Adaugă temă",
   name: "Nume",
   title: "Titlu",
+  addTest: "Adaugă test",
 
   //Interval
   viewIntervals: "Vizualizare intervaluri",

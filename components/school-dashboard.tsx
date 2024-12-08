@@ -386,14 +386,14 @@ export default function SchoolDashboard() {
                             )}
                         </div>
                         <div style={{ marginTop: '10px', textAlign: 'right' }}>
-                          <Button variant="outline" onClick={() => handleSelectingDiscipline(discipline.id)}>{translations.addInterval}</Button>
+                          <Button variant="outline" onClick={() => handleSelectingDiscipline(discipline.id)}>{translations.addTest}</Button>
                         </div>
                       </AccordionContent>
                     </AccordionItem>
                   ))}
                 </Accordion>
                 <div style={{ marginTop: '10px', textAlign: 'right' }}>
-                  <Button variant="outline" onClick={() => setIsDisciplineModalOpen(true)}>{translations.addDiscipline}</Button>
+                  <Button variant="outline" onClick={() => setIsDisciplineModalOpen(true)}>{translations.addClass}</Button>
                 </div>
               </div>
             )}
@@ -404,7 +404,7 @@ export default function SchoolDashboard() {
                   <p>{translations.noDisciplinesAdded}</p>
                 </div>
                 <div style={{ marginTop: '10px', textAlign: 'right' }}>
-                  <Button variant="outline" onClick={() => setIsDisciplineModalOpen(true)}>{translations.addDiscipline}</Button>
+                  <Button variant="outline" onClick={() => setIsDisciplineModalOpen(true)}>{translations.addClass}</Button>
                 </div>
               </div>
             )}

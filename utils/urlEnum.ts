@@ -5,6 +5,7 @@ export const urlEnum = {
   year: '/api/year',
   class: '/api/class',
   discipline: '/api/discipline',
+  student: '/api/student',
   test: '/api/test',
   interval: '/api/interval',
   docs: '/api/docs',

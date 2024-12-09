@@ -16,6 +16,7 @@ import AddSchool from "./add-modals/add-school";
 import { handleGetSchools, handleCreateSchool } from "@/controllers/schools";
 import { handleGetClasses, handleCreateClass } from "@/controllers/classes";
 import { handleGetYears, handleCreateYear } from "@/controllers/years";
+import { handleGetStudents, handleCreateStudent } from "@/controllers/student";
 import { handleCreateTest } from "@/controllers/test";
 import AddYear from "./add-modals/add-year";
 import { toRoman } from "@/utils/functions";
@@ -204,8 +205,6 @@ export default function SchoolDashboard() {
     handleCreateYear(newRecord, selectedSchool?.id || '');
     setIsYearModalOpen(false);
     setNewRecord({});
-
-
   };
 
   const handleClassSave = () => {
@@ -214,6 +213,7 @@ export default function SchoolDashboard() {
   };
   const handleStudentSave = () => {
     setIsStudentModalOpen(false);
+    handleCreateStudent(newRecord, selectedClassId);
 
   };
 
@@ -535,7 +535,7 @@ export default function SchoolDashboard() {
           <AddStudent
             isModalOpen={isStudentModalOpen}
             handleCloseModal={() => setIsStudentModalOpen(false)}
-            handleSaveModal={handleTestSave}
+            handleSaveModal={handleStudentSave}
             newRecord={newRecord}
             setNewRecord={setNewRecord}
             selectedYear={selectedYear} />

@@ -12,7 +12,6 @@ import { School, Users } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { logout } from '@/utils/auth';
 import translations from "../lib/translations";
-import AddStudent from "./add-modals/add-student";
 import AddSchool from "./add-modals/add-school";
 import { handleGetSchools, handleCreateSchool } from "@/controllers/schools";
 import { handleGetClasses, handleCreateClass } from "@/controllers/classes";
@@ -22,6 +21,7 @@ import AddYear from "./add-modals/add-year";
 import { toRoman } from "@/utils/functions";
 import { Student, Interval, Test, YearData, ClassData, SchoolData } from "@/types/types";
 import AddClass from "./add-modals/add-class";
+import AddStudent from "./add-modals/add-student";
 import AddTest from "./add-modals/add-test";
 import AddViewIntervals from "./add-modals/add-view-intervals";
 // Mock student data
@@ -212,10 +212,18 @@ export default function SchoolDashboard() {
     setIsClassModalOpen(false);
     handleCreateClass(newRecord, selectedYear);
   };
+  const handleStudentSave = () => {
+    setIsStudentModalOpen(false);
+
+  };
+
   const handleSelectingTest = (testId: number) => {
     setIsTestModalOpen(true);
     setSelectedClassId(testId);
 
+  };
+  const handleAddStudent = () => {
+    setIsStudentModalOpen(true);
   };
 
   const handleTestSave = () => {
@@ -240,6 +248,7 @@ export default function SchoolDashboard() {
   // const selectedYearData = selectedSchool?.years.find(y => y.year === selectedYear);
 
   console.log("classes", classes);
+
 
   return (
     <div className="min-h-screen bg-gray-100 p-8">
@@ -388,6 +397,7 @@ export default function SchoolDashboard() {
                             )}
                         </div>
                         <div style={{ marginTop: '10px', textAlign: 'right' }}>
+                          <Button variant="outline" style={{ marginRight: '10px' }} onClick={() => handleAddStudent(the_class.id)}>{translations.addStudent}</Button>
                           <Button variant="outline" onClick={() => handleSelectingTest(the_class.id)}>{translations.addTest}</Button>
                         </div>
                       </AccordionContent>
@@ -515,11 +525,21 @@ export default function SchoolDashboard() {
           <AddTest isModalOpen={isTestModalOpen} handleCloseModal={() => setIsTestModalOpen(false)} handleSaveModal={handleTestSave} setNewRecord={setNewRecord}
             newRecord={newRecord} />
 
-          <AddViewIntervals isModalOpen={isIntervalModalOpen} handleCloseModal={() => setIsIntervalModalOpen(false)} handleSaveModal={handleTestSave} setNewRecord={setNewRecord}
-            newRecord={newRecord} />
 
-          {/*
-          <AddStudent isModalOpen={isClassModalOpen} handleCloseModal={() => setIsStudentModalOpen(false)} handleSaveModal={handleClassSave} /> */}
+          <AddViewIntervals
+            isModalOpen={isIntervalModalOpen}
+            handleCloseModal={() => setIsIntervalModalOpen(false)}
+            handleSaveModal={handleTestSave}
+            setNewRecord={setNewRecord}
+            newRecord={newRecord} />
+          <AddStudent
+            isModalOpen={isStudentModalOpen}
+            handleCloseModal={() => setIsStudentModalOpen(false)}
+            handleSaveModal={handleTestSave}
+            newRecord={newRecord}
+            setNewRecord={setNewRecord}
+            selectedYear={selectedYear} />
+
         </CardContent>
       </Card>
     </div >

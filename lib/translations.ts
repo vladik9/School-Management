@@ -27,6 +27,7 @@ const translations = {
   inter: "Int.",
   addDescription: "Adaugă detaliile aici",
   year: "An",
+  id: "Id",
 
   //Generic modal
   cancelText: "Anulare",
@@ -60,9 +61,22 @@ const translations = {
   noClassesAdded: "Nu sunt clase adaugate",
 
   //Student
-  studentId: "ID elev",
+  studentId: "Id elev nou",
+  orderNumber: "Numar de ordine",
   addStudent: "Adaugă elev",
   viewStudents: "Vizualizare elevi",
+  studentName: "Numele elevului",
+  noStudentsAdded: "Nu sunt elevi adaugati",
+  generatedStudentId: "Id-il generat",
+  idStudent: "Numar de ordine elev",
+  sex: "Sex",
+  sexF: "Fată",
+  sexB: "Băiat",
+  class: "Clasa",
+  controlB: "Control",
+  experimentA: "Experiment",
+  idNotGenerated: "Id-ul nu a fost generat",
+
 
 
   //Test

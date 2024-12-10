@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import Class from '@/models/class.model';
 import Test from '@/models/test.model';
+import Student from '@/models/student.model';
 
 // Handle GET (read all schools)
 
@@ -10,7 +11,9 @@ const getClasses = async (req: NextApiRequest, res: NextApiResponse) => {
 
     // Validate yearId
     if (!yearId) {
-      return res.status(400).json({ message: 'YearId is required for the given classes' });
+      return res
+        .status(400)
+        .json({ message: 'YearId is required for the given classes' });
     }
 
     // Fetch all classes for the given yearId
@@ -20,28 +23,35 @@ const getClasses = async (req: NextApiRequest, res: NextApiResponse) => {
 
     // If no classes found, return 404
     if (!classes || classes.length === 0) {
-      return res.status(404).json( []);
+      return res.status(404).json([]);
     }
 
-    // Fetch disciplines for each class
-    const classesWithTests = await Promise.all(
+    // Fetch students and tests for each class
+    const classesWithDetails = await Promise.all(
       classes.map(async (classData) => {
-        const tests = await Test.findAll({
-          where: { classId: classData.id }, // Use classId to fetch related disciplines
-          attributes: ['id', 'name' ], // Select relevant fields
-        });
+        const [tests, students] = await Promise.all([
+          Test.findAll({
+            where: { classId: classData.id }, // Use classId to fetch related tests
+            attributes: ['id', 'name'], // Select relevant fields
+          }),
+          Student.findAll({
+            where: { classId: classData.id }, // Use classId to fetch related students
+            attributes: ['id', 'name'], // Select relevant fields
+          }),
+        ]);
 
         return {
           ...classData.toJSON(), // Convert Sequelize instance to plain object
           tests,
+          students,
         };
       })
     );
 
     // Return the result
-    res.status(200).json(classesWithTests);
+    res.status(200).json(classesWithDetails);
   } catch (error) {
-    console.error("Error in getClasses:", error);
+    console.error('Error in getClasses:', error);
     res.status(500).json({ message: 'Error fetching classes', error });
   }
 };

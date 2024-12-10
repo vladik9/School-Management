@@ -8,7 +8,7 @@ const getTest = async (req: NextApiRequest, res: NextApiResponse) => {
     const { classId } = req.query;
     // Ensure schoolId is provided
     if (!classId) {
-      return res.status(400).json({ message: 'Discipline id is required' });
+      return res.status(400).json({ message: 'Class id is required' });
     }
 
     // Query the 'Year' table to find all years for the given schoolId
@@ -18,24 +18,25 @@ const getTest = async (req: NextApiRequest, res: NextApiResponse) => {
 
     // If no years found, return 404
     if (!discipline || discipline.length === 0) {
-      return res.status(404).json({ message: 'Disciplines not found for the given schoolId' });
+      return res.status(404).json({ message: 'Class not found for the given schoolId' });
     }
 
     // Return the found years
     res.status(200).json(discipline);
   } catch (error) {
-    res.status(500).json({ message: 'Error fetching discipline', error });
+    res.status(500).json({ message: 'Error fetching test', error });
   }
 };
 
 // Handle POST (create school)
 const createTest = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    const { name, classId } = req.body;
-    const newDiscipline = await Test.create({name, classId });
+    const { name,  barem, classId } = req.body;
+    const baremType = barem;
+    const newDiscipline = await Test.create({name, baremType, classId });
     res.status(201).json(newDiscipline);
   } catch (error) {
-    res.status(500).json({ message: 'Error creating discipline', error });
+    res.status(500).json({ message: 'Error creating test', error });
   }
 };
 
@@ -46,13 +47,13 @@ const updateTest = async (req: NextApiRequest, res: NextApiResponse) => {
 
   try {
     const year = await Test.findByPk(id as string);
-    if (!year) return res.status(404).json({ message: 'Discipline not found' });
+    if (!year) return res.status(404).json({ message: 'Test not found' });
 
     year.name = name || year.name;
     await year.save();
     res.status(200).json(year);
   } catch (error) {
-    res.status(500).json({ message: 'Error updating discipline', error });
+    res.status(500).json({ message: 'Error updating test', error });
   }
 };
 
@@ -62,12 +63,12 @@ const deleteTest = async (req: NextApiRequest, res: NextApiResponse) => {
 
   try {
     const year = await Test.findByPk(id as string);
-    if (!year) return res.status(404).json({ message: 'Discipline not found' });
+    if (!year) return res.status(404).json({ message: 'Test not found' });
 
     await year.destroy();
-    res.status(200).json({ message: 'Discipline deleted' });
+    res.status(200).json({ message: 'Test deleted' });
   } catch (error) {
-    res.status(500).json({ message: 'Error deleting discipline', error });
+    res.status(500).json({ message: 'Error deleting test', error });
   }
 };
 

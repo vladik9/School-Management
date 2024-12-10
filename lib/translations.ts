@@ -77,8 +77,6 @@ const translations = {
   experimentA: "Experiment",
   idNotGenerated: "Id-ul nu a fost generat",
 
-
-
   //Test
   tasks: "Teme",
   addTask: "Adaugă temă",
@@ -87,6 +85,8 @@ const translations = {
   addTest: "Adaugă test",
   testName: "Numele testului",
   noTestAdded: "Nu sunt teste adaugate",
+  barem: "Barem",
+  addBarem: "Adaugă barem",
 
   //Interval
   viewIntervals: "Vizualizare intervaluri",

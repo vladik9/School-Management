@@ -26,13 +26,13 @@ import AddStudent from "./add-modals/add-student";
 import AddTest from "./add-modals/add-test";
 import AddViewIntervals from "./add-modals/add-view-intervals";
 // Mock student data
-const mockStudents: Student[] = [
-  { id: 1, points: 85, finalTime: "45:30", average: 82.5 },
-  { id: 2, points: 92, finalTime: "42:15", average: 88.0 },
-  { id: 3, points: 78, finalTime: "50:00", average: 75.5 },
-  { id: 4, points: 95, finalTime: "38:45", average: 91.0 },
-  { id: 5, points: 88, finalTime: "43:20", average: 85.5 },
-];
+// const mockStudents: Student[] = [
+//   { id: 1, points: 85, finalTime: "45:30", average: 82.5 },
+//   { id: 2, points: 92, finalTime: "42:15", average: 88.0 },
+//   { id: 3, points: 78, finalTime: "50:00", average: 75.5 },
+//   { id: 4, points: 95, finalTime: "38:45", average: 91.0 },
+//   { id: 5, points: 88, finalTime: "43:20", average: 85.5 },
+// ];
 
 // const initialSchoolsData: SchoolData[] = [
 //   {
@@ -131,6 +131,7 @@ export default function SchoolDashboard() {
   const [selectedClassId, setSelectedClassId] = useState<number>();
   const [years, setYears] = useState<YearData[]>([]);
   const [selectedYear, setSelectedYear] = useState<number | null>(null);
+  const [students, setStudents] = useState<StudentData[]>([]);
   const [selectedInterval, setSelectedInterval] = useState<Interval | null>(null);
   const [isSchoolModalOpen, setIsSchoolModalOpen] = useState(false);
   const [isYearModalOpen, setIsYearModalOpen] = useState(false);
@@ -162,7 +163,7 @@ export default function SchoolDashboard() {
   const fetchYears = async () => {
     if (!selectedSchool) return;
     try {
-      const years = await handleGetYears(selectedSchool.id) || [];
+      const years = await handleGetYears(selectedSchool.id.toString()) || [];
       setYears(years);
     } catch (error) {
       console.error("Error fetching years:", error);
@@ -172,8 +173,18 @@ export default function SchoolDashboard() {
   const fetchClasses = async () => {
     if (!selectedYear) return;
     try {
-      const classes = await handleGetClasses(selectedYear) || [];
+      const classes = await handleGetClasses(selectedYear.toString()) || [];
       setClasses(classes);
+      fetchStudents();
+    } catch (error) {
+      console.error("Error fetching classes:", error);
+    }
+  };
+  const fetchStudents = async () => {
+    if (!selectedClassId) return;
+    try {
+      const students = await handleGetStudents(selectedClassId.toString()) || [];
+      setStudents(students);
     } catch (error) {
       console.error("Error fetching classes:", error);
     }
@@ -202,19 +213,19 @@ export default function SchoolDashboard() {
 
   };
   const handleYearSave = async () => {
-    handleCreateYear(newRecord, selectedSchool?.id || '');
+    handleCreateYear(newRecord, selectedSchool?.id.toString() || '');
     setIsYearModalOpen(false);
     setNewRecord({});
   };
 
   const handleClassSave = () => {
     setIsClassModalOpen(false);
-    handleCreateClass(newRecord, selectedYear);
+    handleCreateClass(newRecord, selectedYear?.toString() || '0');
   };
   const handleStudentSave = () => {
     setIsStudentModalOpen(false);
-    handleCreateStudent(newRecord, selectedClassId);
-
+    handleCreateStudent(newRecord, selectedClassId?.toString() || '');
+    setNewRecord({});
   };
 
   const handleSelectingTest = (testId: number) => {
@@ -222,14 +233,16 @@ export default function SchoolDashboard() {
     setSelectedClassId(testId);
 
   };
-  const handleAddStudent = () => {
+
+  const handleAddStudent = (classId: number) => {
+    setSelectedClassId(parseInt(classId.toString()));
     setIsStudentModalOpen(true);
   };
 
   const handleTestSave = () => {
     console.log(selectedClassId);
     setIsTestModalOpen(false);
-    handleCreateTest(newRecord, selectedClassId);
+    handleCreateTest(newRecord, selectedClassId?.toString() || '0');
   };
 
 
@@ -246,8 +259,6 @@ export default function SchoolDashboard() {
   }, [selectedYear]);
 
   // const selectedYearData = selectedSchool?.years.find(y => y.year === selectedYear);
-
-  console.log("classes", classes);
 
 
   return (
@@ -307,7 +318,7 @@ export default function SchoolDashboard() {
             {/* //NOTE -  this is for the class */}
             {classes.length > 0 && (
               <div>
-                <Accordion type="single" collapsible>
+                <Accordion type="single" collapsible >
                   {classes.map((the_class) => (
                     <AccordionItem key={the_class.id} value={the_class.id.toString()}>
                       <AccordionTrigger>
@@ -538,7 +549,8 @@ export default function SchoolDashboard() {
             handleSaveModal={handleStudentSave}
             newRecord={newRecord}
             setNewRecord={setNewRecord}
-            selectedYear={selectedYear} />
+            selectedYear={selectedYear}
+          />
 
         </CardContent>
       </Card>

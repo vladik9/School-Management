@@ -2,23 +2,23 @@ import { DataTypes, Model, Optional } from 'sequelize';
 import sequelize from '../db/sequelize';
 import Class from './class.model';
 
-interface TestAttributes {
+interface StudentAttributes {
   id: number;
   name: string;
+  studentId: number;
   classId: number;
-  baremType: string;
 }
 
-interface TestCreationAttributes extends Optional<TestAttributes, 'id'> {}
+interface TestCreationAttributes extends Optional<StudentAttributes, 'id'> {}
 
-class Test extends Model<TestAttributes, TestCreationAttributes> implements TestAttributes {
+class Student extends Model<StudentAttributes, TestCreationAttributes> implements StudentAttributes {
   public id!: number;
   public name!: string;
+  public studentId!: number;
   public classId!: number;
-  public baremType!: string;
 }
 
-Test.init(
+Student.init(
   {
     id: {
       type: DataTypes.INTEGER,
@@ -29,6 +29,13 @@ Test.init(
       type: DataTypes.STRING,
       allowNull: false,
     },
+    studentId: {
+      type: DataTypes.INTEGER,
+      references: {
+        model: Class,
+        key: 'id',
+      },
+    },
     classId: {
       type: DataTypes.INTEGER,
       references: {
@@ -36,20 +43,15 @@ Test.init(
         key: 'id',
       },
     },
-    baremType: {
-      type: DataTypes.STRING,
-      allowNull: false,
-  },
-  },
 
-
+  },
   {
     sequelize,
-    tableName: 'tests',
+    tableName: 'students',
   }
 );
 
-Class.hasMany(Test, { foreignKey: 'classId' });
-Test.belongsTo(Class, { foreignKey: 'classId' });
+Class.hasMany(Student, { foreignKey: 'classId' });
+Student.belongsTo(Class, { foreignKey: 'classId' });
 
-export default Test;
+export default Student;

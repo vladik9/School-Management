@@ -20,6 +20,7 @@ interface AddStudentProps {
   newRecord: any;
   setNewRecord: (data: { name: string; }) => void;
   selectedYear: number | null;
+  selectedClassId: number | null;
 }
 
 
@@ -30,8 +31,6 @@ export default function AddStudent({ isModalOpen, handleCloseModal, handleSaveMo
     sex: '',
     study_class: '',
   });
-
-  console.log("selectedYear", selectedYear);
 
   useEffect(() => {
     handleIdGeneration();
@@ -51,9 +50,11 @@ export default function AddStudent({ isModalOpen, handleCloseModal, handleSaveMo
   const handleIdGeneration = () => {
     const { orderNb, sex, study_class } = studentDetails;
     if (orderNb && sex && study_class) {
-      setGeneratedId(`${sex}${orderNb}${study_class}${selectedYear}`);
+      const studentId = `${sex}${orderNb}${study_class}${selectedYear}`;
+      setGeneratedId(studentId);
+      setNewRecord((prev: any) => ({ ...prev, 'studentId': studentId }));
     } else {
-      setGeneratedId(''); // Clear ID if details are incomplete
+      setGeneratedId('');
     }
   };
   return (
@@ -71,7 +72,10 @@ export default function AddStudent({ isModalOpen, handleCloseModal, handleSaveMo
             id="name"
             placeholder={translations.studentName}
             value={studentDetails.name}
-            onChange={(e) => handleInputChange('name', e.target.value)}
+            onChange={(e) => {
+              handleInputChange('name', e.target.value);
+              setNewRecord((prev: any) => ({ ...prev, 'name': e.target.value }));
+            }}
           />
         </div>
         <div>
@@ -113,17 +117,17 @@ export default function AddStudent({ isModalOpen, handleCloseModal, handleSaveMo
               <SelectValue placeholder={translations.class} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="F">{translations.controlB}</SelectItem>
-              <SelectItem value="B">{translations.experimentA}</SelectItem>
+              <SelectItem value="A">{translations.experimentA}</SelectItem>
+              <SelectItem value="B">{translations.controlB}</SelectItem>
             </SelectContent>
           </Select>
         </div>
         <div style={{ display: 'flex', alignItems: 'center' }}>
-          <div className="ml-2">
-            {translations.generatedStudentId}: {generatedId || translations.idNotGenerated}
+          <div className="ml-2" >
+            {translations.generatedStudentId}: <span style={{ fontStyle: 'italic' }}>{generatedId || translations.idNotGenerated}</span>
           </div>
         </div>
       </div>
-    </GenericModal>
+    </GenericModal >
   );
 }

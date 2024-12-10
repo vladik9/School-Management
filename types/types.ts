@@ -1,8 +1,7 @@
 type Student = {
   id: number;
-  points: number;
-  finalTime: string;
-  average: number;
+  studentId: number;
+  name: string;
 };
 
 type Interval = {
@@ -14,6 +13,7 @@ type Interval = {
 type Test = {
   id: number;
   name: string;
+  barem: string;
   intervals: Interval[];
 };
 

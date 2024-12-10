@@ -27,10 +27,14 @@ export default function AddTest({ isModalOpen, handleCloseModal, handleSaveModal
       <div className="space-y-4">
         <div>
           <Label htmlFor="name">{translations.testName}</Label>
-          <Input id="name" placeholder={translations.addTest} value={newRecord.name || ''} onChange={(e) =>
-            setNewRecord((prev: any) => ({ ...prev, name: e.target.value }))
+          <Input id="name" placeholder={translations.addTest} value={newRecord.name || ''}
+            onChange={(e) =>
+              setNewRecord((prev: any) => ({ ...prev, name: e.target.value }))
+            } />
+          <Label htmlFor="barem">{translations.barem}</Label>
+          <Input id="barem" placeholder={translations.addBarem} value={newRecord.barem || ''} onChange={(e) =>
+            setNewRecord((prev: any) => ({ ...prev, barem: e.target.value }))
           } />
-
         </div>
 
       </div>

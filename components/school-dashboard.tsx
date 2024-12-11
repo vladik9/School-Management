@@ -36,6 +36,7 @@ export default function SchoolDashboard() {
   const [years, setYears] = useState<YearData[]>([]);
   const [selectedYear, setSelectedYear] = useState<number | null>(null);
   const [students, setStudents] = useState<StudentData[]>([]);
+  const [intervals, setIntervals] = useState<Interval[]>([]);
   const [selectedInterval, setSelectedInterval] = useState<Interval | null>(null);
   const [isSchoolModalOpen, setIsSchoolModalOpen] = useState(false);
   const [isYearModalOpen, setIsYearModalOpen] = useState(false);
@@ -187,6 +188,10 @@ export default function SchoolDashboard() {
       showStatusModal('Error creating student', 'error');
     }
   };
+  const handleAddStudent = (classId: number) => {
+    setSelectedClassId(parseInt(classId.toString()));
+    setIsStudentModalOpen(true);
+  };
 
   const handleTestSave = async () => {
     showStatusModal('Creating test...', 'loading');
@@ -199,6 +204,22 @@ export default function SchoolDashboard() {
       showStatusModal('Error creating test', 'error');
     }
   };
+  const handleIntervalSave = async () => {
+    showStatusModal('Creating interval...', 'loading');
+    try {
+      await handleCreateInterval(newRecord, selectedClassId?.toString() || '0');
+      setIsIntervalModalOpen(false);
+      fetchClasses();
+      showStatusModal('Interval created successfully', 'success');
+    } catch (error) {
+      showStatusModal('Error creating interval', 'error');
+    }
+  };
+  const handleSelectingTest = (testId: number) => {
+    setIsTestModalOpen(true);
+    setSelectedClassId(testId);
+  };
+
 
   const handleYearChange = (value: string) => {
     const year = parseInt(value);
@@ -490,9 +511,10 @@ export default function SchoolDashboard() {
 
 
           <AddViewIntervals
+            intervals={intervals}
             isModalOpen={isIntervalModalOpen}
             handleCloseModal={() => setIsIntervalModalOpen(false)}
-            handleSaveModal={handleTestSave}
+            handleSaveModal={handleIntervalSave}
             setNewRecord={setNewRecord}
             newRecord={newRecord} />
           <AddStudent

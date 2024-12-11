@@ -20,7 +20,6 @@ interface AddStudentProps {
   newRecord: any;
   setNewRecord: (data: { name: string; }) => void;
   selectedYear: number | null;
-  selectedClassId: number | null;
 }
 
 

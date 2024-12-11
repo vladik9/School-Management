@@ -25,6 +25,7 @@ import AddClass from "./add-modals/add-class";
 import AddStudent from "./add-modals/add-student";
 import AddTest from "./add-modals/add-test";
 import AddViewIntervals from "./add-modals/add-view-intervals";
+import { StatusModal } from '@/components/status-modal';
 // Mock student data
 // const mockStudents: Student[] = [
 //   { id: 1, points: 85, finalTime: "45:30", average: 82.5 },
@@ -140,6 +141,11 @@ export default function SchoolDashboard() {
   const [isIntervalModalOpen, setIsIntervalModalOpen] = useState(false);
   const [isStudentModalOpen, setIsStudentModalOpen] = useState(false);
   const [newRecord, setNewRecord] = useState({});
+  const [statusModal, setStatusModal] = useState({
+    isVisible: false,
+    message: '',
+    variant: 'default' as const,
+  });
 
   const router = useRouter();
 
@@ -148,57 +154,80 @@ export default function SchoolDashboard() {
     router.push('/');
   };
 
-
   useEffect(() => {
     fetchSchools();
   }, []);
 
 
-  const fetchSchools = async () => {
-    const schools = await handleGetSchools() || [];
-    setSchools(schools);
-
+  const showStatusModal = (message: string, variant: 'default' | 'success' | 'error' | 'loading') => {
+    setStatusModal({ isVisible: true, message, variant });
   };
+
+  /**
+   * Hide the status modal by setting isVisible to false.
+   */
+  const hideStatusModal = () => {
+    setStatusModal(prev => ({ ...prev, isVisible: false }));
+  };
+
+
+  const fetchSchools = async () => {
+    showStatusModal('Fetching schools...', 'loading');
+    try {
+      const schools = await handleGetSchools() || [];
+      setSchools(schools);
+      showStatusModal('Schools fetched successfully', 'success');
+    } catch (error) {
+      showStatusModal('Error fetching schools', 'error');
+    }
+  };
+
 
   const fetchYears = async () => {
     if (!selectedSchool) return;
+    showStatusModal('Fetching years...', 'loading');
     try {
       const years = await handleGetYears(selectedSchool.id.toString()) || [];
       setYears(years);
+      showStatusModal('Years fetched successfully', 'success');
     } catch (error) {
-      console.error("Error fetching years:", error);
+      showStatusModal('Error fetching years', 'error');
     }
   };
 
   const fetchClasses = async () => {
     if (!selectedYear) return;
+    showStatusModal('Fetching classes...', 'loading');
     try {
       const classes = await handleGetClasses(selectedYear.toString()) || [];
       setClasses(classes);
       fetchStudents();
+      showStatusModal('Classes fetched successfully', 'success');
     } catch (error) {
-      console.error("Error fetching classes:", error);
-    }
-  };
-  const fetchStudents = async () => {
-    if (!selectedClassId) return;
-    try {
-      const students = await handleGetStudents(selectedClassId.toString()) || [];
-      setStudents(students);
-    } catch (error) {
-      console.error("Error fetching classes:", error);
+      showStatusModal('Error fetching classes', 'error');
     }
   };
 
+  const fetchStudents = async () => {
+    if (!selectedClassId) return;
+    showStatusModal('Fetching students...', 'loading');
+    try {
+      const students = await handleGetStudents(selectedClassId.toString()) || [];
+      setStudents(students);
+      showStatusModal('Students fetched successfully', 'success');
+    } catch (error) {
+      showStatusModal('Error fetching students', 'error');
+    }
+  };
 
   const handleSchoolChange = (value: string) => {
     const school = schools.find(s => s.id === parseInt(value));
     if (school) {
-      setSelectedSchool(school); // Update state
-      setSelectedYear(null); // Reset dependent state
+      setSelectedSchool(school);
+      setSelectedYear(null);
     }
   };
-  // Trigger fetchYears when selectedSchool changes
+
   useEffect(() => {
     if (selectedSchool) {
       fetchYears();
@@ -206,45 +235,67 @@ export default function SchoolDashboard() {
   }, [selectedSchool]);
 
   const handleSchoolSave = async () => {
-    handleCreateSchool(newRecord);
-    setIsSchoolModalOpen(false);
-    setNewRecord({});
-    // fetchSchools();
-
+    showStatusModal('Creating school...', 'loading');
+    try {
+      await handleCreateSchool(newRecord);
+      setIsSchoolModalOpen(false);
+      setNewRecord({});
+      fetchSchools();
+      showStatusModal('School created successfully', 'success');
+    } catch (error) {
+      showStatusModal('Error creating school', 'error');
+    }
   };
+
   const handleYearSave = async () => {
-    handleCreateYear(newRecord, selectedSchool?.id.toString() || '');
-    setIsYearModalOpen(false);
-    setNewRecord({});
+    showStatusModal('Creating year...', 'loading');
+    try {
+      await handleCreateYear(newRecord, selectedSchool?.id.toString() || '');
+      setIsYearModalOpen(false);
+      setNewRecord({});
+      fetchYears();
+      showStatusModal('Year created successfully', 'success');
+    } catch (error) {
+      showStatusModal('Error creating year', 'error');
+    }
   };
 
-  const handleClassSave = () => {
-    setIsClassModalOpen(false);
-    handleCreateClass(newRecord, selectedYear?.toString() || '0');
-  };
-  const handleStudentSave = () => {
-    setIsStudentModalOpen(false);
-    handleCreateStudent(newRecord, selectedClassId?.toString() || '');
-    setNewRecord({});
-  };
-
-  const handleSelectingTest = (testId: number) => {
-    setIsTestModalOpen(true);
-    setSelectedClassId(testId);
-
+  const handleClassSave = async () => {
+    showStatusModal('Creating class...', 'loading');
+    try {
+      await handleCreateClass(newRecord, selectedYear?.toString() || '0');
+      setIsClassModalOpen(false);
+      fetchClasses();
+      showStatusModal('Class created successfully', 'success');
+    } catch (error) {
+      showStatusModal('Error creating class', 'error');
+    }
   };
 
-  const handleAddStudent = (classId: number) => {
-    setSelectedClassId(parseInt(classId.toString()));
-    setIsStudentModalOpen(true);
+  const handleStudentSave = async () => {
+    showStatusModal('Creating student...', 'loading');
+    try {
+      await handleCreateStudent(newRecord, selectedClassId?.toString() || '');
+      setIsStudentModalOpen(false);
+      setNewRecord({});
+      fetchStudents();
+      showStatusModal('Student created successfully', 'success');
+    } catch (error) {
+      showStatusModal('Error creating student', 'error');
+    }
   };
 
-  const handleTestSave = () => {
-    console.log(selectedClassId);
-    setIsTestModalOpen(false);
-    handleCreateTest(newRecord, selectedClassId?.toString() || '0');
+  const handleTestSave = async () => {
+    showStatusModal('Creating test...', 'loading');
+    try {
+      await handleCreateTest(newRecord, selectedClassId?.toString() || '0');
+      setIsTestModalOpen(false);
+      fetchClasses();
+      showStatusModal('Test created successfully', 'success');
+    } catch (error) {
+      showStatusModal('Error creating test', 'error');
+    }
   };
-
 
   const handleYearChange = (value: string) => {
     const year = parseInt(value);
@@ -551,7 +602,12 @@ export default function SchoolDashboard() {
             setNewRecord={setNewRecord}
             selectedYear={selectedYear}
           />
-
+          <StatusModal
+            isVisible={statusModal.isVisible}
+            message={statusModal.message}
+            variant={statusModal.variant}
+            onClose={hideStatusModal}
+          />
         </CardContent>
       </Card>
     </div >

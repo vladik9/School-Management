@@ -89,13 +89,15 @@ const translations = {
   addBarem: "Adaugă barem",
 
   //Interval
-  viewIntervals: "Vizualizare intervaluri",
-  intervals: "Intervaluri de studiu",
-  intervalName: "Numele intervalului",
-  addInterval: "Adaugă interval",
+  viewIntervals: "Vizualizare intervale",
+  viewAddIntervals: "Vizualizare/Adaugare intervale",
+  addInterval: "Adaugare interval",
+  intervals: "Intervale de studiu",
+  intervalName: "Numele interval",
   finalTime: "Timp final",
   points: "Puncte",
   average: "Medie",
+  noIntervals: "Nu există intervale adaugate",
 
   //Docs
 };

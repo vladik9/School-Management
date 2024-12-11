@@ -26,104 +26,7 @@ import AddStudent from "./add-modals/add-student";
 import AddTest from "./add-modals/add-test";
 import AddViewIntervals from "./add-modals/add-view-intervals";
 import { StatusModal } from '@/components/status-modal';
-// Mock student data
-// const mockStudents: Student[] = [
-//   { id: 1, points: 85, finalTime: "45:30", average: 82.5 },
-//   { id: 2, points: 92, finalTime: "42:15", average: 88.0 },
-//   { id: 3, points: 78, finalTime: "50:00", average: 75.5 },
-//   { id: 4, points: 95, finalTime: "38:45", average: 91.0 },
-//   { id: 5, points: 88, finalTime: "43:20", average: 85.5 },
-// ];
 
-// const initialSchoolsData: SchoolData[] = [
-//   {
-//     id: 1,
-//     name: "Liceul Tehnologic \"Iorgu Vârnav Liteanu\"",
-//     years: Array.from({ length: 5 }, (_, i) => ({
-//       year: i + 1,
-//       disciplines: [
-//         {
-//           id: 1,
-//           name: "Educatia fizica",
-//           teacher: "Doamna Turcanu",
-//           hours: 5,
-//           tasks: [
-//             {
-//               id: 1,
-//               name: "Fotbal",
-//               intervals: Array.from({ length: 5 }, (_, i) => ({
-//                 id: i + 1,
-//                 name: `Interval ${i + 1}`,
-//                 students: mockStudents
-//               }))
-//             },
-//             {
-//               id: 2,
-//               name: "Gimnastica",
-//               intervals: Array.from({ length: 5 }, (_, i) => ({
-//                 id: i + 1,
-//                 name: `Interval ${i + 1}`,
-//                 students: mockStudents
-//               }))
-//             }
-//           ]
-//         },
-//         {
-//           id: 2,
-//           name: "Document",
-//           teacher: "Docs",
-//           hours: 5,
-//           tasks: [
-//             {
-//               id: 1,
-//               name: "Doc1",
-//               intervals: Array.from({ length: 5 }, (_, i) => ({
-//                 id: i + 1,
-//                 name: `Interval ${i + 1}`,
-//                 students: mockStudents
-//               }))
-//             },
-//             {
-//               id: 2,
-//               name: "Doc2",
-//               intervals: Array.from({ length: 5 }, (_, i) => ({
-//                 id: i + 1,
-//                 name: `Interval ${i + 1}`,
-//                 students: mockStudents
-//               }))
-//             }
-//           ]
-//         },
-//         {
-//           id: 3,
-//           name: "Tabele",
-//           teacher: "performanta",
-//           hours: 5,
-//           tasks: [
-//             {
-//               id: 1,
-//               name: "Tabel 1 ",
-//               intervals: Array.from({ length: 5 }, (_, i) => ({
-//                 id: i + 1,
-//                 name: `Tabel ${i + 1}`,
-//                 students: mockStudents
-//               }))
-//             },
-//             {
-//               id: 2,
-//               name: "Tabel 9",
-//               intervals: Array.from({ length: 5 }, (_, i) => ({
-//                 id: i + 1,
-//                 name: `Tabel ${i + 1}`,
-//                 students: mockStudents
-//               }))
-//             }
-//           ]
-//         }
-//       ]
-//     }))
-//   },
-// ];
 
 export default function SchoolDashboard() {
   const [schools, setSchools] = useState<SchoolData[]>([]);
@@ -309,8 +212,6 @@ export default function SchoolDashboard() {
     }
   }, [selectedYear]);
 
-  // const selectedYearData = selectedSchool?.years.find(y => y.year === selectedYear);
-
 
   return (
     <div className="min-h-screen bg-gray-100 p-8">
@@ -384,10 +285,10 @@ export default function SchoolDashboard() {
                                   <CardTitle className="text-lg">{testItem.name}</CardTitle>
                                 </CardHeader>
                                 <CardContent>
-                                  <Dialog open={isSchoolModalOpen} onOpenChange={setIsClassModalOpen}>
+                                  <Dialog open={isSchoolModalOpen} onOpenChange={setIsIntervalModalOpen}>
                                     <DialogTrigger asChild>
                                       <div style={{ marginTop: '10px', textAlign: 'center' }}>
-                                        <Button variant="outline">{translations.viewIntervals}</Button>
+                                        <Button variant="outline" className="w-full" >{translations.viewAddIntervals}</Button>
                                       </div>
                                     </DialogTrigger>
                                     <DialogContent className="sm:max-w-[600px]">

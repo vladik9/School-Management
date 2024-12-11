@@ -14,6 +14,7 @@ interface GenericModalProps {
   children: ReactNode;
   cancelText?: string;
   saveText?: string;
+  width?: string;
 }
 
 export default function GenericModal({
@@ -23,11 +24,13 @@ export default function GenericModal({
   title = 'Modal Title',
   description,
   children,
+  width = '425',
 
 }: GenericModalProps) {
+  const modalWidth = `sm:max-w-[${width}px]`;
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className={modalWidth}>
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
           {description && <DialogDescription>{description}</DialogDescription>}

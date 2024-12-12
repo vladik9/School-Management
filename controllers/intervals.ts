@@ -1,9 +1,9 @@
 'use client';
 import { urlEnum } from '../utils/urlEnum';
 
-export const handleGetIntervals = async (yearId: string) => {
+export const handleGetIntervals = async (testId: string) => {
   try {
-    const response = await fetch(`${urlEnum.interval}?yearId=${yearId}`, {
+    const response = await fetch(`${urlEnum.interval}?testId=${testId}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -12,10 +12,10 @@ export const handleGetIntervals = async (yearId: string) => {
     if (!response.ok) {
       throw new Error('Failed to fetch intervals');
     }
-
+    if(!response) return []
 
     const data = await response.json();
-    return data;  // This will return the list of years
+    return data;  // This will return the list of intervals
   } catch (error) {
 
     console.error(error);
@@ -24,13 +24,13 @@ export const handleGetIntervals = async (yearId: string) => {
 };
 
 
-export const handleCreateInterval = async (data: object, yearId: string) => {
+export const handleCreateInterval = async (data: object, testId: string) => {
    const response = await fetch(`${urlEnum.interval}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ ...data, yearId }),
+    body: JSON.stringify({ ...data, testId }),
   });
   return response;
 };

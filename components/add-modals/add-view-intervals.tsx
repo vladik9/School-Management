@@ -47,7 +47,7 @@ export default function AddViewIntervals({ intervals, isModalOpen, handleCloseMo
               </TableRow>
             </TableHeader>
             <TableBody>
-              {intervals.map((interval) => (
+              {intervals.length > 0 && intervals.map((interval) => (
                 <TableRow key={interval.id}>
                   <TableCell>{translations.inter} {interval.id}</TableCell>
                   <TableCell>
@@ -72,12 +72,12 @@ export default function AddViewIntervals({ intervals, isModalOpen, handleCloseMo
                             </TableRow>
                           </TableHeader>
                           <TableBody>
-                            {interval.students.map((student) => (
-                              <TableRow key={student.id}>
-                                <TableCell>{student.id}</TableCell>
-                                <TableCell>{student.points}</TableCell>
-                                <TableCell>{student.finalTime}</TableCell>
-                                <TableCell>{student.average}</TableCell>
+                            {intervals.length > 0 && interval.map((int: any) => (
+                              <TableRow key={int.id}>
+                                <TableCell>{int.id}</TableCell>
+                                <TableCell>{int.points}</TableCell>
+                                <TableCell>{int.finalTime}</TableCell>
+                                <TableCell>{int.average}</TableCell>
                               </TableRow>
                             ))}
                           </TableBody>

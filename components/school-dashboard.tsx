@@ -26,6 +26,7 @@ import AddStudent from "./add-modals/add-student";
 import AddTest from "./add-modals/add-test";
 import AddViewIntervals from "./add-modals/add-view-intervals";
 import { StatusModal } from '@/components/status-modal';
+import { handleGetIntervals, handleCreateInterval } from '@/controllers/intervals';
 
 
 export default function SchoolDashboard() {
@@ -42,6 +43,7 @@ export default function SchoolDashboard() {
   const [isYearModalOpen, setIsYearModalOpen] = useState(false);
   const [isClassModalOpen, setIsClassModalOpen] = useState(false);
   const [isTestModalOpen, setIsTestModalOpen] = useState(false);
+  const [selectedTestId, setSelectedTestId] = useState<number | null>(null);
   const [isIntervalModalOpen, setIsIntervalModalOpen] = useState(false);
   const [isStudentModalOpen, setIsStudentModalOpen] = useState(false);
   const [newRecord, setNewRecord] = useState({});
@@ -121,6 +123,20 @@ export default function SchoolDashboard() {
       showStatusModal('Students fetched successfully', 'success');
     } catch (error) {
       showStatusModal('Error fetching students', 'error');
+    }
+  };
+  const fetchIntervals = async (testId: number) => {
+    console.log("🚀 ~ fetchIntervals ~ fetchIntervals:", fetchIntervals);
+
+    setIsIntervalModalOpen(true);
+    if (!testId) return;
+    showStatusModal('Fetching intervals...', 'loading');
+    try {
+      const intervals = await handleGetIntervals(testId.toString()) || [];
+      setIntervals(intervals);
+      showStatusModal('Intervals fetched successfully', 'success');
+    } catch (error) {
+      showStatusModal('Error fetching intervals', 'error');
     }
   };
 
@@ -306,7 +322,7 @@ export default function SchoolDashboard() {
                                   <CardTitle className="text-lg">{testItem.name}</CardTitle>
                                 </CardHeader>
                                 <CardContent>
-                                  <Dialog open={isSchoolModalOpen} onOpenChange={setIsIntervalModalOpen}>
+                                  <Dialog open={isSchoolModalOpen} onOpenChange={() => fetchIntervals(testItem.id)}>
                                     <DialogTrigger asChild>
                                       <div style={{ marginTop: '10px', textAlign: 'center' }}>
                                         <Button variant="outline" className="w-full" >{translations.viewAddIntervals}</Button>

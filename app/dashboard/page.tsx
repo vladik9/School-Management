@@ -1,10 +1,10 @@
 import ProtectedRoute from '@/components/protected-route';
-import SchoolDashboard from '@/components/school-dashboard';
+import Dashboard from '@/components/dashboard';
 
 export default function DashboardPage() {
   return (
     <ProtectedRoute>
-      <SchoolDashboard />
+      <Dashboard />
     </ProtectedRoute>
   );
 }

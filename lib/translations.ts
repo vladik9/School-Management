@@ -1,4 +1,3 @@
-// utils/translations.ts
 
 const translations = {
 

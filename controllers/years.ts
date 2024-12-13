@@ -1,7 +1,7 @@
 'use client';
 
 import { urlEnum } from '../utils/urlEnum';
-export const handleGetYears = async (schoolId: string) => {
+export const handleGetYears = async (schoolId: number) => {
   try {
     const response = await fetch(`${urlEnum.year}?schoolId=${schoolId}`, {
       method: 'GET',
@@ -23,7 +23,9 @@ export const handleGetYears = async (schoolId: string) => {
 };
 
 
-export const handleCreateYear = async (data: object, schoolId: string) => {
+export const handleCreateYear = async (data: object, schoolId: number) => {
+console.log("🚀 ~ handleCreateYear ~ handleCreateYear:", handleCreateYear)
+
   const response = await fetch(`${urlEnum.year}`, {
     method: 'POST',
     headers: {

@@ -38,6 +38,7 @@ const translations = {
   newSchoolName: "Nume școală nouă",
   addSchool: "Adaugă o școală nouă",
   viewSchools: "Vizualizare școli",
+  noSchools: "Nu sunt școli adaugate",
 
   //Year
   addYear: "Adaugă an",

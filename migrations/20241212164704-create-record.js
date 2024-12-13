@@ -2,12 +2,20 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('intervals', {
+    await queryInterface.createTable('records', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
+      },
+      startTime: {
+        type: Sequelize.DATE,
+        allowNull: false,
+      },
+      endTime: {
+        type: Sequelize.DATE,
+        allowNull: false,
       },
       testId: {
         type: Sequelize.INTEGER,
@@ -29,6 +37,6 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('intervals');
+    await queryInterface.dropTable('records');
   },
 };

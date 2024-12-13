@@ -1,7 +1,7 @@
 'use client';
 import { urlEnum } from '../utils/urlEnum';
 
-export const handleGetIntervals = async (testId: string) => {
+export const handleGetIntervals = async (testId: number) => {
   try {
     const response = await fetch(`${urlEnum.interval}?testId=${testId}`, {
       method: 'GET',
@@ -24,13 +24,13 @@ export const handleGetIntervals = async (testId: string) => {
 };
 
 
-export const handleCreateInterval = async (data: object, testId: string) => {
+export const handleCreateInterval = async ( testId: number) => {
    const response = await fetch(`${urlEnum.interval}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ ...data, testId }),
+    body: JSON.stringify({  testId }),
   });
   return response;
 };

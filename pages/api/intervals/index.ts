@@ -31,10 +31,10 @@ const getInterval = async (req: NextApiRequest, res: NextApiResponse) => {
 // Handle POST (create school)
 const createInterval = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    const { name,  barem, classId } = req.body;
-    const baremType = barem;
-    const newDiscipline = await Interval.create({name, baremType, classId });
-    res.status(201).json(newDiscipline);
+    const { testId } = req.body;
+    console.log("🚀 ~ createInterval ~ testId:", testId)
+    const newInterval = await Interval.create({ testId });
+    res.status(201).json(newInterval);
   } catch (error) {
     res.status(500).json({ message: 'Error creating test', error });
   }

@@ -2,12 +2,12 @@
 export const urlEnum = {
   login: '/api/schools',
   school: '/api/schools',
-  year: '/api/year',
-  class: '/api/class',
-  discipline: '/api/discipline',
-  student: '/api/student',
-  test: '/api/test',
-  interval: '/api/interval',
+  year: '/api/years',
+  class: '/api/classes',
+  discipline: '/api/disciplines',
+  student: '/api/students',
+  test: '/api/tests',
+  interval: '/api/intervals',
   docs: '/api/docs',
 };
 

@@ -126,18 +126,21 @@ export default function SchoolDashboard() {
     }
   };
   const fetchIntervals = async (testId: number) => {
-    console.log("🚀 ~ fetchIntervals ~ fetchIntervals:", fetchIntervals);
-
-    setIsIntervalModalOpen(true);
     if (!testId) return;
     showStatusModal('Fetching intervals...', 'loading');
     try {
-      const intervals = await handleGetIntervals(testId.toString()) || [];
+      const intervals = await handleGetIntervals(testId) || [];
       setIntervals(intervals);
       showStatusModal('Intervals fetched successfully', 'success');
     } catch (error) {
       showStatusModal('Error fetching intervals', 'error');
     }
+  };
+  const handleAddViewIntervals = async (testId: number) => {
+    fetchIntervals(testId);
+    setIsIntervalModalOpen(true);
+    setSelectedTestId(testId);
+
   };
 
   const handleSchoolChange = (value: string) => {
@@ -220,10 +223,13 @@ export default function SchoolDashboard() {
       showStatusModal('Error creating test', 'error');
     }
   };
+
   const handleIntervalSave = async () => {
+    console.log("🚀 ~ handleIntervalSave ~ handleIntervalSave:", handleIntervalSave);
+
     showStatusModal('Creating interval...', 'loading');
     try {
-      await handleCreateInterval(newRecord, selectedClassId?.toString() || '0');
+      await handleCreateInterval(selectedTestId);
       setIsIntervalModalOpen(false);
       fetchClasses();
       showStatusModal('Interval created successfully', 'success');
@@ -322,7 +328,7 @@ export default function SchoolDashboard() {
                                   <CardTitle className="text-lg">{testItem.name}</CardTitle>
                                 </CardHeader>
                                 <CardContent>
-                                  <Dialog open={isSchoolModalOpen} onOpenChange={() => fetchIntervals(testItem.id)}>
+                                  <Dialog open={isSchoolModalOpen} onOpenChange={() => handleAddViewIntervals(testItem.id)}>
                                     <DialogTrigger asChild>
                                       <div style={{ marginTop: '10px', textAlign: 'center' }}>
                                         <Button variant="outline" className="w-full" >{translations.viewAddIntervals}</Button>
@@ -404,13 +410,10 @@ export default function SchoolDashboard() {
                     </AccordionItem>
                   ))}
                 </Accordion>
-                <div style={{ marginTop: '10px', textAlign: 'right' }}>
-                  <Button variant="outline" onClick={() => setIsClassModalOpen(true)}>{translations.addClass}</Button>
-                </div>
               </div>
             )}
             {/* TODO fix this at some point, remove or make it show only if no class is added  */}
-            {/* {selectedYear && (
+            {selectedYear && classes.length === 0 && (
               <div>
                 <div className="text-center">
                   <p>{translations.noClassesAdded}</p>
@@ -419,7 +422,7 @@ export default function SchoolDashboard() {
                   <Button variant="outline" onClick={() => setIsClassModalOpen(true)}>{translations.addClass}</Button>
                 </div>
               </div>
-            )} */}
+            )}
 
 
 

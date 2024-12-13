@@ -18,10 +18,9 @@ interface AddViewIntervalsProps {
 }
 
 
-export default function AddViewIntervals({ intervals, isModalOpen, handleCloseModal, handleSaveModal, newRecord, setNewRecord }: AddViewIntervalsProps) {
+export default function AddViewIntervals({ intervals, isModalOpen, handleCloseModal, handleSaveModal }: AddViewIntervalsProps) {
   // const [isIntervalModalOpen, setIsIntervalModalOpen] = useState(false);
   const handleSaveNewInterval = () => {
-    setNewRecord((prev: any) => ({ ...prev, name: '1' }));
     handleSaveModal();
   };
   return (
@@ -91,7 +90,8 @@ export default function AddViewIntervals({ intervals, isModalOpen, handleCloseMo
           </Table>)}
         </>
         <div style={{ marginTop: '10px', textAlign: 'right' }}>
-          <Button variant="outline" onClick={() => handleSaveNewInterval()}>{translations.addInterval}</Button>
+          <Button variant="outline" onClick={() => handleSaveNewInterval()}>{translations.addInterval} <span>+</span>
+          </Button>
         </div>
       </div >
       {/* <GenericModal isOpen={isIntervalModalOpen}

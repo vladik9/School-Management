@@ -12,7 +12,7 @@ import { handleGetYears, handleCreateYear } from "@/controllers/years";
 import { handleGetStudents, handleCreateStudent } from "@/controllers/student";
 import { handleCreateTest } from "@/controllers/test";
 import { handleGetIntervals, handleCreateInterval } from '@/controllers/intervals';
-import { School, Users } from 'lucide-react';
+import { School } from 'lucide-react';
 import { toRoman } from "@/utils/functions";
 import { Student, Interval, Test, YearData, ClassData, SchoolData } from "@/types/types";
 import statusMessages, { fetchStatuses } from '@/lib/statusMessages';
@@ -31,11 +31,6 @@ import AddStudent from "@/components/add-modals/add-student";
 import AddTest from "@/components/add-modals/add-test";
 import AddViewIntervals from "@/components/add-modals/add-view-intervals";
 
-interface StudentData {
-  id: number;
-  name: string;
-  // Add other fields if needed
-}
 
 export default function SchoolDashboard() {
   const [schools, setSchools] = useState<SchoolData[]>([]);
@@ -44,10 +39,10 @@ export default function SchoolDashboard() {
   const [selectedClassId, setSelectedClassId] = useState<number>();
   const [years, setYears] = useState<YearData[]>([]);
   const [selectedYear, setSelectedYear] = useState<number | null>(null);
-  const [students, setStudents] = useState<StudentData[]>([]);
+  const [students, setStudents] = useState<Student[]>([]);
   const [intervals, setIntervals] = useState<Interval[]>([]);
   const [selectedTestId, setSelectedTestId] = useState<number | null>(null);
-
+  const [records, setRecords] = useState<Record[]>([]);
   // Modal states
   const [isSchoolModalOpen, setIsSchoolModalOpen] = useState(false);
   const [isYearModalOpen, setIsYearModalOpen] = useState(false);
@@ -228,7 +223,7 @@ export default function SchoolDashboard() {
       await handleCreateStudent(newRecord, selectedClassId.toString());
       setIsStudentModalOpen(false);
       setNewRecord({});
-      fetchStudents();
+      fetchClasses();
       showStatusModal(statusMessages.studentCreated, fetchStatuses.success);
     } catch (error) {
       showStatusModal(statusMessages.errorCreatingStudent, fetchStatuses.error);
@@ -254,31 +249,23 @@ export default function SchoolDashboard() {
     showStatusModal(statusMessages.creatingInterval, fetchStatuses.loading);
     try {
       await handleCreateInterval(selectedTestId);
-      setIsIntervalModalOpen(false);
       fetchClasses();
+      fetchIntervals(selectedTestId);
       showStatusModal(statusMessages.intervalCreated, fetchStatuses.success);
     } catch (error) {
       showStatusModal(statusMessages.errorCreatingTest, fetchStatuses.error);
     }
   };
+  const handleSaveNewRecord = () => {
+
+  };
 
   // Other handlers
-  const handleAddStudent = (classId: number) => {
-    setSelectedClassId(classId);
-    setIsStudentModalOpen(true);
-  };
-
-  const handleSelectingTest = (classId: number) => {
-    setSelectedClassId(classId);
-    setIsTestModalOpen(true);
-  };
-
   const handleAddViewIntervals = async (testId: number) => {
     setSelectedTestId(testId);
     await fetchIntervals(testId);
     setIsIntervalModalOpen(true);
   };
-
   return (
     <div className="min-h-screen bg-gray-100 p-8">
       <Card className="max-w-6xl mx-auto">
@@ -307,18 +294,19 @@ export default function SchoolDashboard() {
           )}
 
           {/* Classes and Tests */}
-          {selectedYear && classes.length > 0 && (
+          {classes.length > 0 && (
             <ClassAccordion
               classes={classes}
-              translations={translations}
-              handleAddStudent={handleAddStudent}
-              handleSelectingTest={handleSelectingTest}
+              handleAddStudent={() => setIsStudentModalOpen(true)}
+              handleSelectingTest={() => setIsTestModalOpen(true)}
               handleAddViewIntervals={handleAddViewIntervals}
+              setSelectedClassId={setSelectedClassId}
             />
           )}
 
           {/* If no classes yet */}
-          {selectedYear && classes.length === 0 && (
+          {/* //TODO - FIX THIS BAD CODE */}
+          {(
             <div>
               <div className="text-center">
                 <p>{translations.noClassesAdded}</p>
@@ -371,6 +359,9 @@ export default function SchoolDashboard() {
             handleSaveModal={handleIntervalSave}
             setNewRecord={setNewRecord}
             newRecord={newRecord}
+            records={records}
+            students={(classes.find((c) => c.id === selectedClassId) || {}).students || []}
+            handleSaveNewRecord={handleSaveNewRecord}
           />
 
           <AddStudent

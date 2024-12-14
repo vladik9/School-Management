@@ -1,6 +1,8 @@
 'use client';
 
 import { urlEnum } from '../utils/urlEnum';
+import statusMessages from '@/lib/statusMessages';
+
 export const handleGetTests = async (classId: string) => {
   try {
     const response = await fetch(`${urlEnum.test}?classId=${classId}`, {
@@ -11,19 +13,20 @@ export const handleGetTests = async (classId: string) => {
     });
 
     if (!response.ok) {
-      throw new Error('Failed to fetch tests');
+      throw new Error(statusMessages.errorFetchingTests);
     }
 
     const data = await response.json();
-    return data;  // This will return the list of years
+    return data;
   } catch (error) {
     console.error(error);
-    return { message: 'Error fetching tests' };  // Handle error gracefully
+    return { message: statusMessages.errorFetchingTests };
   }
 };
 
 
 export const handleCreateTest = async (data: object, classId: string) => {
+  try{
   const response = await fetch(`${urlEnum.test}`, {
     method: 'POST',
     headers: {
@@ -31,5 +34,12 @@ export const handleCreateTest = async (data: object, classId: string) => {
     },
     body: JSON.stringify({ ...data, classId }),
   });
-  return response;
+  if (!response.ok) {
+    throw new Error(statusMessages.errorCreatingTest);
+  }
+    return response;
+  } catch (error) {
+    console.error(error);
+    return { message: statusMessages.errorCreatingTest };
+  }
 };

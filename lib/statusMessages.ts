@@ -1,3 +1,4 @@
+import {FetchStatuses} from '@/types/types';
 const statusMessages = {
   // Schools
   fetchingSchools: 'Incarcarea scolilor...',
@@ -68,7 +69,6 @@ const statusMessages = {
   error: 'A aparut o eroare',
 };
 
-export type FetchStatuses = "default" | "success" | "error" | "loading";
 
 export const fetchStatuses: Record<FetchStatuses, FetchStatuses> = {
   default: 'default',

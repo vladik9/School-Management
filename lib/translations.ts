@@ -1,3 +1,6 @@
+import { TimePicker } from '@/components/ui/time-picker';
+import AddNewRecord from "@/components/add-modals/add-new-record";
+import { start } from "repl";
 
 const translations = {
 
@@ -19,14 +22,6 @@ const translations = {
   dashboard: "Dashboard",
   dashboardDescription: "Aici puteți vedea informațiile despre școală",
   dashboardTitle: "Bine ai venit pe pagina de administrare a școlilor",
-  //Common
-  action: "Acțiune",
-  view: "Vizualizare",
-  edit: "Editare",
-  inter: "Int.",
-  addDescription: "Adaugă detaliile aici",
-  year: "An",
-  id: "Id",
 
   //Generic modal
   cancelText: "Anulare",
@@ -61,7 +56,8 @@ const translations = {
   noClassesAdded: "Nu sunt clase adaugate",
 
   //Student
-  studentId: "Id elev nou",
+  studentId: "Id elev",
+  newStudentId: "Id elev nou",
   orderNumber: "Numar de ordine",
   addStudent: "Adaugă elev",
   viewStudents: "Vizualizare elevi",
@@ -76,6 +72,7 @@ const translations = {
   controlB: "Control",
   experimentA: "Experiment",
   idNotGenerated: "Id-ul nu a fost generat",
+  chooseStudent: "Alege elev",
 
   //Test
   tasks: "Teme",
@@ -91,13 +88,40 @@ const translations = {
   //Interval
   viewIntervals: "Vizualizare intervale",
   viewAddIntervals: "Vizualizare/Adaugare intervale",
+  viewAddIntervalsDescription: "Adaugare sau administreaza intervale",
   addInterval: "Adaugare interval",
   intervals: "Intervale de studiu",
-  intervalName: "Numele interval",
+  intervalName: "Nume interval",
+  startTime: "Timp de start",
   finalTime: "Timp final",
   points: "Puncte",
   average: "Medie",
   noIntervals: "Nu există intervale adaugate",
+
+  //Records
+  addNewRecord: "Adaugă o noua inregistrare",
+  addNewRecordDescription: "Adaugă o noua inregistrare aici",
+  noRecords: "Nu sunt note adaugate",
+  viewRecords: "Vizualizare note",
+  addRecord: "Adaugă inregistrare",
+  student: "Elev",
+  date: "Data",
+  record: "Nota",
+
+  //TimePicker
+  selectTime: "Selecteaza timp",
+  selectedTime: "Timp selectat",
+  noTimeSelected: "Niciun timp selectat",
+
+  //Common
+  action: "Acțiune",
+  view: "Vizualizare",
+  viewOrEdit: "Vizualizare sau editare",
+  edit: "Editare",
+  inter: "Int.",
+  addDescription: "Adaugă detaliile aici",
+  year: "An",
+  id: "Id",
 
   //Docs
 };

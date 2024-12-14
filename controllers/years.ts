@@ -1,6 +1,8 @@
 'use client';
 
 import { urlEnum } from '../utils/urlEnum';
+import statusMessages from '@/lib/statusMessages';
+
 export const handleGetYears = async (schoolId: number) => {
   try {
     const response = await fetch(`${urlEnum.year}?schoolId=${schoolId}`, {
@@ -11,21 +13,21 @@ export const handleGetYears = async (schoolId: number) => {
     });
 
     if (!response.ok) {
-      throw new Error('Failed to fetch years');
+      throw new Error(statusMessages.errorFetchingYears);
     }
 
     const data = await response.json();
-    return data;  // This will return the list of years
+    return data;
   } catch (error) {
     console.error(error);
-    return { message: 'Error fetching years' };  // Handle error gracefully
+    return { message: statusMessages.errorFetchingYears };
   }
 };
 
 
 export const handleCreateYear = async (data: object, schoolId: number) => {
 console.log("🚀 ~ handleCreateYear ~ handleCreateYear:", handleCreateYear)
-
+try {
   const response = await fetch(`${urlEnum.year}`, {
     method: 'POST',
     headers: {
@@ -33,5 +35,12 @@ console.log("🚀 ~ handleCreateYear ~ handleCreateYear:", handleCreateYear)
     },
     body: JSON.stringify({ ...data, schoolId }),
   });
+  if (!response.ok) {
+    throw new Error(statusMessages.errorCreatingTest);
+  }
   return response;
+} catch (error) {
+  console.error(error);
+  return { message: statusMessages.errorCreatingTest };
+}
 };

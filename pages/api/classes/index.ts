@@ -36,7 +36,7 @@ const getClasses = async (req: NextApiRequest, res: NextApiResponse) => {
           }),
           Student.findAll({
             where: { classId: classData.id }, // Use classId to fetch related students
-            attributes: ['id', 'name'], // Select relevant fields
+            attributes: ['id', 'name','studentId'], // Select relevant fields
           }),
         ]);
 

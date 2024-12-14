@@ -1,6 +1,7 @@
 'use client';
-//TODO - WORK FORM HERE IMPLEMENT STUDENTS and API
 import { urlEnum } from '../utils/urlEnum';
+import statusMessages from '@/lib/statusMessages';
+
 export const handleGetStudents = async (classId: string) => {
   try {
     const response = await fetch(`${urlEnum.student}?classId=${classId}`, {
@@ -11,19 +12,20 @@ export const handleGetStudents = async (classId: string) => {
     });
 
     if (!response.ok) {
-      throw new Error('Failed to fetch students');
+      throw new Error(statusMessages.errorFetchingStudents);
     }
 
     const data = await response.json();
-    return data;  // This will return the list of years
+    return data;
   } catch (error) {
     console.error(error);
-    return { message: 'Error fetching students' };  // Handle error gracefully
+    return { message: statusMessages.errorFetchingStudents };
   }
 };
 
 
 export const handleCreateStudent = async (data: object, classId: string) => {
+  try{
   const response = await fetch(`${urlEnum.student}`, {
     method: 'POST',
     headers: {
@@ -31,5 +33,12 @@ export const handleCreateStudent = async (data: object, classId: string) => {
     },
     body: JSON.stringify({ ...data, classId: classId }),
   });
-  return response;
+  if (!response.ok) {
+    throw new Error(statusMessages.errorCreatingStudent);
+  }
+    return response;
+  } catch (error) {
+    console.error(error);
+    return { message: statusMessages.errorCreatingStudent };
+  }
 };

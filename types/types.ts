@@ -1,20 +1,20 @@
-type Student = {
+type StudentData = {
   id: number;
   studentId: number;
   name: string;
 };
 
-type Interval = {
+type IntervalData = {
   id: number;
   name: string;
-  students: Student[];
+  students: StudentData[];
 };
 
-type Test = {
+type TestData = {
   id: number;
   name: string;
   barem: string;
-  intervals: Interval[];
+  intervals: IntervalData[];
 };
 
 
@@ -28,19 +28,30 @@ type ClassData = {
   name: string;
   schoolId: number;
   teacher: string;
-  tests: Test[];
+  tests: TestData[];
+  students: StudentData[];
 };
 
 type SchoolData = {
   id: number;
   name: string;
 };
+type RecordData = {
+  id: number;
+  startTime: Date;
+  endTime: Date;
+  intervalId: number;
+}
+ type FetchStatuses = "default" | "success" | "error" | "loading";
 
-export {
+
+export type{
   YearData,
   ClassData,
   SchoolData,
-  Student,
-  Interval,
-  Test,
+  StudentData,
+  IntervalData,
+  TestData,
+  RecordData,
+  FetchStatuses,
 };

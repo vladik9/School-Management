@@ -32,7 +32,6 @@ const getInterval = async (req: NextApiRequest, res: NextApiResponse) => {
 const createInterval = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const { testId } = req.body;
-    console.log("🚀 ~ createInterval ~ testId:", testId)
     const newInterval = await Interval.create({ testId });
     res.status(201).json(newInterval);
   } catch (error) {

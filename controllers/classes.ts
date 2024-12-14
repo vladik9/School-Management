@@ -1,6 +1,6 @@
 'use client';
 import { urlEnum } from '../utils/urlEnum';
-
+import statusMessages from '@/lib/statusMessages';
 export const handleGetClasses = async (yearId: string) => {
   try {
     const response = await fetch(`${urlEnum.class}?yearId=${yearId}`, {
@@ -10,7 +10,7 @@ export const handleGetClasses = async (yearId: string) => {
       },
     });
     if (!response.ok) {
-      throw new Error('Failed to fetch classes');
+      throw new Error(statusMessages.errorFetchingClasses);
     }
 
 
@@ -19,18 +19,26 @@ export const handleGetClasses = async (yearId: string) => {
   } catch (error) {
 
     console.error(error);
-    return { message: 'Error fetching classes' };  // Handle error gracefully
+    return { message: statusMessages.errorFetchingClasses};
   }
 };
 
 
 export const handleCreateClass = async (data: object, yearId: string) => {
+  try {
    const response = await fetch(`${urlEnum.class}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({ ...data, yearId }),
-  });
-  return response;
+   });
+   if (!response.ok) {
+    throw new Error(statusMessages.errorCreatingClass);
+  }
+    return response;
+  } catch (error) {
+    console.error(error);
+    return { message: statusMessages.errorCreatingClass};
+  }
 };

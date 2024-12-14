@@ -1,5 +1,6 @@
 'use client';
 import { urlEnum } from '../utils/urlEnum';
+import statusMessages from '@/lib/statusMessages';
 
 export const handleGetIntervals = async (testId: number) => {
   try {
@@ -10,27 +11,35 @@ export const handleGetIntervals = async (testId: number) => {
       },
     });
     if (!response.ok) {
-      throw new Error('Failed to fetch intervals');
+      throw new Error(statusMessages.errorFetchingIntervals);
     }
     if(!response) return []
 
     const data = await response.json();
-    return data;  // This will return the list of intervals
+    return data;
   } catch (error) {
 
     console.error(error);
-    return { message: 'Error fetching intervals' };  // Handle error gracefully
+    return { message: statusMessages.errorFetchingIntervals };
   }
 };
 
 
-export const handleCreateInterval = async ( testId: number) => {
+export const handleCreateInterval = async (testId: number) => {
+  try {
    const response = await fetch(`${urlEnum.interval}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({  testId }),
-  });
-  return response;
+    body: JSON.stringify({ testId }),
+   });
+   if (!response.ok) {
+    throw new Error(statusMessages.errorCreatingInterval);
+  }
+    return response;
+  } catch (error) {
+  console.error(error);
+  return { message: statusMessages.errorCreatingInterval};
+}
 };

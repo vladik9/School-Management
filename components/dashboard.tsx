@@ -15,7 +15,7 @@ import { handleGetIntervals, handleCreateInterval } from '@/controllers/interval
 import { School, Users } from 'lucide-react';
 import { toRoman } from "@/utils/functions";
 import { Student, Interval, Test, YearData, ClassData, SchoolData } from "@/types/types";
-
+import statusMessages, { fetchStatuses } from '@/lib/statusMessages';
 import { StatusModal } from '@/components/status-modal';
 
 // Child components
@@ -66,8 +66,8 @@ export default function SchoolDashboard() {
   const router = useRouter();
 
   // Status Modal functions
-  const showStatusModal = (message: string, variant: 'default' | 'success' | 'error' | 'loading') => {
-    setStatusModal({ isVisible: true, message, variant });
+  const showStatusModal = (message: string, variant: "default" | "success" | "error" | "loading") => {
+    setStatusModal({ isVisible: true, message, variant: 'default' });
   };
   const hideStatusModal = () => {
     setStatusModal(prev => ({ ...prev, isVisible: false }));
@@ -107,61 +107,60 @@ export default function SchoolDashboard() {
 
   // Data fetching functions
   const fetchSchools = async () => {
-    showStatusModal('Fetching schools...', 'loading');
+    showStatusModal(statusMessages.fetchingSchools, fetchStatuses.loading);
     try {
       const schoolList = await handleGetSchools() || [];
       setSchools(schoolList);
-      showStatusModal('Schools fetched successfully', 'success');
+      showStatusModal(statusMessages.schoolsFetched, fetchStatuses.success);
     } catch (error) {
-      showStatusModal('Error fetching schools', 'error');
+      showStatusModal(statusMessages.errorFetchingSchools, fetchStatuses.error);
     }
   };
 
   const fetchYears = async () => {
     if (!selectedSchool) return;
-    showStatusModal('Fetching years...', 'loading');
+    showStatusModal(statusMessages.fetchingYears, fetchStatuses.loading);
     try {
-      const yearList = await handleGetYears(selectedSchool.id.toString()) || [];
+      const yearList = await handleGetYears(selectedSchool.id) || [];
       setYears(yearList);
-      showStatusModal('Years fetched successfully', 'success');
+      showStatusModal(statusMessages.yearsFetched, fetchStatuses.success);
     } catch (error) {
-      showStatusModal('Error fetching years', 'error');
+      showStatusModal(statusMessages.errorFetchingYears, fetchStatuses.error);
     }
   };
 
   const fetchClasses = async () => {
     if (!selectedYear) return;
-    showStatusModal('Fetching classes...', 'loading');
+    showStatusModal(statusMessages.fetchingClasses, fetchStatuses.loading);
     try {
       const classList = await handleGetClasses(selectedYear.toString()) || [];
       setClasses(classList);
-      showStatusModal('Classes fetched successfully', 'success');
+      showStatusModal(statusMessages.classesFetched, fetchStatuses.success);
     } catch (error) {
-      showStatusModal('Error fetching classes', 'error');
+      showStatusModal(statusMessages.errorFetchingClasses, fetchStatuses.error);;
     }
   };
 
   const fetchStudents = async () => {
     if (!selectedClassId) return;
-    showStatusModal('Fetching students...', 'loading');
+    showStatusModal(statusMessages.fetchingStudents, fetchStatuses.loading);
     try {
       const studentList = await handleGetStudents(selectedClassId.toString()) || [];
       setStudents(studentList);
-      showStatusModal('Students fetched successfully', 'success');
+      showStatusModal(statusMessages.studentsFetched, fetchStatuses.success);
     } catch (error) {
-      showStatusModal('Error fetching students', 'error');
+      showStatusModal(statusMessages.errorFetchingStudents, fetchStatuses.error);
     }
   };
 
   const fetchIntervals = async (testId: number) => {
     if (!testId) return;
-    showStatusModal('Fetching intervals...', 'loading');
+    showStatusModal(statusMessages.fetchingIntervals, fetchStatuses.loading);
     try {
       const intervalList = await handleGetIntervals(testId) || [];
       setIntervals(intervalList);
-      showStatusModal('Intervals fetched successfully', 'success');
     } catch (error) {
-      showStatusModal('Error fetching intervals', 'error');
+      showStatusModal(statusMessages.errorFetchingIntervals, fetchStatuses.error);
     }
   };
 
@@ -182,84 +181,84 @@ export default function SchoolDashboard() {
 
   // Handlers for creating new data
   const handleSchoolSave = async () => {
-    showStatusModal('Creating school...', 'loading');
+    showStatusModal(statusMessages.creatingSchool, fetchStatuses.loading);
     try {
       await handleCreateSchool(newRecord);
       setIsSchoolModalOpen(false);
       setNewRecord({});
       fetchSchools();
-      showStatusModal('School created successfully', 'success');
+      showStatusModal(statusMessages.schoolCreated, fetchStatuses.success);
     } catch (error) {
-      showStatusModal('Error creating school', 'error');
+      showStatusModal(statusMessages.errorCreatingSchool, fetchStatuses.error);
     }
   };
 
   const handleYearSave = async () => {
     if (!selectedSchool) return;
-    showStatusModal('Creating year...', 'loading');
+    showStatusModal(statusMessages.schoolCreated, fetchStatuses.loading);
     try {
-      await handleCreateYear(newRecord, selectedSchool.id.toString());
+      await handleCreateYear(newRecord, selectedSchool.id);
       setIsYearModalOpen(false);
       setNewRecord({});
       fetchYears();
-      showStatusModal('Year created successfully', 'success');
+      showStatusModal(statusMessages.yearCreated, fetchStatuses.success);
     } catch (error) {
-      showStatusModal('Error creating year', 'error');
+      showStatusModal(statusMessages.errorCreatingYear, fetchStatuses.error);
     }
   };
 
   const handleClassSave = async () => {
     if (!selectedYear) return;
-    showStatusModal('Creating class...', 'loading');
+    showStatusModal(statusMessages.creatingClass, fetchStatuses.loading);
     try {
       await handleCreateClass(newRecord, selectedYear.toString());
       setIsClassModalOpen(false);
       setNewRecord({});
       fetchClasses();
-      showStatusModal('Class created successfully', 'success');
+      showStatusModal(statusMessages.classCreated, fetchStatuses.success);
     } catch (error) {
-      showStatusModal('Error creating class', 'error');
+      showStatusModal(statusMessages.errorCreatingClass, fetchStatuses.error);
     }
   };
 
   const handleStudentSave = async () => {
     if (!selectedClassId) return;
-    showStatusModal('Creating student...', 'loading');
+    showStatusModal(statusMessages.creatingStudent, fetchStatuses.loading);
     try {
       await handleCreateStudent(newRecord, selectedClassId.toString());
       setIsStudentModalOpen(false);
       setNewRecord({});
       fetchStudents();
-      showStatusModal('Student created successfully', 'success');
+      showStatusModal(statusMessages.studentCreated, fetchStatuses.success);
     } catch (error) {
-      showStatusModal('Error creating student', 'error');
+      showStatusModal(statusMessages.errorCreatingStudent, fetchStatuses.error);
     }
   };
 
   const handleTestSave = async () => {
     if (!selectedClassId) return;
-    showStatusModal('Creating test...', 'loading');
+    showStatusModal(statusMessages.creatingTest, fetchStatuses.loading);
     try {
       await handleCreateTest(newRecord, selectedClassId.toString());
       setIsTestModalOpen(false);
       setNewRecord({});
       fetchClasses();
-      showStatusModal('Test created successfully', 'success');
+      showStatusModal(statusMessages.testCreated, fetchStatuses.success);
     } catch (error) {
-      showStatusModal('Error creating test', 'error');
+      showStatusModal(statusMessages.errorCreatingTest, fetchStatuses.error);
     }
   };
 
   const handleIntervalSave = async () => {
     if (!selectedTestId) return;
-    showStatusModal('Creating interval...', 'loading');
+    showStatusModal(statusMessages.creatingInterval, fetchStatuses.loading);
     try {
       await handleCreateInterval(selectedTestId);
       setIsIntervalModalOpen(false);
       fetchClasses();
-      showStatusModal('Interval created successfully', 'success');
+      showStatusModal(statusMessages.intervalCreated, fetchStatuses.success);
     } catch (error) {
-      showStatusModal('Error creating interval', 'error');
+      showStatusModal(statusMessages.errorCreatingTest, fetchStatuses.error);
     }
   };
 

@@ -68,12 +68,13 @@ const statusMessages = {
   error: 'A aparut o eroare',
 };
 
-export const fetchStatuses = {
+export type FetchStatuses = "default" | "success" | "error" | "loading";
 
+export const fetchStatuses: Record<FetchStatuses, FetchStatuses> = {
+  default: 'default',
   loading: 'loading',
   success: 'success',
   error: 'error',
-
-}
+};
 
 export default statusMessages;

@@ -5,27 +5,21 @@ import TimePicker from '@/components/ui/time-picker';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import translations from '@/lib/translations';
-
+import { RecordData } from "@/types/types";
 interface AddNewRecordProps {
   isModalOpen: boolean;
   handleCloseModal: () => void;
-  handleSaveModal: (newRecord: NewRecord) => void;
+  handleSaveModal: (newRecord: RecordData) => void;
   records: any[];
   students: any[];
+  newRecord: any;
+  setNewRecord: (data: any) => void;
 }
 
-interface NewRecord {
-  studentId: string;
-  startTime: string;
-  finalTime: string;
-}
 
-export default function AddNewRecord({ isModalOpen, handleCloseModal, handleSaveModal, records, students }: AddNewRecordProps) {
-  const [newRecord, setNewRecord] = useState<NewRecord>({
-    studentId: '',
-    startTime: '',
-    finalTime: '',
-  });
+
+export default function AddNewRecord({ isModalOpen, handleCloseModal, handleSaveModal, records, students, newRecord, setNewRecord }: AddNewRecordProps) {
+
 
   const onStudentSelect = (studentId: string) => {
     setNewRecord(prev => ({ ...prev, studentId }));
@@ -36,17 +30,18 @@ export default function AddNewRecord({ isModalOpen, handleCloseModal, handleSave
   };
 
   const onFinalTimeChange = (time: string) => {
-    setNewRecord(prev => ({ ...prev, finalTime: time }));
+    setNewRecord(prev => ({ ...prev, endTime: time }));
   };
 
   const onSave = () => {
-    if (newRecord.studentId && newRecord.startTime && newRecord.finalTime) {
+    if (newRecord.studentId && newRecord.startTime && newRecord.endTime) {
       handleSaveModal(newRecord);
     } else {
       // Handle validation error
       console.error('All fields are required');
     }
   };
+
 
   return (
     <GenericModal

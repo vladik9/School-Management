@@ -112,16 +112,23 @@ const translations = {
   selectTime: "Selecteaza timp",
   selectedTime: "Timp selectat",
   noTimeSelected: "Niciun timp selectat",
+  seconds: "Secunde",
+  minutes: "Minute",
 
   //Common
   action: "Acțiune",
   view: "Vizualizare",
-  viewOrEdit: "Vizualizare sau editare",
+  remove: "Sterge",
+  viewOrEdit: "Vizualizare/editare",
   edit: "Editare",
   inter: "Int.",
   addDescription: "Adaugă detaliile aici",
   year: "An",
   id: "Id",
+  confirm: "Confirma",
+  cancel: "Anuleaza",
+  confirmRemoveRecordTitle: "Confirmare stergere",
+  confirmRemoveRecordMessage: "Esti sigur ca vrei sa stergi acest inregistrare?",
 
   //Docs
 };

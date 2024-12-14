@@ -3,9 +3,9 @@
 import { urlEnum } from '../utils/urlEnum';
 import statusMessages from '@/lib/statusMessages';
 
-export const handleGetYears = async (schoolId: number) => {
+export const handleGetRecords = async (testId: number) => {
   try {
-    const response = await fetch(`${urlEnum.year}?schoolId=${schoolId}`, {
+    const response = await fetch(`${urlEnum.record}?testId=${testId}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -13,33 +13,33 @@ export const handleGetYears = async (schoolId: number) => {
     });
 
     if (!response.ok) {
-      throw new Error(statusMessages.errorFetchingYears);
+      throw new Error(statusMessages.errorFetchingRecords);
     }
 
     const data = await response.json();
     return data;
   } catch (error) {
     console.error(error);
-    return { message: statusMessages.errorFetchingYears };
+    return { message: statusMessages.errorFetchingRecords };
   }
 };
 
 
-export const handleCreateYear = async (data: object, schoolId: number) => {
+export const handleCreateRecord = async (data: object, intervalId: number) => {
 try {
-  const response = await fetch(`${urlEnum.year}`, {
+  const response = await fetch(`${urlEnum.record}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ ...data, schoolId }),
+    body: JSON.stringify({ ...data, intervalId }),
   });
   if (!response.ok) {
-    throw new Error(statusMessages.errorCreatingTest);
+    throw new Error(statusMessages.creatingRecord);
   }
   return response;
 } catch (error) {
   console.error(error);
-  return { message: statusMessages.errorCreatingTest };
+  return { message: statusMessages.creatingRecord };
 }
 };

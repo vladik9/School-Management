@@ -8,6 +8,7 @@ export const urlEnum = {
   student: '/api/students',
   test: '/api/tests',
   interval: '/api/intervals',
+  record: '/api/records',
   docs: '/api/docs',
 };
 

@@ -53,7 +53,7 @@ export default function TimePicker({ label, id, onChange, value }: TimePickerPro
           <Button
             variant="outline"
             className={`w-full justify-start text-left font-normal ${!time && "text-muted-foreground"}`}
-            onClick={handlePopoverClick}  // Add this line
+            onClick={handlePopoverClick}
           >
             <Clock className="mr-2 h-4 w-4" />
             {time ? time : translations.selectTime}
@@ -64,7 +64,7 @@ export default function TimePicker({ label, id, onChange, value }: TimePickerPro
             <div className="flex space-x-2">
               <Select onValueChange={(value) => handleTimeChange('minute', value)}>
                 <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Minutes" />
+                  <SelectValue placeholder={translations.minutes} />
                 </SelectTrigger>
                 <SelectContent>
                   {minutes.map((minute) => (
@@ -76,7 +76,7 @@ export default function TimePicker({ label, id, onChange, value }: TimePickerPro
               </Select>
               <Select onValueChange={(value) => handleTimeChange('second', value)}>
                 <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Seconds" />
+                  <SelectValue placeholder={translations.seconds} />
                 </SelectTrigger>
                 <SelectContent>
                   {seconds.map((second) => (

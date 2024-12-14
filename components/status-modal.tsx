@@ -6,7 +6,7 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '@/lib/utils';
 
 const statusModalVariants = cva(
-  "fixed top-4 right-4 p-4 rounded-md shadow-md transition-all duration-300 ease-in-out z-50",
+  "fixed top-4 right-4 p-4 rounded-md shadow-md transition-all duration-300 ease-in-out z-50 border border-gray-300", // Added border classes here
   {
     variants: {
       variant: {

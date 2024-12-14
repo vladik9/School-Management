@@ -1,7 +1,7 @@
 'use client';
 import { urlEnum } from '../utils/urlEnum';
 import statusMessages from '@/lib/statusMessages';
-
+//TODO- fix interval returning error not rendering ok UI
 export const handleGetIntervals = async (testId: number) => {
   try {
     const response = await fetch(`${urlEnum.interval}?testId=${testId}`, {
@@ -13,7 +13,7 @@ export const handleGetIntervals = async (testId: number) => {
     if (!response.ok) {
       throw new Error(statusMessages.errorFetchingIntervals);
     }
-    if(!response) return []
+    if (!response) return [];
 
     const data = await response.json();
     return data;

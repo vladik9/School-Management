@@ -38,6 +38,7 @@ type SchoolData = {
 };
 type RecordData = {
   id: number;
+  studentId: number;
   startTime: Date;
   endTime: Date;
   intervalId: number;

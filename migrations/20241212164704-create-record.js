@@ -17,7 +17,7 @@ module.exports = {
         type: Sequelize.DATE,
         allowNull: false,
       },
-      testId: {
+      intervalId: {
         type: Sequelize.INTEGER,
         references: {
           model: 'tests',

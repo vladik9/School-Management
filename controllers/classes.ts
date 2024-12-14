@@ -12,7 +12,7 @@ export const handleGetClasses = async (yearId: string) => {
     if (!response.ok) {
       throw new Error(statusMessages.errorFetchingClasses);
     }
-
+    if (!response) return [];
 
     const data = await response.json();
     return data;  // This will return the list of years

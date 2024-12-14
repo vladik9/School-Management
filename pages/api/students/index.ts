@@ -29,7 +29,7 @@ const getStudents = async (req: NextApiRequest, res: NextApiResponse) => {
     res.status(200).json(students);
   } catch (error) {
     console.error("Error in getStudents:", error);
-    res.status(500).json({ message: 'Error fetching studenst', error });
+    return res.status(404).json([]);
   }
 };
 

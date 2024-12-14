@@ -14,10 +14,10 @@ import { handleCreateTest } from "@/controllers/test";
 import { handleGetIntervals, handleCreateInterval } from '@/controllers/intervals';
 import { School } from 'lucide-react';
 import { toRoman } from "@/utils/functions";
-import { Student, Interval, Test, YearData, ClassData, SchoolData } from "@/types/types";
+import { StudentData, IntervalData, RecordData, TestData, YearData, ClassData, SchoolData } from "@/types/types";
 import statusMessages, { fetchStatuses } from '@/lib/statusMessages';
 import { StatusModal } from '@/components/status-modal';
-
+import { handleCreateRecord } from "@/controllers/records";
 // Child components
 import SchoolSelector from '@/components/schoolSelector/schoolSelector';
 import YearSelector from '@/components/schoolSelector/yearSelector';
@@ -39,10 +39,11 @@ export default function SchoolDashboard() {
   const [selectedClassId, setSelectedClassId] = useState<number>();
   const [years, setYears] = useState<YearData[]>([]);
   const [selectedYear, setSelectedYear] = useState<number | null>(null);
-  const [students, setStudents] = useState<Student[]>([]);
-  const [intervals, setIntervals] = useState<Interval[]>([]);
+  const [students, setStudents] = useState<StudentData[]>([]);
+  const [intervals, setIntervals] = useState<IntervalData[]>([]);
+  const [selectedIntervalId, setSelectedIntervalId] = useState<number>();
   const [selectedTestId, setSelectedTestId] = useState<number | null>(null);
-  const [records, setRecords] = useState<Record[]>([]);
+  const [records, setRecords] = useState<RecordData[]>([]);
   // Modal states
   const [isSchoolModalOpen, setIsSchoolModalOpen] = useState(false);
   const [isYearModalOpen, setIsYearModalOpen] = useState(false);
@@ -258,6 +259,8 @@ export default function SchoolDashboard() {
   };
   const handleSaveNewRecord = () => {
 
+    handleCreateRecord(newRecord, selectedIntervalId || 0);
+
   };
 
   // Other handlers
@@ -266,6 +269,7 @@ export default function SchoolDashboard() {
     await fetchIntervals(testId);
     setIsIntervalModalOpen(true);
   };
+
   return (
     <div className="min-h-screen bg-gray-100 p-8">
       <Card className="max-w-6xl mx-auto">
@@ -360,8 +364,9 @@ export default function SchoolDashboard() {
             setNewRecord={setNewRecord}
             newRecord={newRecord}
             records={records}
-            students={(classes.find((c) => c.id === selectedClassId) || {}).students || []}
+            students={(classes.length > 0 && classes.find((c) => c.id === selectedClassId) || {}).students || []}
             handleSaveNewRecord={handleSaveNewRecord}
+            setSelectedIntervalId={setSelectedIntervalId}
           />
 
           <AddStudent

@@ -12,17 +12,17 @@ const getInterval = async (req: NextApiRequest, res: NextApiResponse) => {
     }
 
     // Query the 'Year' table to find all years for the given schoolId
-    const test = await Interval.findAll({
+    const interval = await Interval.findAll({
       where: { testId },  // Use `where` to filter by schoolId
     });
 
     // If no years found, return 404
-    if (!test || test.length === 0) {
-      return res.status(404).json({ message: 'Test not found for the given testId' });
+    if (!interval || interval.length === 0) {
+      return res.status(404).json([]);
     }
 
     // Return the found years
-    res.status(200).json(test);
+    res.status(200).json(interval);
   } catch (error) {
     res.status(500).json({ message: 'Error fetching test', error });
   }

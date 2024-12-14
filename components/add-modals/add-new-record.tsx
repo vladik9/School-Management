@@ -10,7 +10,6 @@ interface AddNewRecordProps {
   isModalOpen: boolean;
   handleCloseModal: () => void;
   handleSaveModal: (newRecord: RecordData) => void;
-  records: any[];
   students: any[];
   newRecord: any;
   setNewRecord: (data: any) => void;
@@ -18,7 +17,7 @@ interface AddNewRecordProps {
 
 
 
-export default function AddNewRecord({ isModalOpen, handleCloseModal, handleSaveModal, records, students, newRecord, setNewRecord }: AddNewRecordProps) {
+export default function AddNewRecord({ isModalOpen, handleCloseModal, handleSaveModal, students, newRecord, setNewRecord }: AddNewRecordProps) {
 
 
   const onStudentSelect = (studentId: string) => {

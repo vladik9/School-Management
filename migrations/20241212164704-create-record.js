@@ -10,17 +10,25 @@ module.exports = {
         type: Sequelize.INTEGER,
       },
       startTime: {
-        type: Sequelize.DATE,
+        type: Sequelize.STRING,
         allowNull: false,
       },
       endTime: {
-        type: Sequelize.DATE,
+        type: Sequelize.STRING,
         allowNull: false,
       },
       intervalId: {
         type: Sequelize.INTEGER,
         references: {
-          model: 'tests',
+          model: 'intervals',
+          key: 'id',
+        },
+        allowNull: false,
+      },
+      studentId: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'students',
           key: 'id',
         },
         allowNull: false,

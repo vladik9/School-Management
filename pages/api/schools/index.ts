@@ -5,6 +5,10 @@ import School from '../../../models/school.model';
 const getSchools = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const schools = await School.findAll();
+
+    if (!schools || schools.length === 0) {
+      return res.status(200).json([]);
+    }
     res.status(200).json(schools);
   } catch (error) {
     res.status(500).json({ message: 'Error fetching schools', error });

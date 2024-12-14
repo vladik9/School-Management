@@ -12,12 +12,12 @@ import { handleGetYears, handleCreateYear } from "@/controllers/years";
 import { handleGetStudents, handleCreateStudent } from "@/controllers/student";
 import { handleCreateTest } from "@/controllers/test";
 import { handleGetIntervals, handleCreateInterval } from '@/controllers/intervals';
+import { handleGetRecords, handleCreateRecord } from '@/controllers/records';
 import { School } from 'lucide-react';
 import { toRoman } from "@/utils/functions";
 import { StudentData, IntervalData, RecordData, TestData, YearData, ClassData, SchoolData } from "@/types/types";
 import statusMessages, { fetchStatuses } from '@/lib/statusMessages';
 import { StatusModal } from '@/components/status-modal';
-import { handleCreateRecord } from "@/controllers/records";
 // Child components
 import SchoolSelector from '@/components/schoolSelector/schoolSelector';
 import YearSelector from '@/components/schoolSelector/yearSelector';
@@ -51,6 +51,8 @@ export default function SchoolDashboard() {
   const [isTestModalOpen, setIsTestModalOpen] = useState(false);
   const [isIntervalModalOpen, setIsIntervalModalOpen] = useState(false);
   const [isStudentModalOpen, setIsStudentModalOpen] = useState(false);
+  const [isNewRecordModalOpen, setIsNewRecordModalOpen] = useState(false);
+
 
   const [newRecord, setNewRecord] = useState({});
   const [statusModal, setStatusModal] = useState({
@@ -159,6 +161,16 @@ export default function SchoolDashboard() {
       showStatusModal(statusMessages.errorFetchingIntervals, fetchStatuses.error);
     }
   };
+  const fetchRecords = async (intervalId: number) => {
+    showStatusModal(statusMessages.fetchingRecords, fetchStatuses.loading);
+    try {
+      const recordList = await handleGetRecords(intervalId) || [];
+      setRecords(recordList);
+      showStatusModal(statusMessages.recordsFetched, fetchStatuses.success);
+    } catch (error) {
+      showStatusModal(statusMessages.errorFetchingRecords, fetchStatuses.error);
+    }
+  };
 
   // Handlers for selections
   const handleSchoolChange = (schoolId: number) => {
@@ -257,9 +269,11 @@ export default function SchoolDashboard() {
       showStatusModal(statusMessages.errorCreatingTest, fetchStatuses.error);
     }
   };
-  const handleSaveNewRecord = () => {
-
+  const handleSaveNewRecord = async () => {
     handleCreateRecord(newRecord, selectedIntervalId || 0);
+    await fetchRecords(selectedIntervalId || 0);
+    setIsNewRecordModalOpen(false);
+    setNewRecord({});
 
   };
 
@@ -268,6 +282,12 @@ export default function SchoolDashboard() {
     setSelectedTestId(testId);
     await fetchIntervals(testId);
     setIsIntervalModalOpen(true);
+  };
+
+  const handleViewEditRecords = async (intervalId: number) => {
+    setSelectedIntervalId(intervalId);
+    await fetchRecords(intervalId);
+    // setIsRecordModalOpen(true);
   };
 
   return (
@@ -310,18 +330,19 @@ export default function SchoolDashboard() {
 
           {/* If no classes yet */}
           {/* //TODO - FIX THIS BAD CODE */}
-          {(
+          {selectedYear && classes.length === 0 &&
+            <div className="text-center">
+              <p>{translations.noClassesAdded}</p>
+            </div>}
+          {selectedYear &&
             <div>
-              <div className="text-center">
-                <p>{translations.noClassesAdded}</p>
-              </div>
               <div style={{ marginTop: '10px', textAlign: 'right' }}>
                 <Button variant="outline" onClick={() => setIsClassModalOpen(true)}>
                   {translations.addClass}
                 </Button>
               </div>
             </div>
-          )}
+          }
 
           {/* Modals */}
           <AddSchool
@@ -367,6 +388,9 @@ export default function SchoolDashboard() {
             students={(classes.length > 0 && classes.find((c) => c.id === selectedClassId) || {}).students || []}
             handleSaveNewRecord={handleSaveNewRecord}
             setSelectedIntervalId={setSelectedIntervalId}
+            handleViewEditRecords={handleViewEditRecords}
+            isNewRecordModalOpen={isNewRecordModalOpen}
+            setIsNewRecordModalOpen={setIsNewRecordModalOpen}
           />
 
           <AddStudent

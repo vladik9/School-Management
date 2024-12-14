@@ -19,6 +19,9 @@ interface AddViewIntervalsProps {
   students: any[];
   handleSaveNewRecord: () => void;
   setSelectedIntervalId: (id: number) => void;
+  handleViewEditRecords: (id: number) => Promise<void>;
+  isNewRecordModalOpen: boolean;
+  setIsNewRecordModalOpen: (isOpen: boolean) => void;
 }
 
 export default function AddViewIntervals({
@@ -31,27 +34,27 @@ export default function AddViewIntervals({
   records,
   students,
   handleSaveNewRecord,
-  setSelectedIntervalId
+  setSelectedIntervalId,
+  handleViewEditRecords,
+  isNewRecordModalOpen,
+  setIsNewRecordModalOpen,
 }: AddViewIntervalsProps) {
-  const [isNewRecordModalOpen, setIsNewRecordModalOpen] = useState(false);
-
-  const handleSaveNewInterval = () => {
-    handleSaveModal();
-  };
 
   const handleAddNewRecord = (id: number) => {
-    console.log("🚀 ~ handleAddNewRecord ~ id:", id);
     setIsNewRecordModalOpen(true);
     setSelectedIntervalId(id);
   };
 
-  const handleRemoveRecord = (id: number) => {
-    console.log("🚀 ~ handleRemoveRecord ~ id:", id);
-    // Add your remove logic here
-
+  const handleViewOrEditRecord = (id: number) => {
+    handleViewEditRecords(id);
+    // Add your edit logic here if needed
   };
 
-  console.log("intervals", intervals);
+  const handleRemoveRecord = (id: number) => {
+    console.log("🚀 ~ handleRemoveRecord ~ id:", id);
+    // Add your remove logic here for either an interval or a record
+  };
+
   return (
     <GenericModal
       isOpen={isModalOpen}
@@ -67,22 +70,26 @@ export default function AddViewIntervals({
             <p>{translations.noIntervals}</p>
           </div>
         ) : (
-          <Table className="w-full text-center">
+          <Table >
             <TableHeader>
               <TableRow>
-                <TableHead className="w-1/3">{translations.intervalName}</TableHead>
-                <TableHead className="w-1/3">{translations.action}</TableHead>
+                <TableHead>{translations.intervalName}</TableHead>
+                <TableHead>{translations.action}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {intervals.length > 0 && intervals.map((interval) => (
+              {intervals.map((interval) => (
                 <TableRow key={interval.id}>
-                  <TableCell className="w-1/3">{translations.inter} {interval.id}</TableCell>
-                  <TableCell className="w-1/3 flex justify-center space-x-2">
-                    {/* View Dialog */}
+                  <TableCell  >{translations.inter} {interval.id}</TableCell>
+                  <TableCell >
+                    {/* View/Edit Dialog */}
                     <Dialog>
                       <DialogTrigger asChild>
-                        <Button variant="outline" size="sm">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handleViewOrEditRecord(interval.id)}
+                        >
                           <Users className="h-4 w-4 mr-2" />
                           {translations.viewOrEdit}
                         </Button>
@@ -91,42 +98,90 @@ export default function AddViewIntervals({
                         <DialogHeader>
                           <DialogTitle>{translations.inter} {interval.id}</DialogTitle>
                         </DialogHeader>
-                        <Table className="w-full text-center">
+                        <Table>
                           <TableHeader>
                             <TableRow>
-                              <TableHead className="w-1/3">{translations.studentId}</TableHead>
-                              <TableHead className="w-1/3">{translations.startTime}</TableHead>
-                              <TableHead className="w-1/3">{translations.finalTime}</TableHead>
-                              <TableHead className="w-1/3">{translations.average}</TableHead>
+                              <TableHead>{translations.studentId}</TableHead>
+                              <TableHead>{translations.startTime}</TableHead>
+                              <TableHead>{translations.finalTime}</TableHead>
+                              <TableHead>{translations.average}</TableHead>
+                              <TableHead>{translations.action}</TableHead>
+                              <TableHead>{translations.remove}</TableHead>
                             </TableRow>
                           </TableHeader>
                           <TableBody>
                             {records && records.length > 0 ? (
                               records.map((int: any) => (
                                 <TableRow key={int.id}>
-                                  <TableCell className="w-1/3">{int.id}</TableCell>
-                                  <TableCell className="w-1/3">{int.points}</TableCell>
-                                  <TableCell className="w-1/3">{int.finalTime}</TableCell>
-                                  <TableCell className="w-1/3">{int.average}</TableCell>
+                                  <TableCell>{int.id}</TableCell>
+                                  <TableCell>{int.startTime}</TableCell>
+                                  <TableCell>{int.endTime}</TableCell>
+                                  {/* TODO: Fix this math calculation */}
+                                  <TableCell>
+                                    {int.startTime && int.endTime
+                                      ? parseInt(int.startTime) / parseInt(int.endTime)
+                                      : '-'}
+                                  </TableCell>
+                                  <TableCell>
+                                    <Button
+                                      variant="outline"
+                                      size="sm"
+                                      onClick={() => handleViewOrEditRecord(interval.id)}
+                                    >
+                                      <Users className="h-4 w-4 mr-2" />
+                                      {translations.edit}
+                                    </Button>
+                                  </TableCell>
+                                  <TableCell>
+                                    {/* Record-level Remove Dialog */}
+                                    <Dialog>
+                                      <DialogTrigger asChild>
+                                        <Button variant="outline" size="sm">
+                                          <Trash2 className="h-4 w-4 mr-2" />
+                                          {translations.remove}
+                                        </Button>
+                                      </DialogTrigger>
+                                      <DialogContent className="sm:max-w-[400px]">
+                                        <DialogHeader>
+                                          <DialogTitle>{translations.confirmRemoveRecordTitle}</DialogTitle>
+                                        </DialogHeader>
+                                        <p>{translations.confirmRemoveRecordMessage}</p>
+                                        <DialogFooter className="space-x-2">
+                                          <Button variant="outline">
+                                            {translations.cancel}
+                                          </Button>
+                                          <Button
+                                            variant="destructive"
+                                            onClick={() => handleRemoveRecord(int.id)}
+                                          >
+                                            {translations.confirm}
+                                          </Button>
+                                        </DialogFooter>
+                                      </DialogContent>
+                                    </Dialog>
+                                  </TableCell>
                                 </TableRow>
                               ))
                             ) : (
                               <TableRow>
-                                <TableCell colSpan={4}>
-                                  <p style={{ marginTop: '10px', textAlign: 'center' }}>{translations.noRecords}</p>
+                                <TableCell colSpan={6}>
+                                  <p style={{ marginTop: '10px', textAlign: 'center' }}>
+                                    {translations.noRecords}
+                                  </p>
                                 </TableCell>
                               </TableRow>
                             )}
                           </TableBody>
                         </Table>
                         <div style={{ marginTop: '10px', textAlign: 'right' }}>
-                          <Button variant="outline" onClick={(id) => handleAddNewRecord(interval.id)}>
+                          <Button variant="outline" onClick={() => handleAddNewRecord(interval.id)}>
                             {translations.addRecord} <span>+</span>
                           </Button>
                         </div>
                       </DialogContent>
                     </Dialog>
-                    {/* Remove Dialog */}
+
+                    {/* Interval-level Remove Dialog */}
                     <Dialog>
                       <DialogTrigger asChild>
                         <Button variant="outline" size="sm">
@@ -156,7 +211,7 @@ export default function AddViewIntervals({
           </Table>
         )}
         <div style={{ marginTop: '10px', textAlign: 'right' }}>
-          <Button variant="outline" onClick={() => handleSaveNewInterval()}>
+          <Button variant="outline" onClick={handleSaveModal}>
             {translations.addInterval} <span>+</span>
           </Button>
         </div>
@@ -168,7 +223,6 @@ export default function AddViewIntervals({
         students={students}
         newRecord={newRecord}
         setNewRecord={setNewRecord}
-        records={records}
       />
     </GenericModal>
   );

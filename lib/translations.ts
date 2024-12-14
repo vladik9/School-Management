@@ -103,7 +103,7 @@ const translations = {
   addNewRecordDescription: "Adaugă o noua inregistrare aici",
   noRecords: "Nu sunt note adaugate",
   viewRecords: "Vizualizare note",
-  addRecord: "Adaugă inregistrare",
+  addRecord: "Adaugă o inregistrare",
   student: "Elev",
   date: "Data",
   record: "Nota",

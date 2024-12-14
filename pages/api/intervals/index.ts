@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import Interval from '@/models/interval.model';
 
 // Handle GET (read all schools)
-// API Route to get years by schoolId
+// API Route to get interval by testId
 const getInterval = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const { testId } = req.query;
@@ -11,14 +11,14 @@ const getInterval = async (req: NextApiRequest, res: NextApiResponse) => {
       return res.status(400).json({ message: 'Test id is required' });
     }
 
-    // Query the 'Year' table to find all years for the given schoolId
+    // Query the 'Interval' table to find all years for the given schoolId
     const interval = await Interval.findAll({
       where: { testId },  // Use `where` to filter by schoolId
     });
 
     // If no years found, return 404
     if (!interval || interval.length === 0) {
-      return res.status(404).json([]);
+      return res.status(200).json([]);
     }
 
     // Return the found years

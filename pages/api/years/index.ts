@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import Year from '../../../models/year.model';
 
-// Handle GET (read all schools)
+// Handle GET (read all years)
 // API Route to get years by schoolId
 const getYear = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
@@ -18,7 +18,7 @@ const getYear = async (req: NextApiRequest, res: NextApiResponse) => {
 
     // If no years found, return 404
     if (!years || years.length === 0) {
-      return res.status(404).json({ message: 'Years not found for the given schoolId' });
+      return res.status(200).json({ message: 'Years not found for the given schoolId' });
     }
 
     // Return the found years
@@ -72,8 +72,6 @@ const deleteYear = async (req: NextApiRequest, res: NextApiResponse) => {
     res.status(500).json({ message: 'Error deleting year', error });
   }
 };
-
-
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   switch (req.method) {

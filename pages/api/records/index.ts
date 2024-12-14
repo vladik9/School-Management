@@ -18,7 +18,7 @@ const getRecord = async (req: NextApiRequest, res: NextApiResponse) => {
 
     // If no records found, return 404
     if (!records || records.length === 0) {
-      return res.status(404).json([]);
+      return res.status(200).json([]);
     }
 
     // Return the found records
@@ -33,10 +33,11 @@ const getRecord = async (req: NextApiRequest, res: NextApiResponse) => {
 // Handle POST (create record)
 const createRecord = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    const { startTime, endTime, intervalId } = req.body;
-    console.log("🚀 ~ createRecord ~ startTime, endTime, intervalId:", startTime, endTime, intervalId)
+    const { startTime, endTime, studentId,  intervalId } = req.body;
 
-    const newRecord = await Record.create({startTime, endTime, intervalId });
+    console.log("🚀 ~ createRecord ~ startTime, endTime, intervalId:", startTime, endTime, studentId, intervalId)
+
+    const newRecord = await Record.create({startTime, endTime, studentId, intervalId });
     res.status(201).json(newRecord);
   } catch (error) {
     res.status(500).json({ message: 'Error creating record', error });

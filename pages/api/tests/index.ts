@@ -2,26 +2,26 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import Test from '@/models/test.model';
 
 // Handle GET (read all schools)
-// API Route to get years by schoolId
+// API Route to get years by classId
 const getTest = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const { classId } = req.query;
-    // Ensure schoolId is provided
+    // Ensure classId is provided
     if (!classId) {
-      return res.status(400).json({ message: 'Class id is required' });
+      return res.status(400).json({ message: 'Test id is required' });
     }
 
-    // Query the 'Year' table to find all years for the given schoolId
+    // Query the 'Test' table to find all years for the given classId
     const discipline = await Test.findAll({
-      where: { classId },  // Use `where` to filter by schoolId
+      where: { classId },  // Use `where` to filter by classId
     });
 
-    // If no years found, return 404
+    // If no tests found, return 404
     if (!discipline || discipline.length === 0) {
-      return res.status(404).json({ message: 'Class not found for the given schoolId' });
+      return res.status(200).json({ message: 'Test not found for the given classId' });
     }
 
-    // Return the found years
+    // Return the found tests
     res.status(200).json(discipline);
   } catch (error) {
     res.status(500).json({ message: 'Error fetching test', error });

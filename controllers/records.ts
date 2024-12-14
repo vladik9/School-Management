@@ -3,9 +3,9 @@
 import { urlEnum } from '../utils/urlEnum';
 import statusMessages from '@/lib/statusMessages';
 
-export const handleGetRecords = async (testId: number) => {
+export const handleGetRecords = async (intervalId: number) => {
   try {
-    const response = await fetch(`${urlEnum.record}?testId=${testId}`, {
+    const response = await fetch(`${urlEnum.record}?intervalId=${intervalId}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

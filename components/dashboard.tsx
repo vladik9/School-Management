@@ -11,11 +11,10 @@ import { handleGetClasses, handleCreateClass } from "@/controllers/classes";
 import { handleGetYears, handleCreateYear } from "@/controllers/years";
 import { handleGetStudents, handleCreateStudent } from "@/controllers/student";
 import { handleCreateTest } from "@/controllers/test";
-import { handleGetIntervals, handleCreateInterval } from '@/controllers/intervals';
+import { handleGetIntervals, handleCreateInterval, handleRemoveInterval } from '@/controllers/intervals';
 import { handleGetRecords, handleCreateRecord } from '@/controllers/records';
 import { School } from 'lucide-react';
-import { toRoman } from "@/utils/functions";
-import { StudentData, IntervalData, RecordData, TestData, YearData, ClassData, SchoolData } from "@/types/types";
+import { StudentData, IntervalData, RecordData, YearData, ClassData, SchoolData } from "@/types/types";
 import statusMessages, { fetchStatuses } from '@/lib/statusMessages';
 import { StatusModal } from '@/components/status-modal';
 // Child components
@@ -299,12 +298,20 @@ export default function SchoolDashboard() {
   const handleViewEditStudents = async (classId: number) => {
 
   };
+  const handleUpdateStudent = async (studentId: number, data: object) => {
+
+  };
 
   const handleRemoveClass = async (classId: number) => {
   };
   const handleRemoveStudent = async (studentId: number) => {
 
   };
+  // const handleRemoveInterval = async (intervalId: number) => {
+  //   console.log("🚀 ~ handleRemoveInterval ~ handleRemoveInterval:", handleRemoveInterval);
+  //   handleRemoveInterval(intervalId);
+
+  // };
 
   return (
     <div className="min-h-screen bg-gray-100 p-8">
@@ -344,6 +351,7 @@ export default function SchoolDashboard() {
               handleViewEditStudents={handleViewEditStudents}
               handleRemoveClass={handleRemoveClass}
               handleRemoveStudent={handleRemoveStudent}
+              handleUpdateStudent={handleUpdateStudent}
             />
           )}
 
@@ -410,6 +418,7 @@ export default function SchoolDashboard() {
             handleViewEditRecords={handleViewEditRecords}
             isNewRecordModalOpen={isNewRecordModalOpen}
             setIsNewRecordModalOpen={setIsNewRecordModalOpen}
+            handleRemoveInterval={handleRemoveInterval}
           />
 
           <AddStudent

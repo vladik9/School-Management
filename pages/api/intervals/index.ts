@@ -39,7 +39,7 @@ const createInterval = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 };
 
-// Handle PUT (update school)
+// Handle PUT (update interval)
 const updateInterval = async (req: NextApiRequest, res: NextApiResponse) => {
   const { id } = req.query;
   const { name } = req.body;
@@ -56,18 +56,19 @@ const updateInterval = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 };
 
-// Handle DELETE (delete school)
+// Handle DELETE (delete interval)
 const deleteInterval = async (req: NextApiRequest, res: NextApiResponse) => {
+
   const { id } = req.query;
 
   try {
-    const year = await Interval.findByPk(id as string);
-    if (!year) return res.status(404).json({ message: 'Test not found' });
+    const interval = await Interval.findByPk(id as string);
+    if (!interval) return res.status(404).json({ message: 'Interval not found' });
 
-    await year.destroy();
-    res.status(200).json({ message: 'Test deleted' });
+    await interval.destroy();
+    res.status(200).json({ message: 'Interval deleted' });
   } catch (error) {
-    res.status(500).json({ message: 'Error deleting test', error });
+    res.status(500).json({ message: 'Error deleting interval', error });
   }
 };
 

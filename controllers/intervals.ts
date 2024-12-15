@@ -42,3 +42,20 @@ export const handleCreateInterval = async (testId: number) => {
   return { message: statusMessages.errorCreatingInterval};
 }
 };
+export const handleRemoveInterval = async (intervalId: number) => {
+  try {
+    const response = await fetch(`${urlEnum.interval}/${intervalId}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    if (!response.ok) {
+      throw new Error(statusMessages.errorDeletingInterval);
+    }
+    return response;
+  } catch (error) {
+    console.error(error);
+    return { message: statusMessages.errorDeletingInterval };
+  }
+}

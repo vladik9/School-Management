@@ -54,6 +54,8 @@ const statusMessages = {
   creatingInterval: 'Crearea intervalului...',
   intervalCreated: 'Intervalul a fost creat cu succes',
   errorCreatingInterval: 'Eroare la crearea intervalului',
+  errorDeletingInterval: "Eroare la stergerea intervalului",
+
 
   // Records
   fetchingRecords: 'Incarcarea notelor...',

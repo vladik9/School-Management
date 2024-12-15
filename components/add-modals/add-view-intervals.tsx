@@ -1,12 +1,14 @@
 'use client';
-import React, { useState } from 'react';
+import React from 'react';
 import GenericModal from '@/components/generic/generic-modal';
 import translations from '@/lib/translations';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Users, Trash2 } from 'lucide-react';
+import { Edit, Users } from 'lucide-react';
 import AddNewRecord from './add-new-record';
+import RemoveDialog from '../generic/remove-dialog';
+import SimpleDialog from '../generic/simple-dialog';
+import ViewEditDialog from '../generic/view-edit-dialog';
 
 interface AddViewIntervalsProps {
   intervals: any[];
@@ -54,6 +56,10 @@ export default function AddViewIntervals({
     console.log("🚀 ~ handleRemoveRecord ~ id:", id);
     // Add your remove logic here for either an interval or a record
   };
+  const handleRemoveInterval = (id: number) => {
+    console.log("🚀 ~ handleRemoveInterval ~ id:", id);
+    // Add your remove logic here for an interval
+  };
 
   return (
     <GenericModal
@@ -63,6 +69,7 @@ export default function AddViewIntervals({
       title={translations.viewAddIntervals}
       description={translations.viewAddIntervalsDescription}
       width='800'
+      isSaveRequired={false}
     >
       <div className="space-y-4">
         {!intervals || intervals.length === 0 ? (
@@ -74,136 +81,85 @@ export default function AddViewIntervals({
             <TableHeader>
               <TableRow>
                 <TableHead>{translations.intervalName}</TableHead>
-                <TableHead>{translations.action}</TableHead>
+                <TableHead>{translations.viewOrEdit}</TableHead>
+                <TableHead>{translations.remove}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {intervals.map((interval) => (
                 <TableRow key={interval.id}>
-                  <TableCell  >{translations.inter} {interval.id}</TableCell>
-                  <TableCell >
+                  <TableCell>{translations.inter} {interval.id}</TableCell>
+                  <TableCell>
                     {/* View/Edit Dialog */}
-                    <Dialog>
-                      <DialogTrigger asChild>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => handleViewOrEditRecord(interval.id)}
-                        >
-                          <Users className="h-4 w-4 mr-2" />
-                          {translations.viewOrEdit}
-                        </Button>
-                      </DialogTrigger>
-                      <DialogContent className="sm:max-w-[800px]">
-                        <DialogHeader>
-                          <DialogTitle>{translations.inter} {interval.id}</DialogTitle>
-                        </DialogHeader>
-                        <Table>
-                          <TableHeader>
-                            <TableRow>
-                              <TableHead>{translations.studentId}</TableHead>
-                              <TableHead>{translations.startTime}</TableHead>
-                              <TableHead>{translations.finalTime}</TableHead>
-                              <TableHead>{translations.average}</TableHead>
-                              <TableHead>{translations.action}</TableHead>
-                              <TableHead>{translations.remove}</TableHead>
-                            </TableRow>
-                          </TableHeader>
-                          <TableBody>
-                            {records && records.length > 0 ? (
-                              records.map((int: any) => (
-                                <TableRow key={int.id}>
-                                  <TableCell>{int.id}</TableCell>
-                                  <TableCell>{int.startTime}</TableCell>
-                                  <TableCell>{int.endTime}</TableCell>
-                                  {/* TODO: Fix this math calculation */}
-                                  <TableCell>
-                                    {int.startTime && int.endTime
-                                      ? parseInt(int.startTime) / parseInt(int.endTime)
-                                      : '-'}
-                                  </TableCell>
-                                  <TableCell>
-                                    <Button
-                                      variant="outline"
-                                      size="sm"
-                                      onClick={() => handleViewOrEditRecord(interval.id)}
-                                    >
-                                      <Users className="h-4 w-4 mr-2" />
-                                      {translations.edit}
-                                    </Button>
-                                  </TableCell>
-                                  <TableCell>
-                                    {/* Record-level Remove Dialog */}
-                                    <Dialog>
-                                      <DialogTrigger asChild>
-                                        <Button variant="outline" size="sm">
-                                          <Trash2 className="h-4 w-4 mr-2" />
-                                          {translations.remove}
-                                        </Button>
-                                      </DialogTrigger>
-                                      <DialogContent className="sm:max-w-[400px]">
-                                        <DialogHeader>
-                                          <DialogTitle>{translations.confirmRemoveRecordTitle}</DialogTitle>
-                                        </DialogHeader>
-                                        <p>{translations.confirmRemoveRecordMessage}</p>
-                                        <DialogFooter className="space-x-2">
-                                          <Button variant="outline">
-                                            {translations.cancel}
-                                          </Button>
-                                          <Button
-                                            variant="destructive"
-                                            onClick={() => handleRemoveRecord(int.id)}
-                                          >
-                                            {translations.confirm}
-                                          </Button>
-                                        </DialogFooter>
-                                      </DialogContent>
-                                    </Dialog>
-                                  </TableCell>
-                                </TableRow>
-                              ))
-                            ) : (
-                              <TableRow>
-                                <TableCell colSpan={6}>
-                                  <p style={{ marginTop: '10px', textAlign: 'center' }}>
-                                    {translations.noRecords}
-                                  </p>
+                    <SimpleDialog title={`${translations.inter} - ${interval.id}`} description={translations.viewOrEdit} triggerButtonTitle={translations.viewOrEdit} onOpen={() => handleViewOrEditRecord(interval.id)} id={interval.id}
+                    >
+                      <Table>
+                        <TableHeader>
+                          <TableRow>
+                            <TableHead>{translations.studentId}</TableHead>
+                            <TableHead>{translations.startTime}</TableHead>
+                            <TableHead>{translations.finalTime}</TableHead>
+                            <TableHead>{translations.average}</TableHead>
+                            <TableHead>{translations.action}</TableHead>
+                            <TableHead>{translations.remove}</TableHead>
+                          </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                          {records && records.length > 0 ? (
+                            records.map((int: any) => (
+                              <TableRow key={int.id}>
+                                <TableCell>{int.id}</TableCell>
+                                <TableCell>{int.startTime}</TableCell>
+                                <TableCell>{int.endTime}</TableCell>
+                                {/* TODO: Fix this math calculation */}
+                                <TableCell>
+                                  {int.startTime && int.endTime
+                                    ? parseInt(int.startTime) / parseInt(int.endTime)
+                                    : '-'}
+                                </TableCell>
+                                <TableCell>
+                                  {/* //TODO - fix this as not having anything to edit */}
+                                  <ViewEditDialog title={translations.edit} description={translations.editRecord} onOpen={() => handleViewOrEditRecord(interval.id)} triggerButtonTitle={translations.edit} onSave={handleSaveNewRecord} id={int.id} cancelText={translations.cancel} confirmText={translations.update}>
+                                    <span>EDIT</span>
+                                  </ViewEditDialog>
+                                </TableCell>
+                                <TableCell>
+                                  {/* Record-level Remove Dialog */}
+                                  <RemoveDialog title={translations.remove}
+                                    description={translations.confirmRemoveRecordMessage} confirmText={translations.confirm}
+                                    cancelText={translations.cancel}
+                                    onRemove={handleRemoveRecord}
+                                    id={int.id} />
                                 </TableCell>
                               </TableRow>
-                            )}
-                          </TableBody>
-                        </Table>
-                        <div style={{ marginTop: '10px', textAlign: 'right' }}>
-                          <Button variant="outline" onClick={() => handleAddNewRecord(interval.id)}>
-                            {translations.addRecord} <span>+</span>
-                          </Button>
-                        </div>
-                      </DialogContent>
-                    </Dialog>
-
-                    {/* Interval-level Remove Dialog */}
-                    <Dialog>
-                      <DialogTrigger asChild>
-                        <Button variant="outline" size="sm">
-                          <Trash2 className="h-4 w-4 mr-2" />
-                          {translations.remove}
+                            ))
+                          ) : (
+                            <TableRow>
+                              <TableCell colSpan={6}>
+                                <p style={{ marginTop: '10px', textAlign: 'center' }}>
+                                  {translations.noRecords}
+                                </p>
+                              </TableCell>
+                            </TableRow>
+                          )}
+                        </TableBody>
+                      </Table>
+                      <div style={{ marginTop: '10px', textAlign: 'right' }}>
+                        <Button variant="outline" onClick={() => handleAddNewRecord(interval.id)}>
+                          {translations.addRecord} <span>+</span>
                         </Button>
-                      </DialogTrigger>
-                      <DialogContent className="sm:max-w-[400px]">
-                        <DialogHeader>
-                          <DialogTitle>{translations.confirmRemoveRecordTitle}</DialogTitle>
-                        </DialogHeader>
-                        <p>{translations.confirmRemoveRecordMessage}</p>
-                        <DialogFooter className="space-x-2">
-                          <Button variant="outline">
-                            {translations.cancel}
-                          </Button>
-                          <Button variant="destructive" onClick={() => handleRemoveRecord(interval.id)}>
-                            {translations.confirm}
-                          </Button>
-                        </DialogFooter>
-                      </DialogContent>
-                    </Dialog>
+                      </div>
+                    </SimpleDialog>
+                  </TableCell>
+                  <TableCell>
+                    {/* Interval-level Remove Dialog */}
+                    <RemoveDialog
+                      title={translations.confirmRemoveRecordTitle}
+                      description={translations.confirmRemoveRecordMessage}
+                      confirmText={translations.confirm}
+                      cancelText={translations.cancel}
+                      onRemove={handleRemoveInterval}
+                      id={interval.id} />
                   </TableCell>
                 </TableRow>
               ))}

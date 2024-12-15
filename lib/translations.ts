@@ -1,7 +1,3 @@
-import { TimePicker } from '@/components/ui/time-picker';
-import AddNewRecord from "@/components/add-modals/add-new-record";
-import { start } from "repl";
-
 const translations = {
 
   //Auth
@@ -61,6 +57,8 @@ const translations = {
   orderNumber: "Numar de ordine",
   addStudent: "Adaugă elev",
   viewStudents: "Vizualizare elevi",
+  viewEditStudent: "Vizualizare/editare elev",
+  viewEditStudentDescription: "Vizualizare/editare elev - administreaza elev",
   studentName: "Numele elevului",
   noStudentsAdded: "Nu sunt elevi adaugati",
   generatedStudentId: "Id-il generat",
@@ -107,6 +105,7 @@ const translations = {
   student: "Elev",
   date: "Data",
   record: "Nota",
+  editRecord: "Editare inregistrare",
 
   //TimePicker
   selectTime: "Selecteaza timp",
@@ -129,7 +128,7 @@ const translations = {
   cancel: "Anuleaza",
   confirmRemoveRecordTitle: "Confirmare stergere",
   confirmRemoveRecordMessage: "Esti sigur ca vrei sa stergi acest inregistrare?",
-
+  update: "Actualizare",
   //Docs
 };
 

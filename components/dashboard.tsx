@@ -103,6 +103,13 @@ export default function SchoolDashboard() {
     }
   }, [selectedClassId]);
 
+  // Fetch records when class selected
+  useEffect(() => {
+    if (selectedIntervalId) {
+      fetchRecords(selectedIntervalId);
+    }
+  }, [selectedIntervalId]);
+
   // Data fetching functions
   const fetchSchools = async () => {
     showStatusModal(statusMessages.fetchingSchools, fetchStatuses.loading);
@@ -271,9 +278,9 @@ export default function SchoolDashboard() {
   };
   const handleSaveNewRecord = async () => {
     handleCreateRecord(newRecord, selectedIntervalId || 0);
-    await fetchRecords(selectedIntervalId || 0);
     setIsNewRecordModalOpen(false);
     setNewRecord({});
+    await fetchRecords(selectedIntervalId || 0);
 
   };
 
@@ -288,6 +295,15 @@ export default function SchoolDashboard() {
     setSelectedIntervalId(intervalId);
     await fetchRecords(intervalId);
     // setIsRecordModalOpen(true);
+  };
+  const handleViewEditStudents = async (classId: number) => {
+
+  };
+
+  const handleRemoveClass = async (classId: number) => {
+  };
+  const handleRemoveStudent = async (studentId: number) => {
+
   };
 
   return (
@@ -325,6 +341,9 @@ export default function SchoolDashboard() {
               handleSelectingTest={() => setIsTestModalOpen(true)}
               handleAddViewIntervals={handleAddViewIntervals}
               setSelectedClassId={setSelectedClassId}
+              handleViewEditStudents={handleViewEditStudents}
+              handleRemoveClass={handleRemoveClass}
+              handleRemoveStudent={handleRemoveStudent}
             />
           )}
 

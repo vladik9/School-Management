@@ -3,19 +3,21 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from "@/components/ui/dialog";
-import { Users, Trash2 } from 'lucide-react';
 import translations from "@/lib/translations";
 import { ClassData } from "@/types/types";
+import RemoveDialog from '../generic/remove-dialog';
+import ViewEditDialog from '../generic/view-edit-dialog';
 
 interface ClassAccordionProps {
   classes: ClassData[];
   handleAddStudent: (classId: number) => void;
+  handleUpdateStudent: (studentId: number, data: object) => void;
   handleSelectingTest: (classId: number) => void;
   handleAddViewIntervals: (testId: number) => void;
+  handleViewEditStudents: (classId: number) => void;
   setSelectedClassId: (classId: number) => void;
-  handleRemoveStudent?: (studentId: number) => void;
-  handleRemoveClass?: (classId: number) => void; // Add this if you want to remove a class
+  handleRemoveStudent: (studentId: number) => void;
+  handleRemoveClass: (classId: number) => void; // Add this if you want to remove a class
 }
 
 export default function ClassAccordion({
@@ -23,6 +25,8 @@ export default function ClassAccordion({
   handleAddStudent,
   handleSelectingTest,
   handleAddViewIntervals,
+  handleUpdateStudent,
+  handleViewEditStudents,
   setSelectedClassId,
   handleRemoveStudent,
   handleRemoveClass
@@ -42,32 +46,9 @@ export default function ClassAccordion({
                   <span>
                     {school_class.name} - {school_class.teacher}
                   </span>
+                  {/* //NOTE -Class-level Remove Button and Dialog  */}
                   {/* Class-level Remove Button and Dialog */}
-                  <Dialog>
-                    <DialogTrigger asChild>
-                      <Button variant="outline" size="sm" className="ml-2">
-                        <Trash2 className="h-4 w-4 mr-1" />
-                        {translations.remove}
-                      </Button>
-                    </DialogTrigger>
-                    <DialogContent className="sm:max-w-[400px]">
-                      <DialogHeader>
-                        <DialogTitle>{translations.confirmRemoveRecordTitle}</DialogTitle>
-                      </DialogHeader>
-                      <p>{translations.confirmRemoveRecordMessage}</p>
-                      <DialogFooter className="space-x-2">
-                        <Button variant="outline">
-                          {translations.cancel}
-                        </Button>
-                        <Button
-                          variant="destructive"
-                          onClick={() => handleRemoveClass && handleRemoveClass(school_class.id)}
-                        >
-                          {translations.confirm}
-                        </Button>
-                      </DialogFooter>
-                    </DialogContent>
-                  </Dialog>
+                  <RemoveDialog title={translations.confirmRemoveRecordTitle} description={translations.confirmRemoveRecordMessage} confirmText={translations.remove} cancelText={translations.cancel} onRemove={() => handleRemoveClass(school_class.id)} id={school_class.id} />
                 </div>
               </AccordionTrigger>
               <AccordionContent>
@@ -114,7 +95,8 @@ export default function ClassAccordion({
                         <TableRow>
                           <TableHead>{translations.studentId}</TableHead>
                           <TableHead>{translations.name}</TableHead>
-                          <TableHead>{translations.action}</TableHead>
+                          <TableHead>{translations.viewOrEdit}</TableHead>
+                          <TableHead>{translations.remove}</TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
@@ -123,48 +105,35 @@ export default function ClassAccordion({
                             <TableCell>{student.studentId}</TableCell>
                             <TableCell>{student.name}</TableCell>
                             <TableCell className="flex justify-center space-x-2">
+                              {/* //NOTE - View/Edit Dialog */}
                               {/* View/Edit Dialog */}
-                              <Dialog>
-                                <DialogTrigger asChild>
-                                  <Button variant="outline" size="sm">
-                                    <Users className="h-4 w-4 mr-2" />
-                                    {translations.viewOrEdit}
-                                  </Button>
-                                </DialogTrigger>
-                                <DialogContent className="sm:max-w-[800px]">
-                                  <DialogHeader>
-                                    <DialogTitle>{student.name}</DialogTitle>
-                                  </DialogHeader>
-                                  {/* Your view/edit form or data here */}
-                                </DialogContent>
-                              </Dialog>
-
+                              <ViewEditDialog
+                                title={translations.viewEditStudent} description={translations.viewEditStudentDescription} onOpen={() => handleViewEditStudents(student.id)}
+                                triggerButtonTitle={translations.viewOrEdit}
+                                id={student.id}
+                                cancelText={translations.cancel}
+                                confirmText={translations.update}
+                                onSave={handleUpdateStudent}
+                              >
+                                {/* TODO- fix this to be a table to update students */}
+                                <Table>
+                                  <TableHeader>
+                                    <TableRow>
+                                      <TableHead>{translations.studentId}</TableHead>
+                                      <TableHead>{translations.name}</TableHead>
+                                    </TableRow>
+                                  </TableHeader>
+                                  <TableRow key={student.id}>
+                                    <TableCell>{student.studentId}</TableCell>
+                                    <TableCell>{student.name}</TableCell>
+                                  </TableRow>
+                                </Table>
+                              </ViewEditDialog>
+                            </TableCell>
+                            <TableCell>
+                              {/* //NOTE - Student-level Remove Dialog */}
                               {/* Student-level Remove Dialog */}
-                              <Dialog>
-                                <DialogTrigger asChild>
-                                  <Button variant="outline" size="sm">
-                                    <Trash2 className="h-4 w-4 mr-2" />
-                                    {translations.remove}
-                                  </Button>
-                                </DialogTrigger>
-                                <DialogContent className="sm:max-w-[400px]">
-                                  <DialogHeader>
-                                    <DialogTitle>{translations.confirmRemoveRecordTitle}</DialogTitle>
-                                  </DialogHeader>
-                                  <p>{translations.confirmRemoveRecordMessage}</p>
-                                  <DialogFooter className="space-x-2">
-                                    <Button variant="outline">
-                                      {translations.cancel}
-                                    </Button>
-                                    <Button
-                                      variant="destructive"
-                                      onClick={() => handleRemoveStudent && handleRemoveStudent(student.id)}
-                                    >
-                                      {translations.confirm}
-                                    </Button>
-                                  </DialogFooter>
-                                </DialogContent>
-                              </Dialog>
+                              <RemoveDialog title={translations.confirmRemoveRecordTitle} description={translations.confirmRemoveRecordMessage} confirmText={translations.remove} cancelText={translations.cancel} onRemove={() => handleRemoveStudent(student.id)} id={school_class.id} />
                             </TableCell>
                           </TableRow>
                         ))}
@@ -172,7 +141,6 @@ export default function ClassAccordion({
                     </Table>
                   </div>
                 )}
-
               </AccordionContent>
             </AccordionItem>
           ))}

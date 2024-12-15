@@ -15,6 +15,7 @@ interface GenericModalProps {
   cancelText?: string;
   saveText?: string;
   width?: string;
+  isSaveRequired?: boolean;
 }
 
 export default function GenericModal({
@@ -25,6 +26,7 @@ export default function GenericModal({
   description,
   children,
   width = '425',
+  isSaveRequired = true,
 
 }: GenericModalProps) {
   const modalWidth = `sm:max-w-[${width}px]`;
@@ -38,13 +40,14 @@ export default function GenericModal({
         <div className="py-4">
           {children}
         </div>
-        <DialogFooter>
+        <div className="w-full border-t border-gray-300" style={{ height: '0.125px' }} />
+        <DialogFooter >
           <Button variant="outline" onClick={onClose}>
             {translations.cancelText}
           </Button>
-          <Button onClick={onSave}>
+          {isSaveRequired && <Button onClick={onSave}>
             {translations.saveText}
-          </Button>
+          </Button>}
         </DialogFooter>
       </DialogContent>
     </Dialog>

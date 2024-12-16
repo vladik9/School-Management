@@ -7,6 +7,7 @@ import translations from "@/lib/translations";
 import { ClassData } from "@/types/types";
 import RemoveDialog from '../generic/remove-dialog';
 import ViewEditDialog from '../generic/view-edit-dialog';
+import { text } from 'stream/consumers';
 
 interface ClassAccordionProps {
   classes: ClassData[];
@@ -17,7 +18,8 @@ interface ClassAccordionProps {
   handleViewEditStudents: (classId: number) => void;
   setSelectedClassId: (classId: number) => void;
   handleRemoveStudent: (studentId: number) => void;
-  handleRemoveClass: (classId: number) => void; // Add this if you want to remove a class
+  handleRemoveClass: (classId: number) => void;
+  handleRemoveTest: (testId: number) => void;
 }
 
 export default function ClassAccordion({
@@ -29,7 +31,8 @@ export default function ClassAccordion({
   handleViewEditStudents,
   setSelectedClassId,
   handleRemoveStudent,
-  handleRemoveClass
+  handleRemoveClass,
+  handleRemoveTest
 }: ClassAccordionProps) {
   return (
     <div style={{ marginTop: '20px' }}>
@@ -67,15 +70,15 @@ export default function ClassAccordion({
                             >
                               {translations.viewAddIntervals}
                             </Button>
-                            {/* //TODO - fix this remove button */}
-                            <Button
-                              variant="outline"
-                              className="w-full"
-                              onClick={() => handleAddViewIntervals(testItem.id)}
-                            >
-                              {translations.deleteATest}
-                            </Button>
                           </div>
+                          <div style={{ marginTop: '10px', textAlign: 'center' }} />
+                          <Button
+                            variant="outline"
+                            className="w-full"
+                            onClick={() => handleRemoveTest(testItem.id)}
+                          >
+                            {translations.deleteATest}
+                          </Button>
                         </CardContent>
                       </Card>
                     ))
@@ -96,8 +99,9 @@ export default function ClassAccordion({
                 {school_class.students.length === 0 ? (
                   <div style={{ marginTop: '20px', textAlign: 'center' }}>{translations.noStudentsAdded}</div>
                 ) : (
-                  <div style={{ marginTop: '20px' }}>
-                    <Table>
+                  <div style={{ marginTop: '30px' }}>
+                    <div style={{ marginBottom: '10px', textAlign: 'center', fontSize: '18px', fontWeight: 'bold' }}>{translations.studentTableList} - {school_class.name}</div>
+                    <Table style={{ marginTop: '20px' }}>
                       <TableHeader>
                         <TableRow>
                           <TableHead>{translations.studentId}</TableHead>

@@ -45,3 +45,21 @@ export const processCreateSchool = async (data: object) => {
     return { message: statusMessages.errorCreatingSchool };
   }
 };
+
+export const processRemoveSchool = async (schoolId: number) => {
+  try {
+    const response = await fetch(`${urlEnum.school}?id=${schoolId}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    if (!response.ok) {
+      throw new Error(statusMessages.errorDeletingSchool);
+    }
+    return response;
+  } catch (error) {
+    console.error(error);
+    return { message: statusMessages.errorDeletingSchool };
+  }
+};

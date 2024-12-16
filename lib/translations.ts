@@ -29,12 +29,16 @@ const translations = {
   addSchool: "Adaugă o școală nouă",
   viewSchools: "Vizualizare școli",
   noSchools: "Nu sunt școli adaugate",
+  removeSchool: "Sterge școala",
+  noSchoolsAvailable: "Nu sunt școli disponibile",
+
 
   //Year
   addYear: "Adaugă an",
   chooseYear: "Alege anul",
   addANewYear: "Adaugă un an nou",
   noYears: "Nu sunt ani adaugați",
+  removeYear: "Sterge an",
 
   //Disciplines
   viewDisciplines: "Vizualizare discipline",
@@ -71,6 +75,7 @@ const translations = {
   experimentA: "Experiment",
   idNotGenerated: "Id-ul nu a fost generat",
   chooseStudent: "Alege elev",
+  studentTableList: "Tabel Elevi atribuiti clasei",
 
   //Test
   tasks: "Teme",

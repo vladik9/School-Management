@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { AlertCircle, CheckCircle, XCircle } from 'lucide-react';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '@/lib/utils';
-
+import { fetchStatuses } from '@/lib/statusMessages';
 const statusModalVariants = cva(
   "fixed top-4 right-4 p-4 rounded-md shadow-md transition-all duration-300 ease-in-out z-50 border border-gray-300", // Added border classes here
   {
@@ -17,7 +17,7 @@ const statusModalVariants = cva(
       },
     },
     defaultVariants: {
-      variant: "default",
+      variant: fetchStatuses.default,
     },
   }
 );
@@ -44,9 +44,9 @@ export function StatusModal({ message, isVisible, variant, onClose }: StatusModa
   return (
     <div className={cn(statusModalVariants({ variant }))}>
       <div className="flex items-center">
-        {variant === 'success' && <CheckCircle className="w-5 h-5 mr-2" />}
-        {variant === 'error' && <XCircle className="w-5 h-5 mr-2" />}
-        {variant === 'loading' && <AlertCircle className="w-5 h-5 mr-2" />}
+        {variant === fetchStatuses.success && <CheckCircle className="w-5 h-5 mr-2" />}
+        {variant === fetchStatuses.error && <XCircle className="w-5 h-5 mr-2" />}
+        {variant === fetchStatuses.loading && <AlertCircle className="w-5 h-5 mr-2" />}
         <span>{message}</span>
       </div>
     </div>

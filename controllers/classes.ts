@@ -42,3 +42,20 @@ export const processCreateClass = async (data: object, yearId: string) => {
     return { message: statusMessages.errorCreatingClass};
   }
 };
+export const processRemoveClass = async (classId: number) => {
+  try {
+    const response = await fetch(`${urlEnum.class}?id=${classId}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    if (!response.ok) {
+      throw new Error(statusMessages.errorDeletingClass);
+    }
+    return response;
+  } catch (error) {
+    console.error(error);
+    return { message: statusMessages.errorDeletingClass };
+  }
+};

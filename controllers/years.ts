@@ -3,7 +3,7 @@
 import { urlEnum } from '../utils/urlEnum';
 import statusMessages from '@/lib/statusMessages';
 
-export const handleGetYears = async (schoolId: number) => {
+export const processGetYears = async (schoolId: number) => {
   try {
     const response = await fetch(`${urlEnum.year}?schoolId=${schoolId}`, {
       method: 'GET',
@@ -25,7 +25,7 @@ export const handleGetYears = async (schoolId: number) => {
 };
 
 
-export const handleCreateYear = async (data: object, schoolId: number) => {
+export const processCreateYear = async (data: object, schoolId: number) => {
 try {
   const response = await fetch(`${urlEnum.year}`, {
     method: 'POST',
@@ -42,4 +42,22 @@ try {
   console.error(error);
   return { message: statusMessages.errorCreatingTest };
 }
+};
+
+export const processRemoveYear = async (yearId: number) => {
+  try {
+    const response = await fetch(`${urlEnum.year}?id=${yearId}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    if (!response.ok) {
+      throw new Error(statusMessages.errorDeletingYear);
+    }
+    return response;
+  } catch (error) {
+    console.error(error);
+    return { message: statusMessages.errorDeletingYear };
+  }
 };

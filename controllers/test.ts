@@ -43,3 +43,20 @@ export const processCreateTest = async (data: object, classId: string) => {
     return { message: statusMessages.errorCreatingTest };
   }
 };
+export const processRemoveTest = async (testId: number) => {
+  try {
+    const response = await fetch(`${urlEnum.test}?id=${testId}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    if (!response.ok) {
+      throw new Error(statusMessages.errorDeletingTest);
+    }
+    return response;
+  } catch (error) {
+    console.error(error);
+    return { message: statusMessages.errorDeletingTest };
+  }
+};

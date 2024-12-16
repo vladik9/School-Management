@@ -7,6 +7,7 @@ const statusMessages = {
   creatingSchool: 'Crearea scolii...',
   schoolCreated: 'Scoala a fost creata cu succes',
   errorCreatingSchool: 'Eroare la crearea scolii',
+  errorDeletingSchool: 'Eroare la stergerea scolii',
 
   // Classes
   fetchingClasses: 'Incarcarea claselor...',
@@ -15,6 +16,8 @@ const statusMessages = {
   creatingClass: 'Crearea clasei...',
   classCreated: 'Clasa a fost creata cu succes',
   errorCreatingClass: 'Eroare la crearea clasei',
+  errorDeletingClass: 'Eroare la stergerea clasei',
+
   // Years
   fetchingYears: 'Incarcarea anilor...',
   yearsFetched: 'Anii au fost incarcati cu succes',
@@ -22,6 +25,7 @@ const statusMessages = {
   creatingYear: 'Crearea anului...',
   yearCreated: 'Anul a fost creat cu succes',
   errorCreatingYear: 'Eroare la crearea anului',
+  errorDeletingYear: 'Eroare la stergerea anului',
 
   // Students
   fetchingStudents: 'Incarcarc elevii...',
@@ -47,6 +51,7 @@ const statusMessages = {
   creatingTest: 'Crearea testului...',
   testCreated: 'Testul a fost creat cu succes',
   errorCreatingTest: 'Eroare la crearea testului',
+  errorDeletingTest: 'Eroare la stergerea testului',
 
   // Intervals
   fetchingIntervals: 'Incarcarea intervalelor...',

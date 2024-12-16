@@ -25,6 +25,7 @@ interface AddViewIntervalsProps {
   isNewRecordModalOpen: boolean;
   setIsNewRecordModalOpen: (isOpen: boolean) => void;
   handleRemoveInterval: (id: number) => void;
+  handleRemoveRecord: (id: number) => void;
 }
 
 export default function AddViewIntervals({
@@ -41,7 +42,8 @@ export default function AddViewIntervals({
   handleViewEditRecords,
   isNewRecordModalOpen,
   setIsNewRecordModalOpen,
-  handleRemoveInterval
+  handleRemoveInterval,
+  handleRemoveRecord
 }: AddViewIntervalsProps) {
 
   const handleAddNewRecord = (id: number) => {
@@ -52,11 +54,6 @@ export default function AddViewIntervals({
   const handleViewOrEditRecord = (id: number) => {
     handleViewEditRecords(id);
     // Add your edit logic here if needed
-  };
-
-  const handleRemoveRecord = (id: number) => {
-    console.log("🚀 ~ handleRemoveRecord ~ id:", id);
-    // Add your remove logic here for either an interval or a record
   };
   return (
     <GenericModal

@@ -3,7 +3,7 @@
 import { urlEnum } from '../utils/urlEnum';
 import statusMessages from '@/lib/statusMessages';
 
-export const handleGetTests = async (classId: string) => {
+export const processGetTests = async (classId: string) => {
   try {
     const response = await fetch(`${urlEnum.test}?classId=${classId}`, {
       method: 'GET',
@@ -25,7 +25,7 @@ export const handleGetTests = async (classId: string) => {
 };
 
 
-export const handleCreateTest = async (data: object, classId: string) => {
+export const processCreateTest = async (data: object, classId: string) => {
   try{
   const response = await fetch(`${urlEnum.test}`, {
     method: 'POST',

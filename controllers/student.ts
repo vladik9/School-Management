@@ -2,7 +2,7 @@
 import { urlEnum } from '../utils/urlEnum';
 import statusMessages from '@/lib/statusMessages';
 
-export const handleGetStudents = async (classId: string) => {
+export const processGetStudents = async (classId: string) => {
   try {
     const response = await fetch(`${urlEnum.student}?classId=${classId}`, {
       method: 'GET',
@@ -24,7 +24,7 @@ export const handleGetStudents = async (classId: string) => {
 };
 
 
-export const handleCreateStudent = async (data: object, classId: string) => {
+export const processCreateStudent = async (data: object, classId: string) => {
   try{
   const response = await fetch(`${urlEnum.student}`, {
     method: 'POST',
@@ -40,5 +40,23 @@ export const handleCreateStudent = async (data: object, classId: string) => {
   } catch (error) {
     console.error(error);
     return { message: statusMessages.errorCreatingStudent };
+  }
+};
+
+export const processRemoveStudent = async (studentId: number) => {
+  try {
+    const response = await fetch(`${urlEnum.student}?id=${studentId}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    if (!response.ok) {
+      throw new Error(statusMessages.errorDeletingStudent);
+    }
+    return response;
+  } catch (error) {
+    console.error(error);
+    return { message: statusMessages.errorDeletingStudent };
   }
 };

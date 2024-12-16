@@ -3,7 +3,7 @@
 import { urlEnum } from '../utils/urlEnum';
 import statusMessages from '@/lib/statusMessages';
 
-export const handleGetRecords = async (intervalId: number) => {
+export const processGetRecords = async (intervalId: number) => {
   try {
     const response = await fetch(`${urlEnum.record}?intervalId=${intervalId}`, {
       method: 'GET',
@@ -25,7 +25,7 @@ export const handleGetRecords = async (intervalId: number) => {
 };
 
 
-export const handleCreateRecord = async (data: object, intervalId: number) => {
+export const processCreateRecord = async (data: object, intervalId: number) => {
 try {
   const response = await fetch(`${urlEnum.record}`, {
     method: 'POST',
@@ -42,4 +42,23 @@ try {
   console.error(error);
   return { message: statusMessages.creatingRecord };
 }
+};
+
+
+export const processRemoveRecord = async (recordId: number) => {
+  try {
+    const response = await fetch(`${urlEnum.record}?id=${recordId}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    if (!response.ok) {
+      throw new Error(statusMessages.errorDeletingRecord);
+    }
+    return response;
+  } catch (error) {
+    console.error(error);
+    return { message: statusMessages.errorDeletingRecord };
+  }
 };

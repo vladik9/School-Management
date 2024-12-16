@@ -1,7 +1,7 @@
 'use client';
 import { urlEnum } from '../utils/urlEnum';
 import statusMessages from '@/lib/statusMessages';
-export const handleGetClasses = async (yearId: string) => {
+export const processGetClasses = async (yearId: string) => {
   try {
     const response = await fetch(`${urlEnum.class}?yearId=${yearId}`, {
       method: 'GET',
@@ -24,7 +24,7 @@ export const handleGetClasses = async (yearId: string) => {
 };
 
 
-export const handleCreateClass = async (data: object, yearId: string) => {
+export const processCreateClass = async (data: object, yearId: string) => {
   try {
    const response = await fetch(`${urlEnum.class}`, {
     method: 'POST',

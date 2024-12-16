@@ -24,12 +24,13 @@ const statusMessages = {
   errorCreatingYear: 'Eroare la crearea anului',
 
   // Students
-  fetchingStudents: 'Incarcarea studentilor...',
-  studentsFetched: 'Studentii au fost incarcati cu succes',
-  errorFetchingStudents: 'Eroare la incarcarea studentilor',
+  fetchingStudents: 'Incarcarc elevii...',
+  studentsFetched: 'Elevii au fost incarcati cu succes',
+  errorFetchingStudents: 'Eroare la incarcarea elevilor',
   creatingStudent: 'Crearea studentului...',
-  studentCreated: 'Studentul a fost creat cu succes',
-  errorCreatingStudent: 'Eroare la crearea studentului',
+  studentCreated: 'Elevul a fost creat cu succes',
+  errorCreatingStudent: 'Eroare la crearea elevului',
+  errorDeletingStudent: 'Eroare la stergerea elevului',
 
   // Disciplines
   fetchingDisciplines: 'Incarcarea disciplinelor...',
@@ -64,6 +65,7 @@ const statusMessages = {
   creatingRecord: 'Crearea notei...',
   recordCreated: 'Nota a fost creata cu succes',
   errorCreatingRecord: 'Eroare la crearea notei',
+  errorDeletingRecord: 'Eroare la stergerea notei',
 
   // Common
   loading: 'Incarcare...',

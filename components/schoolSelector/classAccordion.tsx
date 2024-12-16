@@ -47,7 +47,6 @@ export default function ClassAccordion({
                     {school_class.name} - {school_class.teacher}
                   </span>
                   {/* //NOTE -Class-level Remove Button and Dialog  */}
-                  {/* Class-level Remove Button and Dialog */}
                   <RemoveDialog title={translations.confirmRemoveRecordTitle} description={translations.confirmRemoveRecordMessage} confirmText={translations.remove} cancelText={translations.cancel} onRemove={() => handleRemoveClass(school_class.id)} id={school_class.id} />
                 </div>
               </AccordionTrigger>
@@ -67,6 +66,14 @@ export default function ClassAccordion({
                               onClick={() => handleAddViewIntervals(testItem.id)}
                             >
                               {translations.viewAddIntervals}
+                            </Button>
+                            {/* //TODO - fix this remove button */}
+                            <Button
+                              variant="outline"
+                              className="w-full"
+                              onClick={() => handleAddViewIntervals(testItem.id)}
+                            >
+                              {translations.deleteATest}
                             </Button>
                           </div>
                         </CardContent>
@@ -106,7 +113,6 @@ export default function ClassAccordion({
                             <TableCell>{student.name}</TableCell>
                             <TableCell className="flex justify-center space-x-2">
                               {/* //NOTE - View/Edit Dialog */}
-                              {/* View/Edit Dialog */}
                               <ViewEditDialog
                                 title={translations.viewEditStudent} description={translations.viewEditStudentDescription} onOpen={() => handleViewEditStudents(student.id)}
                                 triggerButtonTitle={translations.viewOrEdit}
@@ -132,7 +138,6 @@ export default function ClassAccordion({
                             </TableCell>
                             <TableCell>
                               {/* //NOTE - Student-level Remove Dialog */}
-                              {/* Student-level Remove Dialog */}
                               <RemoveDialog title={translations.confirmRemoveRecordTitle} description={translations.confirmRemoveRecordMessage} confirmText={translations.remove} cancelText={translations.cancel} onRemove={() => handleRemoveStudent(student.id)} id={school_class.id} />
                             </TableCell>
                           </TableRow>

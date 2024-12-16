@@ -64,7 +64,7 @@ const updateStudent = async (req: NextApiRequest, res: NextApiResponse) => {
 // Handle DELETE (delete school)
 const deleteStudent = async (req: NextApiRequest, res: NextApiResponse) => {
   const { id } = req.query;
-
+  console.log("removing", id);
   try {
     const student = await Student.findByPk(id as string);
     if (!student) return res.status(404).json({ message: 'Student not found' });

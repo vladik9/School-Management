@@ -18,6 +18,7 @@ interface TimePickerProps {
 
 export default function TimePicker({ label, id, onChange, value }: TimePickerProps) {
   const [time, setTime] = React.useState<string>(value || "");
+  const [popoverOpen, setPopoverOpen] = React.useState(false);
 
   const minutes = Array.from({ length: 60 }, (_, i) => i.toString().padStart(2, '0'));
   const seconds = Array.from({ length: 60 }, (_, i) => i.toString().padStart(2, '0'));
@@ -40,26 +41,20 @@ export default function TimePicker({ label, id, onChange, value }: TimePickerPro
     onChange(newTime);
   };
 
-  // Prevent event propagation
-  const handlePopoverClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
-  };
-
   return (
     <div className="w-full max-w-sm space-y-2">
       <Label htmlFor={id}>{label}</Label>
-      <Popover>
+      <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
         <PopoverTrigger asChild>
           <Button
             variant="outline"
             className={`w-full justify-start text-left font-normal ${!time && "text-muted-foreground"}`}
-            onClick={handlePopoverClick}
           >
             <Clock className="mr-2 h-4 w-4" />
             {time ? time : translations.selectTime}
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="w-80" portal={false} onClick={handlePopoverClick}>  {/* Add onClick here */}
+        <PopoverContent className="w-80" portal={false}>
           <div className="flex flex-col space-y-4">
             <div className="flex space-x-2">
               <Select onValueChange={(value) => handleTimeChange('minute', value)}>
@@ -96,6 +91,13 @@ export default function TimePicker({ label, id, onChange, value }: TimePickerPro
               pattern="[0-5][0-9]:[0-5][0-9]"
               className="w-full"
             />
+          </div>
+          <div className="mt-4 flex justify-end">
+            <Button
+              onClick={() => setPopoverOpen(false)} // Close the popover on "OK" click
+            >
+              Ok
+            </Button>
           </div>
         </PopoverContent>
       </Popover>

@@ -1,7 +1,7 @@
 'use client';
 import { urlEnum } from '../utils/urlEnum';
 import statusMessages from '@/lib/statusMessages';
-export const handleGetIntervals = async (testId: number) => {
+export const processGetIntervals = async (testId: number) => {
   try {
     const response = await fetch(`${urlEnum.interval}?testId=${testId}`, {
       method: 'GET',
@@ -24,7 +24,7 @@ export const handleGetIntervals = async (testId: number) => {
 };
 
 
-export const handleCreateInterval = async (testId: number) => {
+export const processCreateInterval = async (testId: number) => {
   try {
    const response = await fetch(`${urlEnum.interval}`, {
     method: 'POST',
@@ -42,9 +42,9 @@ export const handleCreateInterval = async (testId: number) => {
   return { message: statusMessages.errorCreatingInterval};
 }
 };
-export const handleRemoveInterval = async (intervalId: number) => {
+export const processRemoveInterval = async (intervalId: number) => {
   try {
-    const response = await fetch(`${urlEnum.interval}/${intervalId}`, {
+    const response = await fetch(`${urlEnum.interval}?id=${intervalId}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',

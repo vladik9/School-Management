@@ -82,6 +82,7 @@ const translations = {
   noTestAdded: "Nu sunt teste adaugate",
   barem: "Barem",
   addBarem: "Adaugă barem",
+  deleteATest: "Sterge testul",
 
   //Interval
   viewIntervals: "Vizualizare intervale",

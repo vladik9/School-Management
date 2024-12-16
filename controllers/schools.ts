@@ -2,7 +2,7 @@
 import { urlEnum } from '../utils/urlEnum';
 import statusMessages from '@/lib/statusMessages';
 
- export const handleGetSchools = async () => {
+ export const processGetSchools = async () => {
   try {
     const response = await fetch(`${urlEnum.school}`, {
       method: 'GET',
@@ -27,7 +27,7 @@ import statusMessages from '@/lib/statusMessages';
 
 
 
-export const handleCreateSchool = async (data: object) => {
+export const processCreateSchool = async (data: object) => {
   try {
   const response = await fetch(`${urlEnum.school}`, {
     method: 'POST',

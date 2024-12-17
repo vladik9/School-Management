@@ -30,6 +30,7 @@ const translations = {
   viewSchools: "Vizualizare școli",
   noSchools: "Nu sunt școli adaugate",
   removeSchool: "Sterge școala",
+  confirmRemoveSchool: "Sigur doresti sa stergi școala?",
   noSchoolsAvailable: "Nu sunt școli disponibile",
 
 
@@ -39,6 +40,7 @@ const translations = {
   addANewYear: "Adaugă un an nou",
   noYears: "Nu sunt ani adaugați",
   removeYear: "Sterge an",
+  confirmRemoveYear: "Sigur doresti sa stergi anul?",
 
   //Disciplines
   viewDisciplines: "Vizualizare discipline",
@@ -54,6 +56,8 @@ const translations = {
   teacherName: "Numele profesorului",
   className: "Numele clasei",
   noClassesAdded: "Nu sunt clase adaugate",
+  removeClass: "Sterge clasa",
+  confirmRemoveClass: "Sigur doresti sa stergi o clasă?",
 
   //Student
   studentId: "Id elev",
@@ -88,6 +92,8 @@ const translations = {
   barem: "Barem",
   addBarem: "Adaugă barem",
   deleteATest: "Sterge testul",
+  removeTest: "Sterge test",
+  confirmRemoveTest: "Sigur doresti sa stergi testul?",
 
   //Interval
   viewIntervals: "Vizualizare intervale",
@@ -101,6 +107,8 @@ const translations = {
   points: "Puncte",
   average: "Medie",
   noIntervals: "Nu există intervale adaugate",
+  removeInterval: "Sterge interval",
+  confirmRemoveInterval: "Sigur doresti sa stergi intervalul?",
 
   //Records
   addNewRecord: "Adaugă o noua inregistrare",
@@ -112,6 +120,8 @@ const translations = {
   date: "Data",
   record: "Nota",
   editRecord: "Editare inregistrare",
+  removeRecord: "Sterge inregistrare",
+  confirmRemoveRecord: "Sigur doresti sa stergi inregistrarea?",
 
   //TimePicker
   selectTime: "Selecteaza timp",

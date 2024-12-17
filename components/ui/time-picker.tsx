@@ -96,7 +96,7 @@ export default function TimePicker({ label, id, onChange, value }: TimePickerPro
             <Button
               onClick={() => setPopoverOpen(false)} // Close the popover on "OK" click
             >
-              Ok
+              {translations.confirm}
             </Button>
           </div>
         </PopoverContent>

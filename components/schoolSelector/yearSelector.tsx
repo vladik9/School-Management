@@ -4,12 +4,14 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import translations from "@/lib/translations";
 import { YearData } from "@/types/types";
+import RemoveDialog from '../generic/remove-dialog';
 
 interface YearSelectorProps {
   years: YearData[];
   onSelectYear: (yearId: number) => void;
   onAddYear: () => void;
   onRemoveYear: (yearId: number) => void;
+
 }
 
 export default function YearSelector({ years, onSelectYear, onAddYear, onRemoveYear, }: YearSelectorProps) {
@@ -25,7 +27,7 @@ export default function YearSelector({ years, onSelectYear, onAddYear, onRemoveY
             {years.length > 0 ? (
               years.map((yearData) => (
                 <SelectItem key={yearData.id} value={yearData.id.toString()}>
-                  {yearData.id}
+                  {yearData.name}
                 </SelectItem>
               ))
             ) : (
@@ -38,9 +40,7 @@ export default function YearSelector({ years, onSelectYear, onAddYear, onRemoveY
         {
           <Button variant="outline" onClick={onAddYear}>{translations.addYear}</Button>
         }
-        {years.length > 0 &&
-          <Button variant="outline" onClick={() => onRemoveYear(years[0].id)}>{translations.removeYear}
-          </Button>}
+        {years.length > 0 && <RemoveDialog title={translations.removeYear} description={translations.confirmRemoveYear} confirmText={translations.removeYear} cancelText={translations.cancel} onRemove={() => onRemoveYear(years[0].id)} id={years[0].id} />}
       </div>
     </div>
   );

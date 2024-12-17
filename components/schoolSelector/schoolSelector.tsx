@@ -4,6 +4,7 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import translations from "@/lib/translations";
 import { SchoolData } from "@/types/types";
+import RemoveDialog from '../generic/remove-dialog';
 
 interface SchoolSelectorProps {
   schools: SchoolData[];
@@ -36,7 +37,9 @@ export default function SchoolSelector({ schools, onSelectSchool, onAddSchool, o
       </Select>
       <div style={{ marginTop: '10px', display: 'flex', justifyContent: 'space-between' }}>
         <Button variant="outline" onClick={onAddSchool}>{translations.addSchool}</Button>
-        {schools.length > 0 && <Button variant="outline" onClick={() => onRemoveSchool(schools[0].id)}>{translations.removeSchool}</Button>}
+        {schools.length > 0 && <RemoveDialog title={translations.removeSchool} description=
+
+          {translations.confirmRemoveSchool} confirmText={translations.removeSchool} cancelText={translations.cancel} onRemove={() => onRemoveSchool(schools[0].id)} id={schools[0].id} />}
       </div>
     </div>
   );

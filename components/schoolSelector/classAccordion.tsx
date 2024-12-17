@@ -49,8 +49,7 @@ export default function ClassAccordion({
                   <span>
                     {school_class.name} - {school_class.teacher}
                   </span>
-                  {/* //NOTE -Class-level Remove Button and Dialog  */}
-                  <RemoveDialog title={translations.confirmRemoveRecordTitle} description={translations.confirmRemoveRecordMessage} confirmText={translations.remove} cancelText={translations.cancel} onRemove={() => handleRemoveClass(school_class.id)} id={school_class.id} />
+
                 </div>
               </AccordionTrigger>
               <AccordionContent>
@@ -62,40 +61,43 @@ export default function ClassAccordion({
                           <CardTitle className="text-lg">{testItem.name}</CardTitle>
                         </CardHeader>
                         <CardContent>
-                          <div style={{ marginTop: '10px', textAlign: 'center' }}>
+                          <div style={{ marginTop: '10px', display: 'flex', justifyContent: 'space-between' }}>
                             <Button
                               variant="outline"
-                              className="w-full"
+                              className="max-w-100"
                               onClick={() => handleAddViewIntervals(testItem.id)}
                             >
                               {translations.viewAddIntervals}
                             </Button>
+                            {/* //NOTE -Test-level Remove Button and Dialog  */}
+                            <RemoveDialog title={translations.removeTest} description={translations.confirmRemoveTest} confirmText={translations.removeTest} cancelText={translations.cancel} onRemove={() => handleRemoveTest(testItem.id)} id={testItem.id} />
                           </div>
-                          <div style={{ marginTop: '10px', textAlign: 'center' }} />
-                          <Button
-                            variant="outline"
-                            className="w-full"
-                            onClick={() => handleRemoveTest(testItem.id)}
-                          >
-                            {translations.deleteATest}
-                          </Button>
+
                         </CardContent>
                       </Card>
                     ))
+
                   ) : (
                     <div className="text-center">
                       <p>{translations.noTestAdded}</p>
                     </div>
                   )}
                 </div>
-                <div style={{ marginTop: '10px', textAlign: 'right' }}>
-                  <Button variant="outline" style={{ marginRight: '10px' }} onClick={() => handleAddStudent(school_class.id)}>
-                    {translations.addStudent}
-                  </Button>
-                  <Button variant="outline" onClick={() => handleSelectingTest(school_class.id)}>
-                    {translations.addTest}
-                  </Button>
+                <div style={{ marginTop: '10px', display: 'flex', justifyContent: 'space-between' }}>
+                  <div>
+                    <Button variant="outline" style={{ marginRight: '10px' }} onClick={() => handleAddStudent(school_class.id)}>
+                      {translations.addStudent}
+                    </Button>
+                    <Button variant="outline" onClick={() => handleSelectingTest(school_class.id)}>
+                      {translations.addTest}
+                    </Button>
+                  </div>
+                  {/* //NOTE -Class-level Remove Button and Dialog  */}
+                  <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <RemoveDialog title={translations.removeClass} description={translations.confirmRemoveClass} confirmText={translations.removeSchool} cancelText={translations.cancel} onRemove={() => handleRemoveClass(school_class.id)} id={school_class.id} />
+                  </div>
                 </div>
+
                 {school_class.students.length === 0 ? (
                   <div style={{ marginTop: '20px', textAlign: 'center' }}>{translations.noStudentsAdded}</div>
                 ) : (

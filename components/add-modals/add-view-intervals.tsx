@@ -119,8 +119,8 @@ export default function AddViewIntervals({
                                 </TableCell>
                                 <TableCell>
                                   {/* Record-level Remove Dialog */}
-                                  <RemoveDialog title={translations.remove}
-                                    description={translations.confirmRemoveRecordMessage} confirmText={translations.confirm}
+                                  <RemoveDialog title={translations.removeRecord}
+                                    description={translations.confirmRemoveRecord} confirmText={translations.removeRecord}
                                     cancelText={translations.cancel}
                                     onRemove={handleRemoveRecord}
                                     id={int.id} />
@@ -148,9 +148,9 @@ export default function AddViewIntervals({
                   <TableCell>
                     {/* Interval-level Remove Dialog */}
                     <RemoveDialog
-                      title={translations.confirmRemoveRecordTitle}
-                      description={translations.confirmRemoveRecordMessage}
-                      confirmText={translations.confirm}
+                      title={translations.removeInterval}
+                      description={translations.confirmRemoveInterval}
+                      confirmText={translations.removeInterval}
                       cancelText={translations.cancel}
                       onRemove={handleRemoveInterval}
                       id={interval.id} />

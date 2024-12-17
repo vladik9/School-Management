@@ -168,6 +168,7 @@ export default function SchoolDashboard() {
       showStatusModal(statusMessages.errorFetchingIntervals, fetchStatuses.error);
     }
   };
+
   const fetchRecords = async (intervalId: number) => {
     showStatusModal(statusMessages.fetchingRecords, fetchStatuses.loading);
     try {
@@ -296,20 +297,23 @@ export default function SchoolDashboard() {
   const handleViewEditRecords = async (intervalId: number) => {
     await setSelectedIntervalId(intervalId);
     await fetchRecords(intervalId);
-    // setIsRecordModalOpen(true);
   };
   const handleViewEditStudents = async (classId: number) => {
 
   };
 
-  const handleRemoveInterval = async (intervalId: number) => {
-    await processRemoveInterval(intervalId);
-    await fetchIntervals(selectedTestId || 0);
-  };
+
   const handleUpdateStudent = async (studentId: number, data: object) => {
 
   };
-
+  const handleRemoveSchool = async (schoolId: number) => {
+    await processRemoveSchool(schoolId);
+    await fetchSchools();
+  };
+  const handleRemoveYear = async (yearId: number) => {
+    await processRemoveYear(yearId);
+    await fetchYears();
+  };
   const handleRemoveClass = async (classId: number) => {
     await processRemoveClass(classId);
     await fetchClasses();
@@ -318,22 +322,20 @@ export default function SchoolDashboard() {
     await processRemoveStudent(studentId);
     await fetchClasses();
   };
-  const handleRemoveRecord = async (recordId: number) => {
-    processRemoveRecord(recordId);
-    await fetchRecords(selectedIntervalId || 0);
-  };
+
   const handleRemoveTest = async (testId: number) => {
     await processRemoveTest(testId);
     await fetchClasses();
   };
-  const handleRemoveYear = async (yearId: number) => {
-    await processRemoveYear(yearId);
-    await fetchYears();
+  const handleRemoveInterval = async (intervalId: number) => {
+    await processRemoveInterval(intervalId);
+    await fetchIntervals(selectedTestId || 0);
   };
-  const handleRemoveSchool = async (schoolId: number) => {
-    await processRemoveSchool(schoolId);
-    await fetchSchools();
+  const handleRemoveRecord = async (recordId: number) => {
+    processRemoveRecord(recordId);
+    await fetchRecords(selectedIntervalId || 0);
   };
+
 
   return (
     <div className="min-h-screen bg-gray-100 p-8">

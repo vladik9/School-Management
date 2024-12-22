@@ -1,3 +1,5 @@
+import { count } from "console";
+
 const translations = {
 
   //Auth
@@ -61,6 +63,7 @@ const translations = {
 
   //Student
   studentId: "Id elev",
+  studentName: "Nume elev",
   newStudentId: "Id elev nou",
   orderNumber: "Numar de ordine",
   addStudent: "Adaugă elev",
@@ -113,11 +116,11 @@ const translations = {
   confirmRemoveInterval: "Sigur doresti sa stergi intervalul?",
 
   //Records
-  addNewRecord: "Adaugă o noua inregistrare",
+  addNewRecord: "Adaugă o nota noua",
   addNewRecordDescription: "Adaugă o noua inregistrare aici",
   noRecords: "Nu sunt note adaugate",
   viewRecords: "Vizualizare note",
-  addRecord: "Adaugă o inregistrare",
+  addRecord: "Adaugă o nota",
   student: "Elev",
   date: "Data",
   record: "Nota",
@@ -131,6 +134,14 @@ const translations = {
   noTimeSelected: "Niciun timp selectat",
   seconds: "Secunde",
   minutes: "Minute",
+
+  //Performance
+  noPerformance: "Nu sunt performante adaugate",
+  score: "Scor",
+  testBarem: "Barem test",
+  studentListOfPerformance: "Lista de performante a elevilor",
+
+
 
   //Common
   action: "Acțiune",
@@ -147,6 +158,7 @@ const translations = {
   confirmRemoveRecordTitle: "Confirmare stergere",
   confirmRemoveRecordMessage: "Esti sigur ca vrei sa stergi acest inregistrare?",
   update: "Actualizare",
+  count: "Numar",
 
   // 404  - Not Found
   pageNotFound: "Pagina nu a fost gasita",
@@ -154,6 +166,11 @@ const translations = {
   backToHome: "Inapoi la pagina principala",
 
   //Docs
+  documentsList: "Lista documentelor",
+  noDocuments: "Nu sunt documente adaugate",
+  docName: "Nume document",
+  download: "Descarca",
+
 };
 
 export default translations;

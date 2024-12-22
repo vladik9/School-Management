@@ -32,6 +32,22 @@ type ClassData = {
   students: StudentData[];
 };
 
+type PerformanceData = {
+  id: number;
+  studentId: number;
+  studentName: string;
+  testName: string;
+  testId: number;
+  testBarem: string;
+  score: number;
+};
+
+type DocumentData = {
+  id: number;
+  filePath: string;
+  fileName: string;
+};
+
 type SchoolData = {
   id: number;
   name: string;
@@ -49,10 +65,12 @@ type RecordData = {
 export type{
   YearData,
   ClassData,
+  PerformanceData,
   SchoolData,
   StudentData,
   IntervalData,
   TestData,
   RecordData,
   FetchStatuses,
+  DocumentData
 };

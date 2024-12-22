@@ -50,7 +50,8 @@ import {
   YearData,
   ClassData,
   SchoolData,
-  FetchStatuses
+  FetchStatuses,
+  PerformanceData
 } from "@/types/types";
 
 import statusMessages, { fetchStatuses } from '@/lib/statusMessages';
@@ -60,6 +61,7 @@ import { StatusModal } from '@/components/status-modal';
 import SchoolSelector from '@/components/schoolSelector/schoolSelector';
 import YearSelector from '@/components/schoolSelector/yearSelector';
 import ClassAccordion from '@/components/schoolSelector/classAccordion';
+import PerformanceAccordion from '@/components/schoolSelector/performanceAccordion';
 
 // Modals
 import AddSchool from "@/components/add-modals/add-school";
@@ -68,6 +70,7 @@ import AddClass from "@/components/add-modals/add-class";
 import AddStudent from "@/components/add-modals/add-student";
 import AddTest from "@/components/add-modals/add-test";
 import AddViewIntervals from "@/components/add-modals/add-view-intervals";
+import DocumentAccordion from './schoolSelector/documentAccordion';
 
 
 export default function SchoolDashboard() {
@@ -485,20 +488,25 @@ export default function SchoolDashboard() {
 
           {/* Classes and Tests */}
           {classes.length > 0 && (
-            <ClassAccordion
-              classes={classes}
-              handleAddStudent={() => setIsStudentModalOpen(true)}
-              handleSelectingTest={() => setIsTestModalOpen(true)}
-              handleAddViewIntervals={handleAddViewIntervals}
-              setSelectedClassId={setSelectedClassId}
-              handleViewEditStudents={handleViewEditStudents}
-              handleRemoveClass={handleRemoveClass}
-              handleRemoveStudent={handleRemoveStudent}
-              handleUpdateStudent={handleUpdateStudent}
-              handleRemoveTest={handleRemoveTest}
-            />
+            <>
+              <ClassAccordion
+                classes={classes}
+                handleAddStudent={() => setIsStudentModalOpen(true)}
+                handleSelectingTest={() => setIsTestModalOpen(true)}
+                handleAddViewIntervals={handleAddViewIntervals}
+                setSelectedClassId={setSelectedClassId}
+                handleViewEditStudents={handleViewEditStudents}
+                handleRemoveClass={handleRemoveClass}
+                handleRemoveStudent={handleRemoveStudent}
+                handleUpdateStudent={handleUpdateStudent}
+                handleRemoveTest={handleRemoveTest}
+              />
+              <PerformanceAccordion
+                performancesList={classes as PerformanceData[]} />
+              <DocumentAccordion
+                documentsList={classes as DocumentData[]} />
+            </>
           )}
-
           {/* If no classes yet */}
           {selectedYearId && classes.length === 0 && (
             <div className="text-center">

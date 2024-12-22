@@ -56,7 +56,6 @@ export const processRemoveTest = async (testId: number) => {
     }
     return response;
   } catch (error) {
-    console.error(error);
-    return { message: statusMessages.errorDeletingTest };
+    throw new Error(statusMessages.errorDeletingTest);
   }
 };

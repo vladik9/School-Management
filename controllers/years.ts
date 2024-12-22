@@ -57,7 +57,6 @@ export const processRemoveYear = async (yearId: number) => {
     }
     return response;
   } catch (error) {
-    console.error(error);
-    return { message: statusMessages.errorDeletingYear };
+    throw new Error(statusMessages.errorDeletingYear);
   }
 };

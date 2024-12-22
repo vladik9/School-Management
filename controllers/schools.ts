@@ -59,7 +59,6 @@ export const processRemoveSchool = async (schoolId: number) => {
     }
     return response;
   } catch (error) {
-    console.error(error);
-    return { message: statusMessages.errorDeletingSchool };
+    throw new Error(statusMessages.errorDeletingSchool);
   }
 };

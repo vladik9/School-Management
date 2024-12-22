@@ -58,7 +58,6 @@ export const processRemoveStudent = async (studentId: number) => {
     }
     return response;
   } catch (error) {
-    console.error(error);
-    return { message: statusMessages.errorDeletingStudent };
+    throw new Error(statusMessages.errorDeletingStudent);
   }
 };

@@ -55,7 +55,6 @@ export const processRemoveInterval = async (intervalId: number) => {
     }
     return response;
   } catch (error) {
-    console.error(error);
-    return { message: statusMessages.errorDeletingInterval };
+    throw new Error(statusMessages.errorDeletingInterval);
   }
 }

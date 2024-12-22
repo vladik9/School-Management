@@ -6,17 +6,56 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { logout } from '@/utils/auth';
 import { useRouter } from 'next/navigation';
 import translations from "@/lib/translations";
-import { processGetSchools, processCreateSchool, processRemoveSchool } from "@/controllers/schools";
-import { processGetClasses, processCreateClass, processRemoveClass } from "@/controllers/classes";
-import { processGetYears, processCreateYear, processRemoveYear } from "@/controllers/years";
-import { processGetStudents, processCreateStudent, processRemoveStudent } from "@/controllers/student";
-import { processCreateTest, processRemoveTest } from "@/controllers/test";
-import { processGetIntervals, processCreateInterval, processRemoveInterval } from '@/controllers/intervals';
-import { processGetRecords, processCreateRecord, processRemoveRecord } from '@/controllers/records';
+
+import {
+  processGetSchools,
+  processCreateSchool,
+  processRemoveSchool
+} from "@/controllers/schools";
+import {
+  processGetClasses,
+  processCreateClass,
+  processRemoveClass
+} from "@/controllers/classes";
+import {
+  processGetYears,
+  processCreateYear,
+  processRemoveYear
+} from "@/controllers/years";
+import {
+  processGetStudents,
+  processCreateStudent,
+  processRemoveStudent
+} from "@/controllers/student";
+import {
+  processCreateTest,
+  processRemoveTest
+} from "@/controllers/test";
+import {
+  processGetIntervals,
+  processCreateInterval,
+  processRemoveInterval
+} from '@/controllers/intervals';
+import {
+  processGetRecords,
+  processCreateRecord,
+  processRemoveRecord
+} from '@/controllers/records';
+
 import { School } from 'lucide-react';
-import { StudentData, IntervalData, RecordData, YearData, ClassData, SchoolData, FetchStatuses } from "@/types/types";
+import {
+  StudentData,
+  IntervalData,
+  RecordData,
+  YearData,
+  ClassData,
+  SchoolData,
+  FetchStatuses
+} from "@/types/types";
+
 import statusMessages, { fetchStatuses } from '@/lib/statusMessages';
 import { StatusModal } from '@/components/status-modal';
+
 // Child components
 import SchoolSelector from '@/components/schoolSelector/schoolSelector';
 import YearSelector from '@/components/schoolSelector/yearSelector';
@@ -43,6 +82,7 @@ export default function SchoolDashboard() {
   const [selectedIntervalId, setSelectedIntervalId] = useState<number>();
   const [selectedTestId, setSelectedTestId] = useState<number | null>(null);
   const [records, setRecords] = useState<RecordData[]>([]);
+
   // Modal states
   const [isSchoolModalOpen, setIsSchoolModalOpen] = useState(false);
   const [isYearModalOpen, setIsYearModalOpen] = useState(false);
@@ -51,7 +91,6 @@ export default function SchoolDashboard() {
   const [isIntervalModalOpen, setIsIntervalModalOpen] = useState(false);
   const [isStudentModalOpen, setIsStudentModalOpen] = useState(false);
   const [isNewRecordModalOpen, setIsNewRecordModalOpen] = useState(false);
-
 
   const [newRecord, setNewRecord] = useState({});
   const [statusModal, setStatusModal] = useState({
@@ -64,11 +103,11 @@ export default function SchoolDashboard() {
 
   // Status Modal functions
   const showStatusModal = (message: string, variant: FetchStatuses) => {
-    setStatusModal({ isVisible: true, message, variant: fetchStatuses.success });
+    setStatusModal({ isVisible: true, message, variant });
   };
 
   const hideStatusModal = () => {
-    setStatusModal(prev => ({ ...prev, isVisible: false }));
+    setStatusModal((prev) => ({ ...prev, isVisible: false }));
   };
 
   // Logout Handler
@@ -103,20 +142,22 @@ export default function SchoolDashboard() {
     }
   }, [selectedClassId]);
 
-  // Fetch records when class selected
+  // Fetch records when interval selected
   useEffect(() => {
     if (selectedIntervalId) {
       fetchRecords(selectedIntervalId);
     }
   }, [selectedIntervalId]);
 
+  // =========================
   // Data fetching functions
+  // =========================
   const fetchSchools = async () => {
-    showStatusModal(statusMessages.fetchingSchools, fetchStatuses.loading);
     try {
-      const schoolList = await processGetSchools() || [];
+      // showStatusModal(statusMessages.fetchingSchools, fetchStatuses.loading);
+      const schoolList = (await processGetSchools()) || [];
       setSchools(schoolList);
-      showStatusModal(statusMessages.schoolsFetched, fetchStatuses.success);
+      // showStatusModal(statusMessages.schoolsFetched, fetchStatuses.success);
     } catch (error) {
       showStatusModal(statusMessages.errorFetchingSchools, fetchStatuses.error);
     }
@@ -124,11 +165,11 @@ export default function SchoolDashboard() {
 
   const fetchYears = async () => {
     if (!selectedSchoolId) return;
-    showStatusModal(statusMessages.fetchingYears, fetchStatuses.loading);
+    // showStatusModal(statusMessages.fetchingYears, fetchStatuses.loading);
     try {
-      const yearList = await processGetYears(selectedSchoolId.id) || [];
+      const yearList = (await processGetYears(selectedSchoolId.id)) || [];
       setYears(yearList);
-      showStatusModal(statusMessages.yearsFetched, fetchStatuses.success);
+      // showStatusModal(statusMessages.yearsFetched, fetchStatuses.success);
     } catch (error) {
       showStatusModal(statusMessages.errorFetchingYears, fetchStatuses.error);
     }
@@ -136,23 +177,23 @@ export default function SchoolDashboard() {
 
   const fetchClasses = async () => {
     if (!selectedYearId) return;
-    showStatusModal(statusMessages.fetchingClasses, fetchStatuses.loading);
+    // showStatusModal(statusMessages.fetchingClasses, fetchStatuses.loading);
     try {
-      const classList = await processGetClasses(selectedYearId.toString()) || [];
+      const classList = (await processGetClasses(selectedYearId.toString())) || [];
       setClasses(classList);
-      showStatusModal(statusMessages.classesFetched, fetchStatuses.success);
+      // showStatusModal(statusMessages.classesFetched, fetchStatuses.success);
     } catch (error) {
-      showStatusModal(statusMessages.errorFetchingClasses, fetchStatuses.error);;
+      showStatusModal(statusMessages.errorFetchingClasses, fetchStatuses.error);
     }
   };
 
   const fetchStudents = async () => {
     if (!selectedClassId) return;
-    showStatusModal(statusMessages.fetchingStudents, fetchStatuses.loading);
+    // showStatusModal(statusMessages.fetchingStudents, fetchStatuses.loading);
     try {
-      const studentList = await processGetStudents(selectedClassId.toString()) || [];
+      const studentList = (await processGetStudents(selectedClassId.toString())) || [];
       setStudents(studentList);
-      showStatusModal(statusMessages.studentsFetched, fetchStatuses.success);
+      // showStatusModal(statusMessages.studentsFetched, fetchStatuses.success);
     } catch (error) {
       showStatusModal(statusMessages.errorFetchingStudents, fetchStatuses.error);
     }
@@ -160,29 +201,32 @@ export default function SchoolDashboard() {
 
   const fetchIntervals = async (testId: number) => {
     if (!testId) return;
-    showStatusModal(statusMessages.fetchingIntervals, fetchStatuses.loading);
+    // showStatusModal(statusMessages.fetchingIntervals, fetchStatuses.loading);
     try {
-      const intervalList = await processGetIntervals(testId) || [];
+      const intervalList = (await processGetIntervals(testId)) || [];
       setIntervals(intervalList);
+      // showStatusModal(statusMessages.intervalsFetched, fetchStatuses.success);
     } catch (error) {
       showStatusModal(statusMessages.errorFetchingIntervals, fetchStatuses.error);
     }
   };
 
   const fetchRecords = async (intervalId: number) => {
-    showStatusModal(statusMessages.fetchingRecords, fetchStatuses.loading);
+    // showStatusModal(statusMessages.fetchingRecords, fetchStatuses.loading);
     try {
-      const recordList = await processGetRecords(intervalId) || [];
+      const recordList = (await processGetRecords(intervalId)) || [];
       setRecords(recordList);
-      showStatusModal(statusMessages.recordsFetched, fetchStatuses.success);
+      // showStatusModal(statusMessages.recordsFetched, fetchStatuses.success);
     } catch (error) {
       showStatusModal(statusMessages.errorFetchingRecords, fetchStatuses.error);
     }
   };
 
-  // Handlers for selections
+  // =========================
+  // Selection Handlers
+  // =========================
   const handleSchoolChange = (schoolId: number) => {
-    const school = schools.find(s => s.id === schoolId);
+    const school = schools.find((s) => s.id === schoolId);
     if (school) {
       setSelectedSchoolId(school);
       setSelectedYearId(null);
@@ -192,13 +236,14 @@ export default function SchoolDashboard() {
 
   const handleYearChange = (yearId: number) => {
     setSelectedYearId(yearId);
-    setSelectedYearId(yearId);
     setClasses([]);
   };
 
-  // Handlers for creating new data
+  // =========================
+  // Creation Handlers
+  // =========================
   const handleSchoolSave = async () => {
-    showStatusModal(statusMessages.creatingSchool, fetchStatuses.loading);
+    // showStatusModal(statusMessages.creatingSchool, fetchStatuses.loading);
     try {
       await processCreateSchool(newRecord);
       setIsSchoolModalOpen(false);
@@ -212,7 +257,7 @@ export default function SchoolDashboard() {
 
   const handleYearSave = async () => {
     if (!selectedSchoolId) return;
-    showStatusModal(statusMessages.schoolCreated, fetchStatuses.loading);
+    // showStatusModal(statusMessages.creatingYear, fetchStatuses.loading);
     try {
       await processCreateYear(newRecord, selectedSchoolId.id);
       setIsYearModalOpen(false);
@@ -226,7 +271,7 @@ export default function SchoolDashboard() {
 
   const handleClassSave = async () => {
     if (!selectedYearId) return;
-    showStatusModal(statusMessages.creatingClass, fetchStatuses.loading);
+    // showStatusModal(statusMessages.creatingClass, fetchStatuses.loading);
     try {
       await processCreateClass(newRecord, selectedYearId.toString());
       setIsClassModalOpen(false);
@@ -239,9 +284,8 @@ export default function SchoolDashboard() {
   };
 
   const handleStudentSave = async () => {
-
     if (!selectedClassId) return;
-    showStatusModal(statusMessages.creatingStudent, fetchStatuses.loading);
+    // showStatusModal(statusMessages.creatingStudent, fetchStatuses.loading);
     try {
       await processCreateStudent(newRecord, selectedClassId.toString());
       setIsStudentModalOpen(false);
@@ -255,7 +299,7 @@ export default function SchoolDashboard() {
 
   const handleTestSave = async () => {
     if (!selectedClassId) return;
-    showStatusModal(statusMessages.creatingTest, fetchStatuses.loading);
+    // showStatusModal(statusMessages.creatingTest, fetchStatuses.loading);
     try {
       await processCreateTest(newRecord, selectedClassId.toString());
       setIsTestModalOpen(false);
@@ -269,7 +313,7 @@ export default function SchoolDashboard() {
 
   const handleIntervalSave = async () => {
     if (!selectedTestId) return;
-    showStatusModal(statusMessages.creatingInterval, fetchStatuses.loading);
+    // showStatusModal(statusMessages.creatingInterval, fetchStatuses.loading);
     try {
       await processCreateInterval(selectedTestId);
       await fetchClasses();
@@ -277,66 +321,136 @@ export default function SchoolDashboard() {
       setNewRecord({});
       showStatusModal(statusMessages.intervalCreated, fetchStatuses.success);
     } catch (error) {
-      showStatusModal(statusMessages.errorCreatingTest, fetchStatuses.error);
+      showStatusModal(statusMessages.errorCreatingInterval, fetchStatuses.error);
     }
   };
-  const handleSaveNewRecord = async () => {
-    await processCreateRecord(newRecord, selectedIntervalId || 0);
-    setIsNewRecordModalOpen(false);
-    setNewRecord({});
-    await fetchRecords(selectedIntervalId || 0);
 
+  const handleSaveNewRecord = async () => {
+    try {
+      // showStatusModal(statusMessages.creatingRecord, fetchStatuses.loading);
+      await processCreateRecord(newRecord, selectedIntervalId || 0);
+      setIsNewRecordModalOpen(false);
+      setNewRecord({});
+      await fetchRecords(selectedIntervalId || 0);
+      showStatusModal(statusMessages.recordCreated, fetchStatuses.success);
+    } catch (error) {
+      showStatusModal(statusMessages.errorCreatingRecord, fetchStatuses.error);
+    }
   };
-  // Other handlers
+
+  // =========================
+  // Viewing / Editing Handlers
+  // =========================
   const handleAddViewIntervals = async (testId: number) => {
-    await setSelectedTestId(testId);
+    setSelectedTestId(testId);
     await fetchIntervals(testId);
     setIsIntervalModalOpen(true);
     setNewRecord({});
   };
 
   const handleViewEditRecords = async (intervalId: number) => {
-    await setSelectedIntervalId(intervalId);
+    setSelectedIntervalId(intervalId);
     await fetchRecords(intervalId);
   };
+
   const handleViewEditStudents = async (classId: number) => {
-
+    // Provide your logic to view/edit students here (if needed).
   };
-
 
   const handleUpdateStudent = async (studentId: number, data: object) => {
+    // Provide your logic to update a student here (if needed).
+  };
 
-  };
+  // =========================
+  // Removal Handlers (UPDATED)
+  // =========================
   const handleRemoveSchool = async (schoolId: number) => {
-    await processRemoveSchool(schoolId);
-    await fetchSchools();
+    showStatusModal(statusMessages.deletingSchool, fetchStatuses.loading);
+    try {
+      await processRemoveSchool(schoolId);
+      showStatusModal(statusMessages.schoolDeleted, fetchStatuses.success);
+    } catch (error) {
+      showStatusModal(statusMessages.errorDeletingSchool, fetchStatuses.error);
+    } finally {
+      await fetchSchools();
+    }
   };
+
   const handleRemoveYear = async (yearId: number) => {
-    await processRemoveYear(yearId);
-    await fetchYears();
+    showStatusModal(statusMessages.deletingYear, fetchStatuses.loading);
+    try {
+      await processRemoveYear(yearId);
+      showStatusModal(statusMessages.yearDeleted, fetchStatuses.success);
+    } catch (error) {
+      showStatusModal(statusMessages.errorDeletingYear, fetchStatuses.error);
+    } finally {
+      await fetchYears();
+    }
   };
+
   const handleRemoveClass = async (classId: number) => {
-    await processRemoveClass(classId);
-    await fetchClasses();
+    showStatusModal(statusMessages.deletingClass, fetchStatuses.loading);
+    try {
+      await processRemoveClass(classId);
+      showStatusModal(statusMessages.classDeleted, fetchStatuses.success);
+    } catch (error) {
+      showStatusModal(statusMessages.errorDeletingClass, fetchStatuses.error);
+    } finally {
+      await fetchClasses();
+    }
   };
+
   const handleRemoveStudent = async (studentId: number) => {
-    await processRemoveStudent(studentId);
-    await fetchClasses();
+    showStatusModal(statusMessages.deletingStudent, fetchStatuses.loading);
+    try {
+      await processRemoveStudent(studentId);
+      showStatusModal(statusMessages.studentDeleted, fetchStatuses.success);
+    } catch (error) {
+      showStatusModal(statusMessages.errorDeletingStudent, fetchStatuses.error);
+    } finally {
+      await fetchClasses();
+    }
   };
 
   const handleRemoveTest = async (testId: number) => {
-    await processRemoveTest(testId);
-    await fetchClasses();
-  };
-  const handleRemoveInterval = async (intervalId: number) => {
-    await processRemoveInterval(intervalId);
-    await fetchIntervals(selectedTestId || 0);
-  };
-  const handleRemoveRecord = async (recordId: number) => {
-    processRemoveRecord(recordId);
-    await fetchRecords(selectedIntervalId || 0);
+    showStatusModal(statusMessages.deletingTest, fetchStatuses.loading);
+    try {
+      await processRemoveTest(testId);
+      showStatusModal(statusMessages.testDeleted, fetchStatuses.success);
+    } catch (error) {
+      showStatusModal(statusMessages.errorDeletingTest, fetchStatuses.error);
+    } finally {
+      await fetchClasses();
+    }
   };
 
+  const handleRemoveInterval = async (intervalId: number) => {
+    showStatusModal(statusMessages.deletingInterval, fetchStatuses.loading);
+    try {
+      await processRemoveInterval(intervalId);
+      showStatusModal(statusMessages.intervalDeleted, fetchStatuses.success);
+    } catch (error) {
+      showStatusModal(statusMessages.errorDeletingInterval, fetchStatuses.error);
+    } finally {
+      if (selectedTestId) {
+        await fetchIntervals(selectedTestId);
+      }
+    }
+  };
+
+  const handleRemoveRecord = async (recordId: number) => {
+    showStatusModal(statusMessages.deletingRecord, fetchStatuses.loading);
+    try {
+      await processRemoveRecord(recordId);
+      showStatusModal(statusMessages.recordDeleted, fetchStatuses.success);
+    } catch (error) {
+      showStatusModal(statusMessages.errorDeletingRecord, fetchStatuses.error);
+    } finally {
+      if (selectedIntervalId) {
+        await fetchRecords(selectedIntervalId);
+      }
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gray-100 p-8">
@@ -346,7 +460,9 @@ export default function SchoolDashboard() {
             <School className="mr-2 h-6 w-6" />
             {translations.dashboardTitle}
           </CardTitle>
-          <Button variant="outline" onClick={handleLogout}>{translations.logout}</Button>
+          <Button variant="outline" onClick={handleLogout}>
+            {translations.logout}
+          </Button>
         </CardHeader>
         <CardContent>
           {/* School Selection */}
@@ -362,7 +478,6 @@ export default function SchoolDashboard() {
             <YearSelector
               years={years}
               onSelectYear={handleYearChange}
-              //TODO- fix this year add logic not adding real value is modifying it on the fly
               onAddYear={() => setIsYearModalOpen(true)}
               onRemoveYear={handleRemoveYear}
             />
@@ -381,16 +496,16 @@ export default function SchoolDashboard() {
               handleRemoveStudent={handleRemoveStudent}
               handleUpdateStudent={handleUpdateStudent}
               handleRemoveTest={handleRemoveTest}
-
             />
           )}
+
           {/* If no classes yet */}
-          {/* //TODO - FIX THIS BAD CODE */}
-          {selectedYearId && classes.length === 0 &&
+          {selectedYearId && classes.length === 0 && (
             <div className="text-center">
               <p>{translations.noClassesAdded}</p>
-            </div>}
-          {selectedYearId && !selectedClassId &&
+            </div>
+          )}
+          {selectedYearId && !selectedClassId && (
             <div>
               <div style={{ marginTop: '10px', textAlign: 'left' }}>
                 <Button variant="outline" onClick={() => setIsClassModalOpen(true)}>
@@ -398,7 +513,7 @@ export default function SchoolDashboard() {
                 </Button>
               </div>
             </div>
-          }
+          )}
 
           {/* Modals */}
           <AddSchool
@@ -456,7 +571,9 @@ export default function SchoolDashboard() {
             setNewRecord={setNewRecord}
             newRecord={newRecord}
             records={records}
-            students={(classes.length > 0 && classes.find((c) => c.id === selectedClassId) || {}).students || []}
+            students={
+              (classes.length > 0 && classes.find((c) => c.id === selectedClassId)?.students) || []
+            }
             handleSaveNewRecord={handleSaveNewRecord}
             setSelectedIntervalId={setSelectedIntervalId}
             handleViewEditRecords={handleViewEditRecords}

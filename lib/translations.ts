@@ -147,6 +147,12 @@ const translations = {
   confirmRemoveRecordTitle: "Confirmare stergere",
   confirmRemoveRecordMessage: "Esti sigur ca vrei sa stergi acest inregistrare?",
   update: "Actualizare",
+
+  // 404  - Not Found
+  pageNotFound: "Pagina nu a fost gasita",
+  pageNotFoundMessage: "Ne pare rau, pagina pe care o cautati nu a fost gasita",
+  backToHome: "Inapoi la pagina principala",
+
   //Docs
 };
 

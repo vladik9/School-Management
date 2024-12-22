@@ -55,7 +55,6 @@ export const processRemoveClass = async (classId: number) => {
     }
     return response;
   } catch (error) {
-    console.error(error);
-    return { message: statusMessages.errorDeletingClass };
+    throw new Error(statusMessages.errorDeletingClass);
   }
 };

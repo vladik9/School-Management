@@ -58,7 +58,6 @@ export const processRemoveRecord = async (recordId: number) => {
     }
     return response;
   } catch (error) {
-    console.error(error);
-    return { message: statusMessages.errorDeletingRecord };
+    throw new Error(statusMessages.errorDeletingRecord);
   }
 };

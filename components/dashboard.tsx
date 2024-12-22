@@ -64,7 +64,7 @@ export default function SchoolDashboard() {
 
   // Status Modal functions
   const showStatusModal = (message: string, variant: FetchStatuses) => {
-    setStatusModal({ isVisible: true, message, variant: fetchStatuses.default });
+    setStatusModal({ isVisible: true, message, variant: fetchStatuses.success });
   };
 
   const hideStatusModal = () => {
@@ -384,7 +384,6 @@ export default function SchoolDashboard() {
 
             />
           )}
-
           {/* If no classes yet */}
           {/* //TODO - FIX THIS BAD CODE */}
           {selectedYearId && classes.length === 0 &&

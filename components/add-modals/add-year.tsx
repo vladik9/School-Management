@@ -14,6 +14,10 @@ interface AddYearProps {
 
 
 export default function AddYear({ isModalOpen, handleCloseModal, handleSaveModal, newRecord, setNewRecord }: AddYearProps) {
+  const isFormValid = (): boolean => {
+    const { year } = newRecord;
+    return !!(year);
+  };
   return (
     <GenericModal
       isOpen={isModalOpen}
@@ -21,6 +25,7 @@ export default function AddYear({ isModalOpen, handleCloseModal, handleSaveModal
       onSave={handleSaveModal}
       title={translations.addANewYear}
       description={translations.addDescription}
+      isFormValid={isFormValid()}
     >
       <div className="space-y-4">
         <div>

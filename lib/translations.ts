@@ -80,6 +80,8 @@ const translations = {
   idNotGenerated: "Id-ul nu a fost generat",
   chooseStudent: "Alege elev",
   studentTableList: "Tabel Elevi atribuiti clasei",
+  removeStudent: "Sterge elev",
+  confirmRemoveStudent: "Sigur doresti sa stergi elevul?",
 
   //Test
   tasks: "Teme",

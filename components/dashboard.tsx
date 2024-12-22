@@ -239,6 +239,7 @@ export default function SchoolDashboard() {
   };
 
   const handleStudentSave = async () => {
+
     if (!selectedClassId) return;
     showStatusModal(statusMessages.creatingStudent, fetchStatuses.loading);
     try {
@@ -403,7 +404,10 @@ export default function SchoolDashboard() {
           {/* Modals */}
           <AddSchool
             isModalOpen={isSchoolModalOpen}
-            handleCloseModal={() => setIsSchoolModalOpen(false)}
+            handleCloseModal={() => {
+              setNewRecord({});
+              setIsSchoolModalOpen(false);
+            }}
             handleSaveModal={handleSchoolSave}
             setNewRecord={setNewRecord}
             newRecord={newRecord}
@@ -411,7 +415,10 @@ export default function SchoolDashboard() {
 
           <AddYear
             isModalOpen={isYearModalOpen}
-            handleCloseModal={() => setIsYearModalOpen(false)}
+            handleCloseModal={() => {
+              setNewRecord({});
+              setIsYearModalOpen(false);
+            }}
             handleSaveModal={handleYearSave}
             setNewRecord={setNewRecord}
             newRecord={newRecord}
@@ -419,7 +426,10 @@ export default function SchoolDashboard() {
 
           <AddClass
             isModalOpen={isClassModalOpen}
-            handleCloseModal={() => setIsClassModalOpen(false)}
+            handleCloseModal={() => {
+              setNewRecord({});
+              setIsClassModalOpen(false);
+            }}
             handleSaveModal={handleClassSave}
             setNewRecord={setNewRecord}
             newRecord={newRecord}
@@ -427,7 +437,10 @@ export default function SchoolDashboard() {
 
           <AddTest
             isModalOpen={isTestModalOpen}
-            handleCloseModal={() => setIsTestModalOpen(false)}
+            handleCloseModal={() => {
+              setNewRecord({});
+              setIsTestModalOpen(false);
+            }}
             handleSaveModal={handleTestSave}
             setNewRecord={setNewRecord}
             newRecord={newRecord}
@@ -436,7 +449,10 @@ export default function SchoolDashboard() {
           <AddViewIntervals
             intervals={intervals}
             isModalOpen={isIntervalModalOpen}
-            handleCloseModal={() => setIsIntervalModalOpen(false)}
+            handleCloseModal={() => {
+              setNewRecord({});
+              setIsIntervalModalOpen(false);
+            }}
             handleSaveModal={handleIntervalSave}
             setNewRecord={setNewRecord}
             newRecord={newRecord}
@@ -453,10 +469,13 @@ export default function SchoolDashboard() {
 
           <AddStudent
             isModalOpen={isStudentModalOpen}
-            handleCloseModal={() => setIsStudentModalOpen(false)}
+            handleCloseModal={() => {
+              setNewRecord({});
+              setIsStudentModalOpen(false);
+            }}
             handleSaveModal={handleStudentSave}
-            newRecord={newRecord}
             setNewRecord={setNewRecord}
+            newRecord={newRecord}
             selectedYear={selectedYearId}
           />
 

@@ -7,7 +7,6 @@ import translations from "@/lib/translations";
 import { ClassData } from "@/types/types";
 import RemoveDialog from '../generic/remove-dialog';
 import ViewEditDialog from '../generic/view-edit-dialog';
-import { text } from 'stream/consumers';
 
 interface ClassAccordionProps {
   classes: ClassData[];
@@ -126,6 +125,7 @@ export default function ClassAccordion({
                                 cancelText={translations.cancel}
                                 confirmText={translations.update}
                                 onSave={handleUpdateStudent}
+
                               >
                                 {/* TODO- fix this to be a table to update students */}
                                 <Table>
@@ -144,7 +144,7 @@ export default function ClassAccordion({
                             </TableCell>
                             <TableCell>
                               {/* //NOTE - Student-level Remove Dialog */}
-                              <RemoveDialog title={translations.confirmRemoveRecordTitle} description={translations.confirmRemoveRecordMessage} confirmText={translations.remove} cancelText={translations.cancel} onRemove={() => handleRemoveStudent(student.id)} id={school_class.id} />
+                              <RemoveDialog title={translations.removeStudent} description={translations.confirmRemoveStudent} confirmText={translations.removeStudent} cancelText={translations.cancel} onRemove={() => handleRemoveStudent(student.id)} id={school_class.id} />
                             </TableCell>
                           </TableRow>
                         ))}

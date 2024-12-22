@@ -14,6 +14,10 @@ interface AddSchoolProps {
 
 
 export default function AddSchool({ isModalOpen, handleCloseModal, handleSaveModal, newRecord, setNewRecord }: AddSchoolProps) {
+  const isFormValid = (): boolean => {
+    const { name } = newRecord;
+    return !!(name);
+  };
   return (
     <GenericModal
       isOpen={isModalOpen}
@@ -21,6 +25,8 @@ export default function AddSchool({ isModalOpen, handleCloseModal, handleSaveMod
       onSave={handleSaveModal}
       title={translations.addSchool}
       description={translations.addDescription}
+      isFormValid={isFormValid()}
+
     >
       <div className="space-y-4">
         <div>

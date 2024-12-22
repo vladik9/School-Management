@@ -12,7 +12,7 @@ interface AddNewRecordProps {
   handleSaveModal: (newRecord: RecordData) => void;
   students: any[];
   newRecord: any;
-  setNewRecord: (data: any) => void;
+  setNewRecord: (data: { studentId: number, startTime: string, endTime: string; }) => void;
 }
 
 
@@ -41,6 +41,11 @@ export default function AddNewRecord({ isModalOpen, handleCloseModal, handleSave
     }
   };
 
+  const isFormValid = (): boolean => {
+    const { studentId, startTime, endTime } = newRecord;
+    return !!(studentId && startTime && endTime);
+  };
+
 
   return (
     <GenericModal
@@ -49,6 +54,8 @@ export default function AddNewRecord({ isModalOpen, handleCloseModal, handleSave
       onSave={onSave}
       title={translations.addNewRecord}
       description={translations.addNewRecordDescription}
+      isFormValid={isFormValid()}
+
     >
       <div className="space-y-4">
         <div>

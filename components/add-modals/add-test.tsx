@@ -10,11 +10,16 @@ interface AddTestProps {
   handleCloseModal: () => void;
   handleSaveModal: () => void;
   newRecord: any;
-  setNewRecord: (data: { name: string; }) => void;
+  setNewRecord: (data: { name: string; addBarem: string; }) => void;
 }
 
 
 export default function AddTest({ isModalOpen, handleCloseModal, handleSaveModal, newRecord, setNewRecord }: AddTestProps) {
+  const isFormValid = (): boolean => {
+    const { name, addBarem } = newRecord;
+    return !!(name && addBarem);
+  };
+
   return (
     <GenericModal
       isOpen={isModalOpen}
@@ -22,6 +27,7 @@ export default function AddTest({ isModalOpen, handleCloseModal, handleSaveModal
       onSave={handleSaveModal}
       title={translations.addTest}
       description={translations.addDescription}
+      isFormValid={isFormValid()}
     >
       {/* Your modal content goes here */}
       <div className="space-y-4">
@@ -32,8 +38,8 @@ export default function AddTest({ isModalOpen, handleCloseModal, handleSaveModal
               setNewRecord((prev: any) => ({ ...prev, name: e.target.value }))
             } />
           <Label htmlFor="barem">{translations.barem}</Label>
-          <Input id="barem" placeholder={translations.addBarem} value={newRecord.barem || ''} onChange={(e) =>
-            setNewRecord((prev: any) => ({ ...prev, barem: e.target.value }))
+          <Input id="barem" placeholder={translations.addBarem} value={newRecord.addBarem || ''} onChange={(e) =>
+            setNewRecord((prev: any) => ({ ...prev, addBarem: e.target.value }))
           } />
         </div>
 

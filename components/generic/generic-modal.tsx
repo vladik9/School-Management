@@ -16,6 +16,8 @@ interface GenericModalProps {
   saveText?: string;
   width?: string;
   isSaveRequired?: boolean;
+  isFormValid?: boolean;
+
 }
 
 export default function GenericModal({
@@ -27,6 +29,7 @@ export default function GenericModal({
   children,
   width = '425',
   isSaveRequired = true,
+  isFormValid = false,
 
 }: GenericModalProps) {
   const modalWidth = `sm:max-w-[${width}px]`;
@@ -45,7 +48,7 @@ export default function GenericModal({
           <Button variant="outline" onClick={onClose}>
             {translations.cancelText}
           </Button>
-          {isSaveRequired && <Button onClick={onSave}>
+          {isSaveRequired && <Button disabled={!isFormValid} onClick={onSave}>
             {translations.saveText}
           </Button>}
         </DialogFooter>

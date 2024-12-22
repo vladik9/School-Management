@@ -12,50 +12,45 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 
-
 interface AddStudentProps {
   isModalOpen: boolean;
   handleCloseModal: () => void;
   handleSaveModal: () => void;
+  setNewRecord: (data: { name: string; studentId: number, classId: number; study_class: number; orderNb: number; sex: string; }) => void;
   newRecord: any;
-  setNewRecord: (data: { name: string; }) => void;
   selectedYear: number | null;
 }
 
-
-export default function AddStudent({ isModalOpen, handleCloseModal, handleSaveModal, newRecord, setNewRecord, selectedYear }: AddStudentProps) {
-  const [studentDetails, setStudentDetails] = useState({
-    name: '',
-    orderNb: '',
-    sex: '',
-    study_class: '',
-  });
+export default function AddStudent({ isModalOpen, handleCloseModal, handleSaveModal, setNewRecord, selectedYear, newRecord }: AddStudentProps) {
+  const [generatedId, setGeneratedId] = useState('');
 
   useEffect(() => {
     handleIdGeneration();
-  }, [studentDetails]);
-
-
-
-  const [generatedId, setGeneratedId] = useState('');
+  }, [newRecord.orderNb, newRecord.sex, newRecord.study_class, selectedYear]);
 
   const handleInputChange = (field: string, value: string) => {
-    setStudentDetails((prev) => ({
+    setNewRecord((prev) => ({
       ...prev,
       [field]: value,
     }));
   };
 
   const handleIdGeneration = () => {
-    const { orderNb, sex, study_class } = studentDetails;
+    const { orderNb, sex, study_class } = newRecord;
     if (orderNb && sex && study_class) {
       const studentId = `${sex}${orderNb}${study_class}${selectedYear}`;
       setGeneratedId(studentId);
-      setNewRecord((prev: any) => ({ ...prev, 'studentId': studentId }));
+      setNewRecord((prev: any) => ({ ...prev, studentId }));
     } else {
       setGeneratedId('');
     }
   };
+
+  const isFormValid = (): boolean => {
+    const { name, orderNb, sex, study_class } = newRecord;
+    return !!(name && orderNb && sex && study_class);
+  };
+
   return (
     <GenericModal
       isOpen={isModalOpen}
@@ -63,6 +58,7 @@ export default function AddStudent({ isModalOpen, handleCloseModal, handleSaveMo
       onSave={handleSaveModal}
       title={translations.addStudent}
       description={translations.addDescription}
+      isFormValid={isFormValid()}
     >
       <div className="space-y-4">
         <div>
@@ -70,10 +66,9 @@ export default function AddStudent({ isModalOpen, handleCloseModal, handleSaveMo
           <Input
             id="name"
             placeholder={translations.studentName}
-            value={studentDetails.name}
+            value={newRecord.name}
             onChange={(e) => {
               handleInputChange('name', e.target.value);
-              setNewRecord((prev: any) => ({ ...prev, 'name': e.target.value }));
             }}
           />
         </div>
@@ -83,7 +78,7 @@ export default function AddStudent({ isModalOpen, handleCloseModal, handleSaveMo
             id="order-nb-student"
             type="number"
             placeholder={translations.idStudent}
-            value={studentDetails.orderNb}
+            value={newRecord.orderNb}
             onChange={(e) => handleInputChange('orderNb', e.target.value)}
           />
         </div>
@@ -92,7 +87,6 @@ export default function AddStudent({ isModalOpen, handleCloseModal, handleSaveMo
           <Select
             onValueChange={(value) => {
               handleInputChange('sex', value);
-              handleIdGeneration();
             }}
           >
             <SelectTrigger id="sex">
@@ -109,7 +103,6 @@ export default function AddStudent({ isModalOpen, handleCloseModal, handleSaveMo
           <Select
             onValueChange={(value) => {
               handleInputChange('study_class', value);
-              handleIdGeneration();
             }}
           >
             <SelectTrigger id="class">
@@ -127,6 +120,6 @@ export default function AddStudent({ isModalOpen, handleCloseModal, handleSaveMo
           </div>
         </div>
       </div>
-    </GenericModal >
+    </GenericModal>
   );
 }

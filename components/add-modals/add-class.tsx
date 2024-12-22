@@ -10,11 +10,15 @@ interface AddClassProps {
   handleCloseModal: () => void;
   handleSaveModal: () => void;
   newRecord: any;
-  setNewRecord: (data: { name: string; }) => void;
+  setNewRecord: (data: { name: string; teacher: string; }) => void;
 }
 
 
 export default function AddClass({ isModalOpen, handleCloseModal, handleSaveModal, newRecord, setNewRecord }: AddClassProps) {
+  const isFormValid = (): boolean => {
+    const { name, teacher } = newRecord;
+    return !!(name && teacher);
+  };
   return (
     <GenericModal
       isOpen={isModalOpen}
@@ -22,6 +26,8 @@ export default function AddClass({ isModalOpen, handleCloseModal, handleSaveModa
       onSave={handleSaveModal}
       title={translations.addClass}
       description={translations.addDescription}
+      isFormValid={isFormValid()}
+
     >
       {/* Your modal content goes here */}
       <div className="space-y-4">

@@ -25,13 +25,15 @@ export const processGetStudents = async (classId: string) => {
 
 
 export const processCreateStudent = async (data: object, classId: string) => {
-  try{
+  try {
+    const { name, studentId } = data;
+    const filteredData = { name, studentId };
   const response = await fetch(`${urlEnum.student}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ ...data, classId: classId }),
+    body: JSON.stringify({ ...filteredData, classId: classId }),
   });
   if (!response.ok) {
     throw new Error(statusMessages.errorCreatingStudent);

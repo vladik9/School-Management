@@ -31,8 +31,8 @@ const getTest = async (req: NextApiRequest, res: NextApiResponse) => {
 // Handle POST (create school)
 const createTest = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    const { name,  barem, classId } = req.body;
-    const baremType = barem;
+    const { name,  addBarem, classId } = req.body;
+    const baremType = addBarem;
     const newDiscipline = await Test.create({name, baremType, classId });
     res.status(201).json(newDiscipline);
   } catch (error) {

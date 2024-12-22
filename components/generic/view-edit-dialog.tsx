@@ -53,12 +53,12 @@ export default function ViewEditDialog({
             </Button>
           </DialogClose>
           <DialogClose asChild>
-            <Button
+            {!isViewOnly && <Button
               variant="default"
               onClick={() => onSave(id, { new: "data" })}
             >
               {confirmText}
-            </Button>
+            </Button>}
           </DialogClose>
         </DialogFooter>
       </DialogContent>

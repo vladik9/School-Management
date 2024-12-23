@@ -9,7 +9,7 @@ import { Download, Upload } from 'lucide-react';
 
 
 interface DocumentAccordionProps {
-  documentsList: DocumentData[];
+  documents: DocumentData[];
   handleRemoveDocument: (documentId: number) => void;
   handleDownloadDocument: (documentId: number) => void;
   handleUploadDocument: () => void;
@@ -17,7 +17,7 @@ interface DocumentAccordionProps {
 }
 
 export default function DocumentAccordion({
-  documentsList: documentsList = [] as DocumentData[],
+  documents,
   handleRemoveDocument,
   handleDownloadDocument,
   handleUploadDocument,
@@ -25,7 +25,7 @@ export default function DocumentAccordion({
 }: DocumentAccordionProps) {
   return (
     <div style={{ marginTop: '20px' }}>
-      {documentsList.length === 0 ? (
+      {documents.length === 0 ? (
         <>
           <div className="text-center">
             <p>{translations.noDocuments}</p>
@@ -38,7 +38,7 @@ export default function DocumentAccordion({
 
       ) :
         (<Accordion type="single" collapsible >
-          {documentsList.map((document) => (
+          {documents.map((document) => (
             <AccordionItem key={document.id} value={document.id.toString()}>
               <AccordionTrigger>
                 <div className="flex items-center justify-between w-full">
@@ -49,7 +49,7 @@ export default function DocumentAccordion({
                 </div>
               </AccordionTrigger>
               <AccordionContent>
-                {documentsList.length === 0 ? (
+                {documents.length === 0 ? (
                   <div style={{ marginTop: '20px', textAlign: 'center' }}>{translations.noStudentsAdded}</div>
                 ) : (
                   <div>
@@ -63,7 +63,7 @@ export default function DocumentAccordion({
                         </TableRow>
                       </TableHeader>
                       <TableBody>
-                        {documentsList.map((test, index: number) => (
+                        {documents.map((test, index: number) => (
                           <TableRow key={test.id}>
                             <TableCell>{index + 1}</TableCell>
                             <TableCell>{test.fileName}</TableCell>

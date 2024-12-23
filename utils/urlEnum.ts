@@ -9,7 +9,7 @@ export const urlEnum = {
   test: '/api/tests',
   interval: '/api/intervals',
   record: '/api/records',
-  docs: '/api/docs',
+  documents: '/api/documents',
 };
 
 export const basicOperationsEnum = {

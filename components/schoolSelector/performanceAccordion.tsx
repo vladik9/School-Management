@@ -5,22 +5,22 @@ import translations from "@/lib/translations";
 import { PerformanceData } from "@/types/types";
 
 interface PerformanceAccordionProps {
-  performancesList: PerformanceData[];
+  performances: PerformanceData[];
 }
 
 export default function PerformanceAccordion({
-  performancesList = [] as PerformanceData[],
+  performances,
 
 }: PerformanceAccordionProps) {
   return (
     <div style={{ marginTop: '20px' }}>
-      {performancesList.length === 0 ? (
+      {performances.length === 0 ? (
         <div className="text-center">
           <p>{translations.noPerformance}</p>
         </div>
       ) :
         (<Accordion type="single" collapsible >
-          {performancesList.map((test) => (
+          {performances.map((test) => (
             <AccordionItem key={test.id} value={test.id.toString()}>
               <AccordionTrigger>
                 <div className="flex items-center justify-between w-full">
@@ -31,7 +31,7 @@ export default function PerformanceAccordion({
                 </div>
               </AccordionTrigger>
               <AccordionContent>
-                {performancesList.length === 0 ? (
+                {performances.length === 0 ? (
                   <div style={{ marginTop: '20px', textAlign: 'center' }}>{translations.noStudentsAdded}</div>
                 ) : (
                   <div>
@@ -46,7 +46,7 @@ export default function PerformanceAccordion({
                         </TableRow>
                       </TableHeader>
                       <TableBody>
-                        {performancesList.map((test, index: number) => (
+                        {performances.map((test, index: number) => (
                           <TableRow key={test.id}>
                             <TableCell>{index + 1}</TableCell>
                             <TableCell>{test.studentId}</TableCell>

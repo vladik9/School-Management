@@ -50,7 +50,8 @@ const getClasses = async (req: NextApiRequest, res: NextApiResponse) => {
           ...classData.toJSON(), // Convert Sequelize instance to plain object
           tests,
           students,
-          documents
+          documents,
+          performances: [], // Placeholder for performances
         };
       })
     );

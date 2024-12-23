@@ -7,6 +7,8 @@ import translations from "@/lib/translations";
 import { ClassData } from "@/types/types";
 import RemoveDialog from '../generic/remove-dialog';
 import ViewEditDialog from '../generic/view-edit-dialog';
+import PerformanceAccordion from './performanceAccordion';
+import DocumentAccordion from './documentAccordion';
 
 interface ClassAccordionProps {
   classes: ClassData[];
@@ -19,6 +21,13 @@ interface ClassAccordionProps {
   handleRemoveStudent: (studentId: number) => void;
   handleRemoveClass: (classId: number) => void;
   handleRemoveTest: (testId: number) => void;
+
+  // NOTE - Document-related props
+  handleUploadDocument: () => void;
+  handleRemoveDocument: (documentId: number) => void;
+  handleDownloadDocument: (documentId: number) => void;
+
+
 }
 
 export default function ClassAccordion({
@@ -31,10 +40,14 @@ export default function ClassAccordion({
   setSelectedClassId,
   handleRemoveStudent,
   handleRemoveClass,
-  handleRemoveTest
+  handleRemoveTest,
+  handleUploadDocument,
+  handleRemoveDocument,
+  handleDownloadDocument,
+
 }: ClassAccordionProps) {
   return (
-    <div style={{ marginTop: '20px' }}>
+    <div style={{ padding: '40px', borderRadius: '10px', marginTop: '20px', border: '0.5px solid lightgray' }}>
       {classes.length === 0 ? (
         <div className="text-center">
           <p>{translations.noClassesAdded}</p>
@@ -152,9 +165,17 @@ export default function ClassAccordion({
                     </Table>
                   </div>
                 )}
+                <PerformanceAccordion
+                  performances={classes.performances || []} />
+                <DocumentAccordion
+                  documents={classes.documents || []}
+                  handleUploadDocument={handleUploadDocument}
+                  handleRemoveDocument={handleRemoveDocument}
+                  handleDownloadDocument={handleDownloadDocument} />
               </AccordionContent>
             </AccordionItem>
           ))}
+
         </Accordion>)}
     </div>
   );

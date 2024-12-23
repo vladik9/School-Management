@@ -5,7 +5,7 @@ import statusMessages from '@/lib/statusMessages';
 
 export const processGetDocuments = async (classId: number) => {
   try {
-    const response = await fetch(`${urlEnum.docs}?classId=${classId}`, {
+    const response = await fetch(`${urlEnum.documents}?classId=${classId}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -27,7 +27,7 @@ export const processGetDocuments = async (classId: number) => {
 
 export const processCreateDocument = async (data: object, classId: number) => {
 try {
-  const response = await fetch(`${urlEnum.docs}`, {
+  const response = await fetch(`${urlEnum.documents}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

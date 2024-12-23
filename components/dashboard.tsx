@@ -51,7 +51,7 @@ import {
   ClassData,
   SchoolData,
   FetchStatuses,
-  PerformanceData,
+
   DocumentData
 } from "@/types/types";
 
@@ -62,7 +62,6 @@ import { StatusModal } from '@/components/status-modal';
 import SchoolSelector from '@/components/schoolSelector/schoolSelector';
 import YearSelector from '@/components/schoolSelector/yearSelector';
 import ClassAccordion from '@/components/schoolSelector/classAccordion';
-import PerformanceAccordion from '@/components/schoolSelector/performanceAccordion';
 
 // Modals
 import AddSchool from "@/components/add-modals/add-school";
@@ -71,7 +70,6 @@ import AddClass from "@/components/add-modals/add-class";
 import AddStudent from "@/components/add-modals/add-student";
 import AddTest from "@/components/add-modals/add-test";
 import AddViewIntervals from "@/components/add-modals/add-view-intervals";
-import DocumentAccordion from '@/components/schoolSelector/documentAccordion';
 import UploadDocument from '@/components/add-modals/upload-doc';
 import { processCreateDocument, processGetDocuments } from '@/controllers/document';
 
@@ -83,12 +81,12 @@ export default function SchoolDashboard() {
   const [selectedClassId, setSelectedClassId] = useState<number>();
   const [years, setYears] = useState<YearData[]>([]);
   const [selectedYearId, setSelectedYearId] = useState<number | null>(null);
-  const [students, setStudents] = useState<StudentData[]>([]);
+  const [students, setStudents] = useState<StudentData[]>([]); //NOTE - fix this later use students from inside of classes
   const [intervals, setIntervals] = useState<IntervalData[]>([]);
   const [selectedIntervalId, setSelectedIntervalId] = useState<number>();
   const [selectedTestId, setSelectedTestId] = useState<number | null>(null);
   const [records, setRecords] = useState<RecordData[]>([]);
-  const [documents, setDocuments] = useState<DocumentData[]>([]);
+  const [documents, setDocuments] = useState<DocumentData[]>([]); //NOTE - fix this later use documents from inside of classes
 
   // Modal states
   const [isSchoolModalOpen, setIsSchoolModalOpen] = useState(false);
@@ -356,7 +354,7 @@ export default function SchoolDashboard() {
       showStatusModal(statusMessages.errorCreatingRecord, fetchStatuses.error);
     }
   };
-  const handleDocumentSave = async () => {
+  const handleSaveDocument = async () => {
     try {
       // showStatusModal(statusMessages.creatingDocument, fetchStatuses.loading);
       await processCreateDocument(newRecord, selectedClassId);
@@ -536,7 +534,7 @@ export default function SchoolDashboard() {
 
           {/* Classes and Tests */}
           {classes.length > 0 && (
-            <div style={{ padding: '20px', borderRadius: '10px', marginTop: '20px', border: '0.5px solid lightgray' }}>
+            <div>
               <ClassAccordion
                 classes={classes}
                 handleAddStudent={() => setIsStudentModalOpen(true)}
@@ -548,13 +546,10 @@ export default function SchoolDashboard() {
                 handleRemoveStudent={handleRemoveStudent}
                 handleUpdateStudent={handleUpdateStudent}
                 handleRemoveTest={handleRemoveTest}
+                handleUploadDocument={() => setIsDocumentModalOpen(true)}
+                handleRemoveDocument={handleRemoveDocument}
+                handleDownloadDocument={handleDownloadDocument}
               />
-              <PerformanceAccordion
-                performancesList={classes as PerformanceData[]} />
-              <DocumentAccordion
-                documentsList={documents}
-                handleUploadDocument={() => setIsDocumentModalOpen(true)} handleRemoveDocument={handleRemoveDocument}
-                handleDownloadDocument={handleDownloadDocument} />
             </div>
           )}
           {/* If no classes yet */}
@@ -660,7 +655,7 @@ export default function SchoolDashboard() {
             }}
             newRecord={newRecord}
             setNewRecord={setNewRecord}
-            handleSaveModal={handleDocumentSave}
+            handleSaveModal={handleSaveDocument}
           />
 
           <StatusModal

@@ -38,8 +38,8 @@ const getDocuments = async (req: NextApiRequest, res: NextApiResponse) => {
 // Handle POST (create school)
 const createDocument = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    const { name,   classId } = req.body;
-    const newDocument = await Document.create({ name,  classId });
+    const { name, classId } = req.body;
+    const newDocument = await Document.create({ name, classId });
     res.status(201).json(newDocument);
   } catch (error) {
     res.status(500).json({ message: 'Error creating document', error });

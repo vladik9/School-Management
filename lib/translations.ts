@@ -141,8 +141,6 @@ const translations = {
   testBarem: "Barem test",
   studentListOfPerformance: "Lista de performante a elevilor",
 
-
-
   //Common
   action: "Acțiune",
   view: "Vizualizare",
@@ -170,6 +168,18 @@ const translations = {
   noDocuments: "Nu sunt documente adaugate",
   docName: "Nume document",
   download: "Descarca",
+  upload: "Incarca",
+  addDocument: "Adauga document",
+  addDocumentDescription: "Adauga documente aici",
+  removeDocument: "Sterge document",
+  confirmRemoveDocument: "Sigur doresti sa stergi documentul?",
+  documentName: "Nume document",
+  documentNamePlaceholder: "Introdu numele documentului",
+  chooseFile: "Alege fisier",
+  dropHere: "Trage fisierul aici",
+  dragDropFileHere: "Trage sa lasa fisierul aici",
+  allowedFileFormats: "Formatele de fisier permise e.g. PDF, DOC, JPG, PNG...",
+
 
 };
 

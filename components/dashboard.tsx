@@ -51,7 +51,8 @@ import {
   ClassData,
   SchoolData,
   FetchStatuses,
-  PerformanceData
+  PerformanceData,
+  DocumentData
 } from "@/types/types";
 
 import statusMessages, { fetchStatuses } from '@/lib/statusMessages';
@@ -70,7 +71,9 @@ import AddClass from "@/components/add-modals/add-class";
 import AddStudent from "@/components/add-modals/add-student";
 import AddTest from "@/components/add-modals/add-test";
 import AddViewIntervals from "@/components/add-modals/add-view-intervals";
-import DocumentAccordion from './schoolSelector/documentAccordion';
+import DocumentAccordion from '@/components/schoolSelector/documentAccordion';
+import UploadDocument from '@/components/add-modals/upload-doc';
+import { processCreateDocument, processGetDocuments } from '@/controllers/document';
 
 
 export default function SchoolDashboard() {
@@ -85,6 +88,7 @@ export default function SchoolDashboard() {
   const [selectedIntervalId, setSelectedIntervalId] = useState<number>();
   const [selectedTestId, setSelectedTestId] = useState<number | null>(null);
   const [records, setRecords] = useState<RecordData[]>([]);
+  const [documents, setDocuments] = useState<DocumentData[]>([]);
 
   // Modal states
   const [isSchoolModalOpen, setIsSchoolModalOpen] = useState(false);
@@ -94,6 +98,7 @@ export default function SchoolDashboard() {
   const [isIntervalModalOpen, setIsIntervalModalOpen] = useState(false);
   const [isStudentModalOpen, setIsStudentModalOpen] = useState(false);
   const [isNewRecordModalOpen, setIsNewRecordModalOpen] = useState(false);
+  const [isDocumentModalOpen, setIsDocumentModalOpen] = useState(false);
 
   const [newRecord, setNewRecord] = useState({});
   const [statusModal, setStatusModal] = useState({
@@ -225,6 +230,17 @@ export default function SchoolDashboard() {
     }
   };
 
+  const fetchDocuments = async () => {
+    // showStatusModal(statusMessages.fetchingDocuments, fetchStatuses.loading);
+    try {
+      const documentList = (await processGetDocuments(selectedClassId)) || [];
+      setDocuments(documentList);
+      // showStatusModal(statusMessages.documentsFetched, fetchStatuses.success);
+    } catch (error) {
+      showStatusModal(statusMessages.errorFetchingDocuments, fetchStatuses.error);
+    }
+  };
+
   // =========================
   // Selection Handlers
   // =========================
@@ -338,6 +354,18 @@ export default function SchoolDashboard() {
       showStatusModal(statusMessages.recordCreated, fetchStatuses.success);
     } catch (error) {
       showStatusModal(statusMessages.errorCreatingRecord, fetchStatuses.error);
+    }
+  };
+  const handleDocumentSave = async () => {
+    try {
+      // showStatusModal(statusMessages.creatingDocument, fetchStatuses.loading);
+      await processCreateDocument(newRecord, selectedClassId);
+      setIsDocumentModalOpen(false);
+      setNewRecord({});
+      await fetchDocuments();
+      showStatusModal(statusMessages.documentCreated, fetchStatuses.success);
+    } catch (error) {
+      showStatusModal(statusMessages.errorCreatingDocument, fetchStatuses.error);
     }
   };
 
@@ -454,6 +482,26 @@ export default function SchoolDashboard() {
       }
     }
   };
+  const handleRemoveDocument = async (documentId: number) => {
+    // showStatusModal(statusMessages.deletingDocument, fetchStatuses.loading);
+    // try {
+    //   await processRemoveDocument(documentId);
+    //   showStatusModal(statusMessages.documentDeleted, fetchStatuses.success);
+    // } catch (error) {
+    //   showStatusModal(statusMessages.errorDeletingDocument, fetchStatuses.error);
+    // } finally {
+    //   await fetchDocuments();
+    // }
+  };
+  const handleDownloadDocument = async (documentId: number) => {
+    // showStatusModal(statusMessages.downloadingDocument, fetchStatuses.loading);
+    // try {
+    //   await processDownloadDocument(documentId);
+    //   showStatusModal(statusMessages.documentDownloaded, fetchStatuses.success);
+    // } catch (error) {
+    //   showStatusModal(statusMessages.errorDownloadingDocument, fetchStatuses.error);
+    // }
+  };
 
   return (
     <div className="min-h-screen bg-gray-100 p-8">
@@ -488,7 +536,7 @@ export default function SchoolDashboard() {
 
           {/* Classes and Tests */}
           {classes.length > 0 && (
-            <>
+            <div style={{ padding: '20px', borderRadius: '10px', marginTop: '20px', border: '0.5px solid lightgray' }}>
               <ClassAccordion
                 classes={classes}
                 handleAddStudent={() => setIsStudentModalOpen(true)}
@@ -504,8 +552,10 @@ export default function SchoolDashboard() {
               <PerformanceAccordion
                 performancesList={classes as PerformanceData[]} />
               <DocumentAccordion
-                documentsList={classes as DocumentData[]} />
-            </>
+                documentsList={documents}
+                handleUploadDocument={() => setIsDocumentModalOpen(true)} handleRemoveDocument={handleRemoveDocument}
+                handleDownloadDocument={handleDownloadDocument} />
+            </div>
           )}
           {/* If no classes yet */}
           {selectedYearId && classes.length === 0 && (
@@ -601,6 +651,16 @@ export default function SchoolDashboard() {
             setNewRecord={setNewRecord}
             newRecord={newRecord}
             selectedYear={selectedYearId}
+          />
+          <UploadDocument
+            isModalOpen={isDocumentModalOpen}
+            handleCloseModal={() => {
+              setNewRecord({});
+              setIsDocumentModalOpen(false);
+            }}
+            newRecord={newRecord}
+            setNewRecord={setNewRecord}
+            handleSaveModal={handleDocumentSave}
           />
 
           <StatusModal

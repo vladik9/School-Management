@@ -1,3 +1,4 @@
+import { Document } from '@/models/document.model';
 type StudentData = {
   id: number;
   studentId: number;
@@ -30,6 +31,7 @@ type ClassData = {
   teacher: string;
   tests: TestData[];
   students: StudentData[];
+  documents: DocumentData[];
 };
 
 type PerformanceData = {

@@ -2,22 +2,40 @@ import React from 'react';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import translations from "@/lib/translations";
-import { PerformanceData } from "@/types/types";
+import { DocumentData } from "@/types/types";
+import { Button } from '../ui/button';
+import RemoveDialog from '../generic/remove-dialog';
+import { Download, Upload } from 'lucide-react';
+
 
 interface DocumentAccordionProps {
-  documentsList: PerformanceData[];
+  documentsList: DocumentData[];
+  handleRemoveDocument: (documentId: number) => void;
+  handleDownloadDocument: (documentId: number) => void;
+  handleUploadDocument: () => void;
+  className?: string;
 }
 
 export default function DocumentAccordion({
-  documentsList: documentsList = [] as PerformanceData[],
-
+  documentsList: documentsList = [] as DocumentData[],
+  handleRemoveDocument,
+  handleDownloadDocument,
+  handleUploadDocument,
+  className = 'document name',
 }: DocumentAccordionProps) {
   return (
     <div style={{ marginTop: '20px' }}>
       {documentsList.length === 0 ? (
-        <div className="text-center">
-          <p>{translations.noDocuments}</p>
-        </div>
+        <>
+          <div className="text-center">
+            <p>{translations.noDocuments}</p>
+          </div>
+          <Button variant="outline" size="sm" onClick={handleUploadDocument}>
+            <Upload className="h-4 w-4 mr-2" />
+            {translations.upload}
+          </Button>
+        </>
+
       ) :
         (<Accordion type="single" collapsible >
           {documentsList.map((document) => (
@@ -26,7 +44,7 @@ export default function DocumentAccordion({
                 <div className="flex items-center justify-between w-full">
                   <span>
                     {/* //TODO - here should be the  name for the list */}
-                    {translations.documentsList} - {document.testName}
+                    {translations.documentsList} - {className}
                   </span>
                 </div>
               </AccordionTrigger>
@@ -48,15 +66,30 @@ export default function DocumentAccordion({
                         {documentsList.map((test, index: number) => (
                           <TableRow key={test.id}>
                             <TableCell>{index + 1}</TableCell>
-                            <TableCell>{test.studentId}</TableCell>
-                            <TableCell>{test.studentName}</TableCell>
-
+                            <TableCell>{test.fileName}</TableCell>
+                            <TableCell>
+                              {/* //NOTE - Student-level Remove Dialog */}
+                              <Button variant="outline" size="sm" onClick={() => handleDownloadDocument(test.id)}>
+                                <Download className="h-4 w-4 mr-2" />
+                                {translations.download}
+                              </Button>
+                            </TableCell>
+                            <TableCell>
+                              {/* //NOTE - Student-level Remove Dialog */}
+                              <RemoveDialog title={translations.removeDocument} description={translations.confirmRemoveDocument} confirmText={translations.removeDocument} cancelText={translations.cancel} onRemove={() => handleRemoveDocument(test.id)} id={test.id} />
+                            </TableCell>
                           </TableRow>
                         ))}
                       </TableBody>
                     </Table>
                   </div>
                 )}
+                <div style={{ marginTop: '10px', display: 'flex', justifyContent: 'space-between' }}>
+                  <Button variant="outline" size="sm" onClick={handleUploadDocument}>
+                    <Upload className="h-4 w-4 mr-2" />
+                    {translations.upload}
+                  </Button>
+                </div>
               </AccordionContent>
             </AccordionItem>
           ))}

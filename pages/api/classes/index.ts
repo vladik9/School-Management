@@ -2,6 +2,8 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import Class from '@/models/class.model';
 import Test from '@/models/test.model';
 import Student from '@/models/student.model';
+import Document from '@/models/document.model';
+
 
 // Handle GET (read all schools)
 
@@ -29,7 +31,7 @@ const getClasses = async (req: NextApiRequest, res: NextApiResponse) => {
     // Fetch students and tests for each class
     const classesWithDetails = await Promise.all(
       classes.map(async (classData) => {
-        const [tests, students] = await Promise.all([
+        const [tests, students, documents] = await Promise.all([
           Test.findAll({
             where: { classId: classData.id }, // Use classId to fetch related tests
             attributes: ['id', 'name'], // Select relevant fields
@@ -38,12 +40,17 @@ const getClasses = async (req: NextApiRequest, res: NextApiResponse) => {
             where: { classId: classData.id }, // Use classId to fetch related students
             attributes: ['id', 'name','studentId'], // Select relevant fields
           }),
+          Document.findAll({
+            where: { classId: classData.id }, // Use classId to fetch related documents
+            attributes: ['id', 'name'], // Select relevant fields
+          }),
         ]);
 
         return {
           ...classData.toJSON(), // Convert Sequelize instance to plain object
           tests,
           students,
+          documents
         };
       })
     );

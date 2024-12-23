@@ -89,6 +89,12 @@ const statusMessages = {
   deletingRecord: 'Stergerea notei...',
   recordDeleted: 'Nota a fost stearsa cu succes',
 
+  // Documents
+  errorFetchingDocuments: "Eroare la incarcarea documentelor",
+  documentCreated: "Documentul a fost creat",
+  errorCreatingDocument: "Eroare la crearea documentului",
+  errorDeletingDocument: "Eroare la stergerea documentului",
+
   // Common
   loading: 'Incarcare...',
   success: 'Operatiunea a fost realizata cu succes',

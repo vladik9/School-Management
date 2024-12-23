@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import Class from '@/models/class.model';
+ import { saveFile } from '@/lib/utils';
 
 import Document from '@/models/document.model';
 
@@ -39,7 +39,9 @@ const getDocuments = async (req: NextApiRequest, res: NextApiResponse) => {
 const createDocument = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const { name, classId } = req.body;
-    const newDocument = await Document.create({ name, classId });
+    const filePath = saveFile(req.body.file, name);
+
+    const newDocument = await Document.create({ name, classId, filePath });
     res.status(201).json(newDocument);
   } catch (error) {
     res.status(500).json({ message: 'Error creating document', error });

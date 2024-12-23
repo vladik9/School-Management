@@ -6,6 +6,7 @@ interface DocumentsAttributes {
   id: number;
   name: string;
   classId: number;
+  filePath: string;
 }
 
 interface DocumentsCreationAttributes extends Optional<DocumentsAttributes, 'id'> {}
@@ -14,6 +15,7 @@ class Document extends Model<DocumentsAttributes, DocumentsCreationAttributes> i
   public id!: number;
   public name!: string;
   public classId!: number;
+  public filePath!: string;
 }
 
 Document.init(
@@ -33,6 +35,10 @@ Document.init(
         model: Class,
         key: 'id',
       },
+    },
+    filePath: {
+      type: DataTypes.STRING,
+      allowNull: false,
     },
   },
   {

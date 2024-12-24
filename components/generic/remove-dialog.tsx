@@ -9,6 +9,7 @@ interface RemoveDialogProps {
   description: string,
   confirmText: string,
   cancelText: string;
+  removeMessage?: string;
   onRemove: (id: number) => void,
   id: number;
 
@@ -19,14 +20,15 @@ export default function RemoveDialog({
   confirmText,
   cancelText,
   onRemove,
-  id
+  id,
+  removeMessage = translations.remove
 }: RemoveDialogProps) {
   return (
     <Dialog>
       <DialogTrigger asChild>
         <Button variant="outline" size="sm">
           <Trash2 className="h-4 w-4 mr-2" />
-          {translations.remove}
+          {removeMessage}
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[400px]">

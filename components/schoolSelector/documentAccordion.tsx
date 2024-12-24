@@ -51,7 +51,7 @@ export default function DocumentAccordion({
                     <TableHead>{translations.count}</TableHead>
                     <TableHead>{translations.docName}</TableHead>
                     <TableHead>{translations.download}</TableHead>
-                    <TableHead>{translations.remove}</TableHead>
+                    <TableHead>{translations.removeDocument}</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -73,6 +73,7 @@ export default function DocumentAccordion({
                           cancelText={translations.cancel}
                           onRemove={() => handleRemoveDocument(document.id)}
                           id={document.id}
+                          removeMessage={translations.removeDocument}
                         />
                       </TableCell>
                     </TableRow>

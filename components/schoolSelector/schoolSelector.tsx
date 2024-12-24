@@ -38,8 +38,7 @@ export default function SchoolSelector({ schools, onSelectSchool, onAddSchool, o
       <div style={{ marginTop: '10px', display: 'flex', justifyContent: 'space-between' }}>
         <Button variant="outline" onClick={onAddSchool}>{translations.addSchool}</Button>
         {schools.length > 0 && <RemoveDialog title={translations.removeSchool} description=
-
-          {translations.confirmRemoveSchool} confirmText={translations.removeSchool} cancelText={translations.cancel} onRemove={() => onRemoveSchool(schools[0].id)} id={schools[0].id} />}
+          {translations.confirmRemoveSchool} confirmText={translations.removeSchool} cancelText={translations.cancel} onRemove={() => onRemoveSchool(schools[0].id)} id={schools[0].id} removeMessage={translations.removeSchool} />}
       </div>
     </div>
   );

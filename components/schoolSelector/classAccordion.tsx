@@ -26,8 +26,6 @@ interface ClassAccordionProps {
   handleUploadDocument: () => void;
   handleRemoveDocument: (documentId: number) => void;
   handleDownloadDocument: (documentId: number) => void;
-
-
 }
 
 export default function ClassAccordion({
@@ -82,9 +80,8 @@ export default function ClassAccordion({
                               {translations.viewAddIntervals}
                             </Button>
                             {/* //NOTE -Test-level Remove Button and Dialog  */}
-                            <RemoveDialog title={translations.removeTest} description={translations.confirmRemoveTest} confirmText={translations.removeTest} cancelText={translations.cancel} onRemove={() => handleRemoveTest(testItem.id)} id={testItem.id} />
+                            <RemoveDialog title={translations.removeTest} description={translations.confirmRemoveTest} confirmText={translations.removeTest} cancelText={translations.cancel} onRemove={() => handleRemoveTest(testItem.id)} id={testItem.id} removeMessage={translations.removeTest} />
                           </div>
-
                         </CardContent>
                       </Card>
                     ))
@@ -106,7 +103,7 @@ export default function ClassAccordion({
                   </div>
                   {/* //NOTE -Class-level Remove Button and Dialog  */}
                   <div style={{ display: 'flex', alignItems: 'center' }}>
-                    <RemoveDialog title={translations.removeClass} description={translations.confirmRemoveClass} confirmText={translations.removeSchool} cancelText={translations.cancel} onRemove={() => handleRemoveClass(school_class.id)} id={school_class.id} />
+                    <RemoveDialog title={translations.removeClass} description={translations.confirmRemoveClass} confirmText={translations.removeSchool} cancelText={translations.cancel} onRemove={() => handleRemoveClass(school_class.id)} id={school_class.id} removeMessage={translations.removeClass} />
                   </div>
                 </div>
 
@@ -121,7 +118,7 @@ export default function ClassAccordion({
                           <TableHead>{translations.studentId}</TableHead>
                           <TableHead>{translations.name}</TableHead>
                           <TableHead>{translations.viewOrEdit}</TableHead>
-                          <TableHead>{translations.remove}</TableHead>
+                          <TableHead>{translations.removeStudent}</TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
@@ -138,7 +135,6 @@ export default function ClassAccordion({
                                 cancelText={translations.cancel}
                                 confirmText={translations.update}
                                 onSave={handleUpdateStudent}
-
                               >
                                 {/* TODO- fix this to be a table to update students */}
                                 <Table>
@@ -157,7 +153,8 @@ export default function ClassAccordion({
                             </TableCell>
                             <TableCell>
                               {/* //NOTE - Student-level Remove Dialog */}
-                              <RemoveDialog title={translations.removeStudent} description={translations.confirmRemoveStudent} confirmText={translations.removeStudent} cancelText={translations.cancel} onRemove={() => handleRemoveStudent(student.id)} id={school_class.id} />
+                              <RemoveDialog title={translations.removeStudent} description={translations.confirmRemoveStudent} confirmText={translations.removeStudent} cancelText={translations.cancel} onRemove={() => handleRemoveStudent(student.id)} id={school_class.id}
+                                removeMessage={translations.removeStudent} />
                             </TableCell>
                           </TableRow>
                         ))}

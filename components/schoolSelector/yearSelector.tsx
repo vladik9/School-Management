@@ -40,7 +40,7 @@ export default function YearSelector({ years, onSelectYear, onAddYear, onRemoveY
         {
           <Button variant="outline" onClick={onAddYear}>{translations.addYear}</Button>
         }
-        {years.length > 0 && <RemoveDialog title={translations.removeYear} description={translations.confirmRemoveYear} confirmText={translations.removeYear} cancelText={translations.cancel} onRemove={() => onRemoveYear(years[0].id)} id={years[0].id} />}
+        {years.length > 0 && <RemoveDialog title={translations.removeYear} description={translations.confirmRemoveYear} confirmText={translations.removeYear} cancelText={translations.cancel} onRemove={() => onRemoveYear(years[0].id)} id={years[0].id} removeMessage={translations.removeYear} />}
       </div>
     </div>
   );

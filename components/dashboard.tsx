@@ -349,7 +349,7 @@ export default function SchoolDashboard() {
         formData.append('file', newRecord.doc);
       }
 
-      await processCreateDocument(formData, selectedClassId);
+      await processCreateDocument(formData, selectedClassId || 0);
       setIsDocumentModalOpen(false);
       setNewRecord({});
       await fetchClasses();

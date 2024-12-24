@@ -76,13 +76,13 @@ export default function AddViewIntervals({
               <TableRow>
                 <TableHead>{translations.intervalName}</TableHead>
                 <TableHead>{translations.viewOrEdit}</TableHead>
-                <TableHead>{translations.remove}</TableHead>
+                <TableHead>{translations.removeInterval}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {intervals.map((interval) => (
+              {intervals.map((interval, index) => (
                 <TableRow key={interval.id}>
-                  <TableCell>{translations.inter} {interval.id}</TableCell>
+                  <TableCell>{translations.inter} {index + 1}</TableCell>
                   <TableCell>
                     {/* View/Edit Dialog */}
                     <SimpleDialog title={`${translations.inter} - ${interval.id}`} description={translations.viewOrEdit} triggerButtonTitle={translations.viewOrEdit} onOpen={() => handleViewOrEditRecord(interval.id)} id={interval.id}
@@ -95,7 +95,7 @@ export default function AddViewIntervals({
                             <TableHead>{translations.finalTime}</TableHead>
                             <TableHead>{translations.average}</TableHead>
                             <TableHead>{translations.action}</TableHead>
-                            <TableHead>{translations.remove}</TableHead>
+                            <TableHead>{translations.removeRecord}</TableHead>
                           </TableRow>
                         </TableHeader>
                         <TableBody>
@@ -123,6 +123,7 @@ export default function AddViewIntervals({
                                     description={translations.confirmRemoveRecord} confirmText={translations.removeRecord}
                                     cancelText={translations.cancel}
                                     onRemove={handleRemoveRecord}
+                                    removeMessage={translations.removeRecord}
                                     id={int.id} />
                                 </TableCell>
                               </TableRow>
@@ -153,6 +154,7 @@ export default function AddViewIntervals({
                       confirmText={translations.removeInterval}
                       cancelText={translations.cancel}
                       onRemove={handleRemoveInterval}
+                      removeMessage={translations.removeInterval}
                       id={interval.id} />
                   </TableCell>
                 </TableRow>

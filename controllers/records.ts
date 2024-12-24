@@ -20,7 +20,8 @@ export const processGetRecords = async (intervalId: number) => {
     return data;
   } catch (error) {
     console.error(error);
-    return { message: statusMessages.errorFetchingRecords };
+  throw new Error(statusMessages.errorFetchingRecords);
+
   }
 };
 
@@ -40,7 +41,8 @@ try {
   return response;
 } catch (error) {
   console.error(error);
-  return { message: statusMessages.creatingRecord };
+  throw new Error(statusMessages.creatingRecord);
+
 }
 };
 
@@ -58,6 +60,7 @@ export const processRemoveRecord = async (recordId: number) => {
     }
     return response;
   } catch (error) {
+    console.log(error);
     throw new Error(statusMessages.errorDeletingRecord);
   }
 };

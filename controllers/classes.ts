@@ -17,9 +17,8 @@ export const processGetClasses = async (yearId: string) => {
     const data = await response.json();
     return data;  // This will return the list of years
   } catch (error) {
-
     console.error(error);
-    return { message: statusMessages.errorFetchingClasses};
+    throw new Error(statusMessages.errorFetchingClasses);
   }
 };
 
@@ -39,7 +38,7 @@ export const processCreateClass = async (data: object, yearId: string) => {
     return response;
   } catch (error) {
     console.error(error);
-    return { message: statusMessages.errorCreatingClass};
+    throw new Error(statusMessages.errorCreatingClass);
   }
 };
 export const processRemoveClass = async (classId: number) => {
@@ -55,6 +54,7 @@ export const processRemoveClass = async (classId: number) => {
     }
     return response;
   } catch (error) {
+    console.error(error);
     throw new Error(statusMessages.errorDeletingClass);
   }
 };

@@ -8,12 +8,12 @@ import translations from '@/lib/translations';
 interface UploadDocumentProps {
   isModalOpen: boolean;
   handleCloseModal: () => void;
-  handleSaveModal: () => void;
+  handleSaveModal: (formData: FormData) => void;
   newRecord: {
     name?: string;
-    doc?: string;
+    doc?: File;
   };
-  setNewRecord: (data: { name?: string; doc?: string; }) => void;
+  setNewRecord: (data: { name?: string; doc?: File; }) => void;
 }
 
 export default function UploadDocument({
@@ -48,15 +48,10 @@ export default function UploadDocument({
     if (!file) return;
 
     setUploadedFileName(file.name);
-
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setNewRecord({
-        ...newRecord,
-        doc: reader.result as string,
-      });
-    };
-    reader.readAsDataURL(file);
+    setNewRecord({
+      ...newRecord,
+      doc: file,
+    });
   };
 
   // Drag event handlers
@@ -82,30 +77,34 @@ export default function UploadDocument({
     if (!file) return;
 
     setUploadedFileName(file.name);
-
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setNewRecord({
-        ...newRecord,
-        doc: reader.result as string,
-      });
-    };
-    reader.readAsDataURL(file);
+    setNewRecord({
+      ...newRecord,
+      doc: file,
+    });
   };
+
   const isFormValid = (): boolean => {
-    const { name, doc, } = newRecord;
+    const { name, doc } = newRecord;
     return !!(name && doc);
+  };
+
+  const handleSave = () => {
+    const formData = new FormData();
+    formData.append('name', newRecord.name || '');
+    if (newRecord.doc) {
+      formData.append('file', newRecord.doc);
+    }
+    handleSaveModal(formData);
   };
 
   return (
     <GenericModal
       isOpen={isModalOpen}
       onClose={handleCloseModal}
-      onSave={handleSaveModal}
+      onSave={handleSave}
       title={translations.addDocument}
       description={translations.addDocumentDescription}
       isFormValid={isFormValid()}
-
     >
       <div className="space-y-4">
         {/* Document Name */}
@@ -147,7 +146,7 @@ export default function UploadDocument({
 
         {/* File Upload Feedback */}
         <p className="text-sm text-gray-500 mt-2">
-          {uploadedFileName ? `Uploaded file: ${uploadedFileName}` : 'No file uploaded yet.'}
+          {uploadedFileName ? `${translations.fileNameUploaded}: ${uploadedFileName}` : `${translations.noDocuments}.`}
         </p>
 
         <input

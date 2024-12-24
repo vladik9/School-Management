@@ -177,8 +177,9 @@ const translations = {
   documentNamePlaceholder: "Introdu numele documentului",
   chooseFile: "Alege fisier",
   dropHere: "Trage fisierul aici",
-  dragDropFileHere: "Trage sa lasa fisierul aici",
+  dragDropFileHere: "Trage sa da click aici pentru a incarca fisierul",
   allowedFileFormats: "Formatele de fisier permise e.g. PDF, DOC, JPG, PNG...",
+  fileNameUploaded: "Numele fisierului incarcat",
 
 
 };

@@ -16,11 +16,11 @@ import statusMessages from '@/lib/statusMessages';
     if(!response) return []
 
     const data = await response.json();
-    return data;  // This will return the list of schools
+    return data;
   } catch (error) {
-
     console.error(error);
-    return { message: statusMessages.errorFetchingSchools };
+    throw new Error(statusMessages.errorFetchingSchools);
+
   }
 };
 
@@ -42,7 +42,9 @@ export const processCreateSchool = async (data: object) => {
   return response;
 
   } catch (error) {
-    return { message: statusMessages.errorCreatingSchool };
+    console.log(error);
+    throw new Error(statusMessages.errorCreatingSchool);
+
   }
 };
 
@@ -59,6 +61,7 @@ export const processRemoveSchool = async (schoolId: number) => {
     }
     return response;
   } catch (error) {
+    console.log(error);
     throw new Error(statusMessages.errorDeletingSchool);
   }
 };

@@ -20,7 +20,8 @@ export const processGetYears = async (schoolId: number) => {
     return data;
   } catch (error) {
     console.error(error);
-    return { message: statusMessages.errorFetchingYears };
+  throw new Error(statusMessages.errorFetchingYears);
+
   }
 };
 
@@ -40,7 +41,8 @@ try {
   return response;
 } catch (error) {
   console.error(error);
-  return { message: statusMessages.errorCreatingTest };
+  throw new Error(statusMessages.errorCreatingTest);
+
 }
 };
 
@@ -57,6 +59,7 @@ export const processRemoveYear = async (yearId: number) => {
     }
     return response;
   } catch (error) {
+    console.log(error);
     throw new Error(statusMessages.errorDeletingYear);
   }
 };

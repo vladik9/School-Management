@@ -19,14 +19,15 @@ export const processGetStudents = async (classId: string) => {
     return data;
   } catch (error) {
     console.error(error);
-    return { message: statusMessages.errorFetchingStudents };
+    throw new Error(statusMessages.errorFetchingStudents);
+
   }
 };
 
 
 export const processCreateStudent = async (data: object, classId: string) => {
   try {
-    const { name, studentId } = data;
+    const { name, studentId } :any = data;
     const filteredData = { name, studentId };
   const response = await fetch(`${urlEnum.student}`, {
     method: 'POST',
@@ -41,7 +42,8 @@ export const processCreateStudent = async (data: object, classId: string) => {
     return response;
   } catch (error) {
     console.error(error);
-    return { message: statusMessages.errorCreatingStudent };
+    throw new Error(statusMessages.errorCreatingStudent);
+
   }
 };
 
@@ -58,6 +60,7 @@ export const processRemoveStudent = async (studentId: number) => {
     }
     return response;
   } catch (error) {
+    console.log(error);
     throw new Error(statusMessages.errorDeletingStudent);
   }
 };

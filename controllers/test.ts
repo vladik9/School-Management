@@ -20,7 +20,7 @@ export const processGetTests = async (classId: string) => {
     return data;
   } catch (error) {
     console.error(error);
-    return { message: statusMessages.errorFetchingTests };
+    throw new Error(statusMessages.errorFetchingTests);
   }
 };
 
@@ -40,7 +40,8 @@ export const processCreateTest = async (data: object, classId: string) => {
     return response;
   } catch (error) {
     console.error(error);
-    return { message: statusMessages.errorCreatingTest };
+    throw new Error(statusMessages.errorCreatingTest);
+
   }
 };
 export const processRemoveTest = async (testId: number) => {
@@ -56,6 +57,7 @@ export const processRemoveTest = async (testId: number) => {
     }
     return response;
   } catch (error) {
+    console.log(error);
     throw new Error(statusMessages.errorDeletingTest);
   }
 };

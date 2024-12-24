@@ -70,7 +70,7 @@ import AddClass from "@/components/add-modals/add-class";
 import AddStudent from "@/components/add-modals/add-student";
 import AddTest from "@/components/add-modals/add-test";
 import AddViewIntervals from "@/components/add-modals/add-view-intervals";
-import UploadDocument from '@/components/add-modals/upload-doc';
+import UploadDocument from '@/components/add-modals/upload-document';
 import { processCreateDocument, processGetDocuments } from '@/controllers/document';
 
 
@@ -356,8 +356,13 @@ export default function SchoolDashboard() {
   };
   const handleSaveDocument = async () => {
     try {
-      // showStatusModal(statusMessages.creatingDocument, fetchStatuses.loading);
-      await processCreateDocument(newRecord, selectedClassId);
+      const formData = new FormData();
+      formData.append('name', newRecord.name || '');
+      if (newRecord.doc) {
+        formData.append('file', newRecord.doc);
+      }
+
+      await processCreateDocument(formData, selectedClassId);
       setIsDocumentModalOpen(false);
       setNewRecord({});
       await fetchDocuments();

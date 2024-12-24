@@ -20,28 +20,29 @@ export const processGetDocuments = async (classId: number) => {
     return data;
   } catch (error) {
     console.error(error);
-    return { message: statusMessages.errorFetchingDocuments };
+    throw new Error(statusMessages.errorFetchingDocuments );
   }
 };
 
 
-export const processCreateDocument = async (data: object, classId: number) => {
-try {
-  const response = await fetch(`${urlEnum.documents}`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ ...data, classId }),
-  });
-  if (!response.ok) {
+export const processCreateDocument = async (formData: FormData, classId: number) => {
+  try {
+    formData.append('classId', classId.toString());
+
+    const response = await fetch(`${urlEnum.documents}`, {
+      method: 'POST',
+      body: formData,
+    });
+
+    if (!response.ok) {
+      throw new Error(statusMessages.errorCreatingDocument);
+    }
+
+    return response;
+  } catch (error) {
+    console.error(error);
     throw new Error(statusMessages.errorCreatingDocument);
   }
-  return response;
-} catch (error) {
-  console.error(error);
-  return { message: statusMessages.errorCreatingDocument };
-}
 };
 
 export const processRemoveDocument = async (yearId: number) => {
@@ -57,6 +58,7 @@ export const processRemoveDocument = async (yearId: number) => {
     }
     return response;
   } catch (error) {
+    console.error(error);
     throw new Error(statusMessages.errorDeletingDocument);
   }
 };

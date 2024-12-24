@@ -4,8 +4,6 @@ import Test from './test.model';
 
 interface IntervalAttributes {
   id: number;
-  startTime: Date;
-  endTime: Date;
   testId: number;
 }
 
@@ -13,8 +11,6 @@ interface IntervalCreationAttributes extends Optional<IntervalAttributes, 'id'> 
 
 class Interval extends Model<IntervalAttributes, IntervalCreationAttributes> implements IntervalAttributes {
   public id!: number;
-  public startTime!: Date;
-  public endTime!: Date;
   public testId!: number;
 }
 
@@ -24,14 +20,6 @@ Interval.init(
       type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
-    },
-    startTime: {
-      type: DataTypes.DATE,
-      allowNull: false,
-    },
-    endTime: {
-      type: DataTypes.DATE,
-      allowNull: false,
     },
     testId: {
       type: DataTypes.INTEGER,

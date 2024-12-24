@@ -1,11 +1,12 @@
 import { DataTypes, Model, Optional } from 'sequelize';
 import sequelize from '../db/sequelize';
-import Discipline from './discipline.model';
+import Class from './class.model';
 
 interface TestAttributes {
   id: number;
   name: string;
-  disciplineId: number;
+  classId: number;
+  baremType: string;
 }
 
 interface TestCreationAttributes extends Optional<TestAttributes, 'id'> {}
@@ -13,7 +14,8 @@ interface TestCreationAttributes extends Optional<TestAttributes, 'id'> {}
 class Test extends Model<TestAttributes, TestCreationAttributes> implements TestAttributes {
   public id!: number;
   public name!: string;
-  public disciplineId!: number;
+  public classId!: number;
+  public baremType!: string;
 }
 
 Test.init(
@@ -27,21 +29,27 @@ Test.init(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    disciplineId: {
+    classId: {
       type: DataTypes.INTEGER,
       references: {
-        model: Discipline,
+        model: Class,
         key: 'id',
       },
     },
+    baremType: {
+      type: DataTypes.STRING,
+      allowNull: false,
   },
+  },
+
+
   {
     sequelize,
     tableName: 'tests',
   }
 );
 
-Discipline.hasMany(Test, { foreignKey: 'disciplineId' });
-Test.belongsTo(Discipline, { foreignKey: 'disciplineId' });
+Class.hasMany(Test, { foreignKey: 'classId' });
+Test.belongsTo(Class, { foreignKey: 'classId' });
 
 export default Test;

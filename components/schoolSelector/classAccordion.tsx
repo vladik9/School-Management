@@ -45,7 +45,7 @@ export default function ClassAccordion({
 
 }: ClassAccordionProps) {
   return (
-    <div style={{ padding: '40px', borderRadius: '10px', marginTop: '20px', border: '0.5px solid lightgray' }}>
+    <Card style={{ padding: '40px', borderRadius: '10px', marginTop: '20px' }}>
       {classes.length === 0 ? (
         <div className="text-center">
           <p>{translations.noClassesAdded}</p>
@@ -108,9 +108,9 @@ export default function ClassAccordion({
                 </div>
 
                 {school_class.students.length === 0 ? (
-                  <div style={{ marginTop: '20px', textAlign: 'center' }}>{translations.noStudentsAdded}</div>
+                  <div style={{ marginTop: '20px', textAlign: 'center', padding: '20px' }}>{translations.noStudentsAdded}</div>
                 ) : (
-                  <div style={{ marginTop: '30px' }}>
+                  <Card style={{ margin: '30px 0', padding: '20px' }}>
                     <div style={{ marginBottom: '10px', textAlign: 'center', fontSize: '18px', fontWeight: 'bold' }}>{translations.studentTableList} - {school_class.name}</div>
                     <Table style={{ marginTop: '20px' }}>
                       <TableHeader>
@@ -160,7 +160,7 @@ export default function ClassAccordion({
                         ))}
                       </TableBody>
                     </Table>
-                  </div>
+                  </Card>
                 )}
                 <PerformanceAccordion
                   performances={school_class.performances || []} />
@@ -175,6 +175,6 @@ export default function ClassAccordion({
           ))}
 
         </Accordion>)}
-    </div>
+    </Card>
   );
 }

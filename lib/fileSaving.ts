@@ -3,6 +3,11 @@ import fs from 'fs';
 import path from 'path';
 
 export const saveFile = async (file: any, filename: string) => {
+  const timestamp = Date.now();
+  const extension = path.extname(filename);
+  const baseName = path.basename(filename, extension);
+  const newFilename = `${baseName}-${timestamp}${extension}`;
+
   const data = fs.readFileSync(file.filepath);
   const uploadDir = path.join(process.cwd(), 'uploadedDocuments');
 
@@ -11,7 +16,7 @@ export const saveFile = async (file: any, filename: string) => {
     fs.mkdirSync(uploadDir);
   }
 
-  const filePath = path.join(uploadDir, filename);
+  const filePath = path.join(uploadDir, newFilename);
   fs.writeFileSync(filePath, data);
   fs.unlinkSync(file.filepath); // Remove the temporary file
 

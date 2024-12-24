@@ -47,7 +47,7 @@ type PerformanceData = {
 type DocumentData = {
   id: number;
   filePath: string;
-  fileName: string;
+  name: string;
 };
 
 type SchoolData = {

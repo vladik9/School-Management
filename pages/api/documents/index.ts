@@ -1,33 +1,39 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { saveFile, parseForm } from '@/lib/fileSaving';
 import Document from '@/models/document.model';
-
+import fs from 'fs';
+import path from 'path';
 export const config = {
   api: {
     bodyParser: false,
   },
 };
 
-const getDocuments = async (req: NextApiRequest, res: NextApiResponse) => {
+const getDocument = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    const { classId } = req.query;
+    const { id } = req.query;
 
-    if (!classId) {
-      return res.status(400).json({ message: 'ClassId is required for the given documents' });
+    if (!id) {
+      return res.status(400).json({ message: 'DocumentId is required for the given documents' });
     }
 
-    const documents = await Document.findAll({
-      where: { classId },
-    });
+    const document = await Document.findByPk(id as string);
 
-    if (!documents || documents.length === 0) {
-      return res.status(200).json([]);
+    if (!document) {
+      return res.status(404).json({ message: 'Document not found' });
     }
 
-    res.status(200).json(documents);
+    const filePath = document.filePath;
+    const fileName = path.basename(filePath);
+
+    res.setHeader('Content-Disposition', `attachment; filename=${fileName}`);
+    res.setHeader('Content-Type', 'application/octet-stream');
+
+    const fileStream = fs.createReadStream(filePath);
+    fileStream.pipe(res);
   } catch (error) {
-    console.error('Error in getClasses:', error);
-    res.status(500).json({ message: 'Error fetching classes', error });
+    console.error('Error fetching document:', error);
+    res.status(500).json({ message: 'Error fetching document', error });
   }
 };
 
@@ -65,7 +71,7 @@ const deleteDocument = async (req: NextApiRequest, res: NextApiResponse) => {
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   switch (req.method) {
     case 'GET':
-      return getDocuments(req, res);
+      return getDocument(req, res);
     case 'POST':
       return createDocument(req, res);
     case 'DELETE':

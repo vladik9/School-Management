@@ -94,6 +94,13 @@ const statusMessages = {
   documentCreated: "Documentul a fost creat",
   errorCreatingDocument: "Eroare la crearea documentului",
   errorDeletingDocument: "Eroare la stergerea documentului",
+  deletingDocument: "Stergerea documentului...",
+  documentDeleted: "Documentul a fost sters cu succes",
+  errorDownloadingDocument: "Eroare la descarcarea documentului",
+  downloadingDocument: "Descarcarea documentului...",
+  documentDownloaded: "Documentul a fost descarcat cu succes",
+  errorFetchingDocument: "Eroare la incarcarea documentului",
+
 
   // Common
   loading: 'Incarcare...',

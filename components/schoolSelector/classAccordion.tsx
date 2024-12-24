@@ -166,12 +166,13 @@ export default function ClassAccordion({
                   </div>
                 )}
                 <PerformanceAccordion
-                  performances={classes.performances || []} />
+                  performances={school_class.performances || []} />
                 <DocumentAccordion
-                  documents={classes.documents || []}
+                  documents={school_class.documents || []}
                   handleUploadDocument={handleUploadDocument}
                   handleRemoveDocument={handleRemoveDocument}
-                  handleDownloadDocument={handleDownloadDocument} />
+                  handleDownloadDocument={handleDownloadDocument}
+                  className={school_class.name} />
               </AccordionContent>
             </AccordionItem>
           ))}

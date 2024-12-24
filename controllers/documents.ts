@@ -24,6 +24,30 @@ export const processGetDocuments = async (classId: number) => {
   }
 };
 
+export const processGetDocument = async (documentId: number) => {
+  try {
+    const response = await fetch(`${urlEnum.documents}?id=${documentId}`, {
+      method: 'GET',
+    });
+
+    if (!response.ok) {
+      throw new Error(statusMessages.errorFetchingDocument);
+    }
+
+    const blob = await response.blob();
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = response.headers.get('Content-Disposition')?.split('filename=')[1] || 'document';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    window.URL.revokeObjectURL(url);
+  } catch (error) {
+    console.error(error);
+    throw new Error(statusMessages.errorFetchingDocument);
+  }
+};
 
 export const processCreateDocument = async (formData: FormData, classId: number) => {
   try {
@@ -45,9 +69,9 @@ export const processCreateDocument = async (formData: FormData, classId: number)
   }
 };
 
-export const processRemoveDocument = async (yearId: number) => {
+export const processRemoveDocument = async (documentId: number) => {
   try {
-    const response = await fetch(`${urlEnum.year}?id=${yearId}`, {
+    const response = await fetch(`${urlEnum.documents}?id=${documentId}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',

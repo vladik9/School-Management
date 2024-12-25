@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { logout } from '@/utils/auth';
+import { logout } from '@/controllers/auth';
 import { useRouter } from 'next/navigation';
 import translations from "@/lib/translations";
 
@@ -495,6 +495,9 @@ export default function SchoolDashboard() {
 
   return (
     <div className="min-h-screen bg-gray-100 p-8">
+      <CardTitle className="text-2xl font-bold flex items-center justify-center">
+        {translations.welcome}
+      </CardTitle>
       <Card className="max-w-6xl mx-auto">
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle className="text-2xl font-bold flex items-center">
@@ -626,6 +629,8 @@ export default function SchoolDashboard() {
             setIsNewRecordModalOpen={setIsNewRecordModalOpen}
             handleRemoveInterval={handleRemoveInterval}
             handleRemoveRecord={handleRemoveRecord}
+            //!TODO: Fix this it should pass test barem not none
+            barem={translations.none}
           />
 
           <AddStudent

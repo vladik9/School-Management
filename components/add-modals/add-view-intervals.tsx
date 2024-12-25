@@ -4,7 +4,6 @@ import GenericModal from '@/components/generic/generic-modal';
 import translations from '@/lib/translations';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { Edit, Users } from 'lucide-react';
 import AddNewRecord from './add-new-record';
 import RemoveDialog from '../generic/remove-dialog';
 import SimpleDialog from '../generic/simple-dialog';
@@ -26,6 +25,8 @@ interface AddViewIntervalsProps {
   setIsNewRecordModalOpen: (isOpen: boolean) => void;
   handleRemoveInterval: (id: number) => void;
   handleRemoveRecord: (id: number) => void;
+  barem: string;
+
 }
 
 export default function AddViewIntervals({
@@ -43,7 +44,8 @@ export default function AddViewIntervals({
   isNewRecordModalOpen,
   setIsNewRecordModalOpen,
   handleRemoveInterval,
-  handleRemoveRecord
+  handleRemoveRecord,
+  barem = translations.none,
 }: AddViewIntervalsProps) {
 
   const handleAddNewRecord = (id: number) => {
@@ -93,8 +95,9 @@ export default function AddViewIntervals({
                             <TableHead>{translations.studentId}</TableHead>
                             <TableHead>{translations.startTime}</TableHead>
                             <TableHead>{translations.finalTime}</TableHead>
+                            <TableHead>{translations.barem}</TableHead>
                             <TableHead>{translations.average}</TableHead>
-                            <TableHead>{translations.action}</TableHead>
+                            <TableHead>{translations.edit}</TableHead>
                             <TableHead>{translations.removeRecord}</TableHead>
                           </TableRow>
                         </TableHeader>
@@ -105,6 +108,7 @@ export default function AddViewIntervals({
                                 <TableCell>{int.id}</TableCell>
                                 <TableCell>{int.startTime}</TableCell>
                                 <TableCell>{int.endTime}</TableCell>
+                                <TableCell>{barem}</TableCell>
                                 {/* TODO: Fix this math calculation */}
                                 <TableCell>
                                   {int.startTime && int.endTime

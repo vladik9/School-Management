@@ -17,7 +17,7 @@ const translations = {
   //Dashboard
   dashboard: "Dashboard",
   dashboardDescription: "Aici puteți vedea informațiile despre școală",
-  dashboardTitle: "Bine ai venit pe pagina de administrare a școlilor",
+  dashboardTitle: "Pe pagina de administrare a școlilor",
 
   //Generic modal
   cancelText: "Anulare",
@@ -153,6 +153,8 @@ const translations = {
   confirmRemoveRecordMessage: "Ești sigur că vrei să ștergi această înregistrare?",
   update: "Actualizare",
   count: "Număr",
+  none: "Niciunul",
+  welcome: "Bine ai venit:",
 
   // 404  - Not Found
   pageNotFound: "Pagina nu a fost găsită",

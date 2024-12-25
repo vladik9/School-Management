@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { checkAuth } from '@/utils/auth';
+import { checkAuth } from '@/controllers/auth';
 
 export default function ProtectedRoute({ children }: { children: React.ReactNode; }) {
   const router = useRouter();

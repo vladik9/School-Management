@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { login } from '@/utils/auth';
+import { login } from '@/controllers/auth';
 import translations from '@/lib/translations';
 
 export default function LoginPage() {
@@ -22,6 +22,7 @@ export default function LoginPage() {
     setError('');
     try {
       const response = await login(email, password);
+      console.log(response);
       if (response) {
         router.push('/dashboard');
       }

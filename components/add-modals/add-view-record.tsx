@@ -5,31 +5,42 @@ import TimePicker from '@/components/ui/time-picker';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import translations from '@/lib/translations';
-import { RecordData } from "@/types/types";
-interface AddNewRecordProps {
+import { RecordData, StudentData } from "@/types/types";
+
+interface AddViewRecordProps {
   isModalOpen: boolean;
+  modalTitle: string;
+  modalDescription: string;
   handleCloseModal: () => void;
   handleSaveModal: (newRecord: RecordData) => void;
-  students: any[];
-  newRecord: any;
-  setNewRecord: (data: { studentId: number, startTime: string, endTime: string; }) => void;
+  students: StudentData[];
+  newRecord: RecordData;
+  setNewRecord: (data: Partial<RecordData>) => void;
 }
 
-
-
-export default function AddNewRecord({ isModalOpen, handleCloseModal, handleSaveModal, students, newRecord, setNewRecord }: AddNewRecordProps) {
-
-
+export default function AddViewRecord({
+  isModalOpen,
+  modalTitle = translations.addNewRecord,
+  modalDescription = translations.addNewRecordDescription,
+  handleCloseModal,
+  handleSaveModal,
+  students,
+  newRecord,
+  setNewRecord
+}: AddViewRecordProps) {
   const onStudentSelect = (studentId: string) => {
-    setNewRecord(prev => ({ ...prev, studentId }));
+    setNewRecord(prev => ({
+      ...prev,
+      studentId: parseInt(studentId, 10)
+    }));
   };
 
-  const onStartTimeChange = (time: string) => {
-    setNewRecord(prev => ({ ...prev, startTime: time }));
+  const onStartTimeChange = (startTime: string) => {
+    setNewRecord(prev => ({ ...prev, startTime }));
   };
 
-  const onFinalTimeChange = (time: string) => {
-    setNewRecord(prev => ({ ...prev, endTime: time }));
+  const onFinalTimeChange = (endTime: string) => {
+    setNewRecord(prev => ({ ...prev, endTime }));
   };
 
   const onSave = () => {
@@ -46,21 +57,19 @@ export default function AddNewRecord({ isModalOpen, handleCloseModal, handleSave
     return !!(studentId && startTime && endTime);
   };
 
-
   return (
     <GenericModal
       isOpen={isModalOpen}
       onClose={handleCloseModal}
       onSave={onSave}
-      title={translations.addNewRecord}
-      description={translations.addNewRecordDescription}
+      title={modalTitle}
+      description={modalDescription}
       isFormValid={isFormValid()}
-
     >
       <div className="space-y-4">
         <div>
           <Label htmlFor="student-select">{translations.chooseStudent}</Label>
-          <Select onValueChange={onStudentSelect} value={newRecord.studentId}>
+          <Select onValueChange={onStudentSelect} value={newRecord.studentId?.toString()}>
             <SelectTrigger id="student-select">
               <SelectValue placeholder={translations.chooseStudent} />
             </SelectTrigger>
@@ -73,21 +82,19 @@ export default function AddNewRecord({ isModalOpen, handleCloseModal, handleSave
             </SelectContent>
           </Select>
         </div>
-
         <div>
           <TimePicker
             label={translations.startTime}
-            id="start-time"
+            id="startTime"
             value={newRecord.startTime}
             onChange={onStartTimeChange}
           />
         </div>
-
         <div>
           <TimePicker
             label={translations.finalTime}
-            id="final-time"
-            value={newRecord.finalTime}
+            id="endTime"
+            value={newRecord.endTime}
             onChange={onFinalTimeChange}
           />
         </div>

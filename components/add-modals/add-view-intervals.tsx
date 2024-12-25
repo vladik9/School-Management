@@ -4,28 +4,30 @@ import GenericModal from '@/components/generic/generic-modal';
 import translations from '@/lib/translations';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import AddNewRecord from './add-new-record';
+import AddViewRecord from './add-view-record';
 import RemoveDialog from '../generic/remove-dialog';
 import SimpleDialog from '../generic/simple-dialog';
-import ViewEditDialog from '../generic/view-edit-dialog';
-
+import { TestData } from '@/types/types';
+import { Users } from 'lucide-react';
 interface AddViewIntervalsProps {
   intervals: any[];
   isModalOpen: boolean;
   handleCloseModal: () => void;
   handleSaveModal: () => void;
   newRecord: any;
-  setNewRecord: (data: { name: string; }) => void;
+  setNewRecord: (data: { studentId: number, startTime: string, endTime: string; }) => void;
   records: any[];
   students: any[];
   handleSaveNewRecord: () => void;
+  handleUpdateRecord: () => void;
   setSelectedIntervalId: (id: number) => void;
   handleViewEditRecords: (id: number) => Promise<void>;
   isNewRecordModalOpen: boolean;
   setIsNewRecordModalOpen: (isOpen: boolean) => void;
   handleRemoveInterval: (id: number) => void;
   handleRemoveRecord: (id: number) => void;
-  barem: string;
+  tests: TestData[];
+  testId: number;
 
 }
 
@@ -34,6 +36,7 @@ export default function AddViewIntervals({
   isModalOpen,
   handleCloseModal,
   handleSaveModal,
+  handleUpdateRecord,
   newRecord,
   setNewRecord,
   records,
@@ -45,8 +48,10 @@ export default function AddViewIntervals({
   setIsNewRecordModalOpen,
   handleRemoveInterval,
   handleRemoveRecord,
-  barem = translations.none,
+  tests,
+  testId,
 }: AddViewIntervalsProps) {
+  const [isViewEditRecordsModalOpen, setIsViewEditRecordsModalOpen] = React.useState(false);
 
   const handleAddNewRecord = (id: number) => {
     setIsNewRecordModalOpen(true);
@@ -57,6 +62,8 @@ export default function AddViewIntervals({
     handleViewEditRecords(id);
     // Add your edit logic here if needed
   };
+  const barem = tests.find((test) => test.id === testId)?.baremType;
+
   return (
     <GenericModal
       isOpen={isModalOpen}
@@ -87,7 +94,7 @@ export default function AddViewIntervals({
                   <TableCell>{translations.inter} {index + 1}</TableCell>
                   <TableCell>
                     {/* View/Edit Dialog */}
-                    <SimpleDialog title={`${translations.inter} - ${interval.id}`} description={translations.viewOrEdit} triggerButtonTitle={translations.viewOrEdit} onOpen={() => handleViewOrEditRecord(interval.id)} id={interval.id}
+                    <SimpleDialog title={`${translations.inter} - ${index + 1}`} description={translations.viewOrEdit} triggerButtonTitle={translations.viewOrEdit} onOpen={() => handleViewOrEditRecord(interval.id)} id={interval.id}
                     >
                       <Table>
                         <TableHeader>
@@ -117,9 +124,21 @@ export default function AddViewIntervals({
                                 </TableCell>
                                 <TableCell>
                                   {/* //TODO - fix this as not having anything to edit */}
-                                  <ViewEditDialog title={translations.edit} description={translations.editRecord} onOpen={() => handleViewOrEditRecord(interval.id)} triggerButtonTitle={translations.edit} onSave={handleSaveNewRecord} id={int.id} cancelText={translations.cancel} confirmText={translations.update}>
-                                    <span>EDIT</span>
-                                  </ViewEditDialog>
+                                  <Button
+                                    variant="outline"
+                                    size="sm"
+                                    onClick={() => {
+                                      setNewRecord(int);
+                                      setIsViewEditRecordsModalOpen(true);
+                                    }}
+                                  >
+                                    <Users className="h-4 w-4 mr-2" />
+                                    {translations.edit}
+                                  </Button>
+                                  <AddViewRecord isModalOpen={isViewEditRecordsModalOpen}
+                                    modalTitle={translations.editRecord} modalDescription={translations.editRecordDescription}
+                                    handleCloseModal={() => setIsViewEditRecordsModalOpen(false)} handleSaveModal={handleUpdateRecord} students={students} newRecord={newRecord} setNewRecord={setNewRecord} />
+
                                 </TableCell>
                                 <TableCell>
                                   {/* Record-level Remove Dialog */}
@@ -172,7 +191,7 @@ export default function AddViewIntervals({
           </Button>
         </div>
       </div>
-      <AddNewRecord
+      <AddViewRecord
         isModalOpen={isNewRecordModalOpen}
         handleCloseModal={() => setIsNewRecordModalOpen(false)}
         handleSaveModal={handleSaveNewRecord}

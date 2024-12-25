@@ -77,12 +77,12 @@ export default function SchoolDashboard() {
   const [selectedSchoolId, setSelectedSchoolId] = useState<SchoolData | null>(null);
   const [classes, setClasses] = useState<ClassData[]>([]);
   const [selectedClassId, setSelectedClassId] = useState<number>();
+  const [selectedTestId, setSelectedTestId] = useState<number | null>(null);
   const [years, setYears] = useState<YearData[]>([]);
   const [selectedYearId, setSelectedYearId] = useState<number | null>(null);
   const [students, setStudents] = useState<StudentData[]>([]); //NOTE - fix this later use students from inside of classes
   const [intervals, setIntervals] = useState<IntervalData[]>([]);
   const [selectedIntervalId, setSelectedIntervalId] = useState<number>();
-  const [selectedTestId, setSelectedTestId] = useState<number | null>(null);
   const [records, setRecords] = useState<RecordData[]>([]);
 
   // Modal states
@@ -492,7 +492,6 @@ export default function SchoolDashboard() {
       showStatusModal(statusMessages.errorDownloadingDocument, fetchStatuses.error);
     }
   };
-
   return (
     <div className="min-h-screen bg-gray-100 p-8">
       <CardTitle className="text-2xl font-bold flex items-center justify-center">
@@ -630,7 +629,8 @@ export default function SchoolDashboard() {
             handleRemoveInterval={handleRemoveInterval}
             handleRemoveRecord={handleRemoveRecord}
             //!TODO: Fix this it should pass test barem not none
-            barem={translations.none}
+            tests={(classes.length > 0 && classes.find((c) => c.id === selectedClassId)?.tests) || []}
+            testId={selectedTestId || 0}
           />
 
           <AddStudent

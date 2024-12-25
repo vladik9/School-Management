@@ -13,7 +13,7 @@ type IntervalData = {
 type TestData = {
   id: number;
   name: string;
-  barem: string;
+  baremType: string;
   intervals: IntervalData[];
 };
 

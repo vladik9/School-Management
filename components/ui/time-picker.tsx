@@ -13,7 +13,7 @@ interface TimePickerProps {
   label: string;
   onChange: (time: string) => void;
   id: string;
-  value?: string;
+  value?: Date | string;
 }
 
 export default function TimePicker({ label, id, onChange, value }: TimePickerProps) {

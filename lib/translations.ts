@@ -123,6 +123,7 @@ const translations = {
   date: "Data",
   record: "Notă",
   editRecord: "Editare înregistrare",
+  editRecordDescription: "Editare înregistrare - administreă inregistrarea",
   removeRecord: "Șterge înregistrare",
   confirmRemoveRecord: "Sigur dorești să ștergi înregistrarea?",
 

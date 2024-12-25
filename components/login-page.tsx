@@ -27,7 +27,7 @@ export default function LoginPage() {
         router.push('/dashboard');
       }
     } catch (error) {
-      setError('Invalid email or password');
+      setError(translations.loginError);
     }
   };
 
@@ -72,7 +72,7 @@ export default function LoginPage() {
                   size="icon"
                   className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
                   onClick={togglePasswordVisibility}
-                  aria-label={showPassword ? "Hide password" : "Show password"}
+                  aria-label={showPassword ? `${translations.hidePassword}` : `${translations.showPassword}`}
                 >
                   {showPassword ? (
                     <EyeOff className="h-4 w-4 text-gray-500" />

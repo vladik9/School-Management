@@ -13,6 +13,8 @@ const translations = {
   loginSuccess: "Autentificare reușită",
   logoutSuccess: "Deconectare reușită",
   logoutError: "Eroare la deconectare",
+  hidePassword: "Ascunde parola",
+  showPassword: "Afișarea parola",
 
   //Dashboard
   dashboard: "Dashboard",

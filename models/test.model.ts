@@ -7,6 +7,7 @@ interface TestAttributes {
   name: string;
   classId: number;
   baremType: string;
+  barem: string;
 }
 
 interface TestCreationAttributes extends Optional<TestAttributes, 'id'> {}
@@ -16,6 +17,7 @@ class Test extends Model<TestAttributes, TestCreationAttributes> implements Test
   public name!: string;
   public classId!: number;
   public baremType!: string;
+  public barem!: string;
 }
 
 Test.init(
@@ -37,9 +39,13 @@ Test.init(
       },
     },
     baremType: {
-      type: DataTypes.STRING,
+      type: DataTypes.INTEGER,
       allowNull: false,
   },
+    barem: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    }
   },
 
 

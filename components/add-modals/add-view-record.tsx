@@ -26,7 +26,7 @@ export default function AddViewRecord({
   handleSaveModal,
   students,
   newRecord,
-  setNewRecord
+  setNewRecord,
 }: AddViewRecordProps) {
   const onStudentSelect = (studentId: string) => {
     setNewRecord(prev => ({

@@ -1,6 +1,15 @@
-//Fix this function as now is not working well
-function toRoman(num: number): string {
-  const romanNumerals = ['Pregatitor', 'I', 'II', 'III', 'IV'];
-  return romanNumerals[num - 1] || num.toString();
+import { romanNumerals } from "./dataEnums";
+function arabicToRoman(num: number): string {
+  if (num < 1 || num > 3999) return 'Number out of range! (1-3999)';
+  let result = '';
+  let remaining = num;
+
+  for (const [value, symbol] of romanNumerals) {
+    while (remaining >= value) {
+      result += symbol;
+      remaining -= value;
+    }
+  }
+  return result;
 }
-export { toRoman };
+export { arabicToRoman };

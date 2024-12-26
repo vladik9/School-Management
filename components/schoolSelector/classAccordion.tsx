@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import translations from "@/lib/translations";
-import { ClassData } from "@/types/types";
+import { ClassData, StudentData } from "@/types/types";
 import RemoveDialog from '../generic/remove-dialog';
 import ViewEditDialog from '../generic/view-edit-dialog';
 import PerformanceAccordion from './performanceAccordion';
@@ -75,6 +75,7 @@ export default function ClassAccordion({
                             <Button
                               variant="outline"
                               className="max-w-100"
+                              disabled={school_class.students.length === 0}
                               onClick={() => handleAddViewIntervals(testItem.id)}
                             >
                               {translations.viewAddIntervals}

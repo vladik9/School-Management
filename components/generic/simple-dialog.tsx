@@ -1,7 +1,6 @@
 import React from 'react';
-import { Dialog, DialogContent, DialogClose, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import translations from '@/lib/translations';
 import { Users } from 'lucide-react';
 
 interface SimpleDialogProps {

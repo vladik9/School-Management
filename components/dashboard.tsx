@@ -504,6 +504,7 @@ export default function SchoolDashboard() {
     try {
       await processUpdateRecord(data, recordId);
       showStatusModal(statusMessages.recordUpdated, fetchStatuses.success);
+      setNewRecord({});
     } catch (error) {
       showStatusModal(statusMessages.errorUpdatingRecord, fetchStatuses.error);
     } finally {

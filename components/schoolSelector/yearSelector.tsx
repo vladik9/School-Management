@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import translations from "@/lib/translations";
 import { YearData } from "@/types/types";
 import RemoveDialog from '../generic/remove-dialog';
+import { arabicToRoman } from '@/utils/functions';
 
 interface YearSelectorProps {
   years: YearData[];
@@ -16,6 +17,7 @@ interface YearSelectorProps {
 
 
 export default function YearSelector({ years, onSelectYear, onAddYear, onRemoveYear, }: YearSelectorProps) {
+
   return (
     <div style={{ marginTop: '20px' }}>
       <Label htmlFor="year-select">{translations.chooseYear}</Label>
@@ -26,9 +28,9 @@ export default function YearSelector({ years, onSelectYear, onAddYear, onRemoveY
           </SelectTrigger>
           <SelectContent>
             {years.length > 0 ? (
-              years.map((yearData) => (
-                <SelectItem key={yearData.id} value={yearData.id.toString()}>
-                  {yearData.name}
+              years.map((year) => (
+                <SelectItem key={year.id} value={year.id.toString()}>
+                  {arabicToRoman(parseInt(year.name))}
                 </SelectItem>
               ))
             ) : (

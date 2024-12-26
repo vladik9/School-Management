@@ -14,6 +14,7 @@ type TestData = {
   id: number;
   name: string;
   baremType: string;
+  barem: string;
   intervals: IntervalData[];
 };
 

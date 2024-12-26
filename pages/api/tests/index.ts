@@ -31,9 +31,8 @@ const getTest = async (req: NextApiRequest, res: NextApiResponse) => {
 // Handle POST (create school)
 const createTest = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    const { name,  addBarem, classId } = req.body;
-    const baremType = addBarem;
-    const newDiscipline = await Test.create({name, baremType, classId });
+    const { name, baremType, barem, classId } = req.body;
+    const newDiscipline = await Test.create({name, baremType, barem,  classId });
     res.status(201).json(newDiscipline);
   } catch (error) {
     res.status(500).json({ message: 'Error creating test', error });

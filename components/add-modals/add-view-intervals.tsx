@@ -62,13 +62,40 @@ export default function AddViewIntervals({
     handleViewEditRecords(id);
     // Add your edit logic here if needed
   };
-  const barem = tests.find((test) => test.id === testId)?.baremType || translations.none;
+  const baremType = tests.find((test) => test.id === testId)?.baremType || translations.none;
 
   const handleUpdateRecord = (recordId: number, newRecord: RecordData) => {
     // Add your update logic here if needed
     handleUpdateRecordGlobal(recordId, newRecord);
     setIsViewEditRecordsModalOpen(false);
   };
+
+  console.log('baremType', baremType);
+
+  const componentBasedOnBaremType = (baremType: string) => {
+    switch (baremType) {
+      case "1":
+        return (
+          <AddViewRecord isModalOpen={isViewEditRecordsModalOpen}
+            modalTitle={translations.editRecord} modalDescription={translations.editRecordDescription}
+            handleCloseModal={() => setIsViewEditRecordsModalOpen(false)} handleSaveModal={handleUpdateRecord} students={students} newRecord={newRecord} setNewRecord={setNewRecord}
+          />);
+      case "2":
+        return (<></>);
+      case "3":
+        return (
+          <></>
+        );
+      case "4":
+        return (<> </>);
+      default:
+        return (<AddViewRecord isModalOpen={isViewEditRecordsModalOpen}
+          modalTitle={translations.editRecord} modalDescription={translations.editRecordDescription}
+          handleCloseModal={() => setIsViewEditRecordsModalOpen(false)} handleSaveModal={handleUpdateRecord} students={students} newRecord={newRecord} setNewRecord={setNewRecord}
+        />);
+    }
+  };
+
   return (
     <GenericModal
       isOpen={isModalOpen}
@@ -122,7 +149,7 @@ export default function AddViewIntervals({
                                 {/* //TODO - fix this to be ID of the stundet not DB Id */}
                                 <TableCell>{int.startTime}</TableCell>
                                 <TableCell>{int.endTime}</TableCell>
-                                <TableCell>{barem}</TableCell>
+                                <TableCell>{baremType}</TableCell>
                                 {/* TODO: Fix this math calculation */}
                                 <TableCell>
                                   {int.startTime && int.endTime
@@ -141,10 +168,11 @@ export default function AddViewIntervals({
                                     <Users className="h-4 w-4 mr-2" />
                                     {translations.edit}
                                   </Button>
+                                  {/* //TODO - fix this to be a specific component render based on barem type */}
                                   <AddViewRecord isModalOpen={isViewEditRecordsModalOpen}
                                     modalTitle={translations.editRecord} modalDescription={translations.editRecordDescription}
-                                    handleCloseModal={() => setIsViewEditRecordsModalOpen(false)} handleSaveModal={handleUpdateRecord} students={students} newRecord={newRecord} setNewRecord={setNewRecord} />
-
+                                    handleCloseModal={() => setIsViewEditRecordsModalOpen(false)} handleSaveModal={handleUpdateRecord} students={students} newRecord={newRecord} setNewRecord={setNewRecord}
+                                  />
                                 </TableCell>
                                 <TableCell>
                                   {/* Record-level Remove Dialog */}
@@ -198,13 +226,16 @@ export default function AddViewIntervals({
         </div>
       </div>
       <AddViewRecord
+        modalTitle={translations.addNewRecord}
+        modalDescription={translations.addNewRecordDescription}
         isModalOpen={isNewRecordModalOpen}
         handleCloseModal={() => setIsNewRecordModalOpen(false)}
         handleSaveModal={handleSaveNewRecord}
         students={students}
         newRecord={newRecord}
         setNewRecord={setNewRecord}
+
       />
     </GenericModal>
   );
-}
+};

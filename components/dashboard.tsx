@@ -39,8 +39,15 @@ import {
 import {
   processGetRecords,
   processCreateRecord,
-  processRemoveRecord
+  processRemoveRecord,
+  processUpdateRecord
 } from '@/controllers/records';
+
+import {
+  processCreateDocument,
+  processGetDocument,
+  processRemoveDocument
+} from '@/controllers/documents';
 
 import { School } from 'lucide-react';
 import {
@@ -69,7 +76,7 @@ import AddStudent from "@/components/add-modals/add-student";
 import AddTest from "@/components/add-modals/add-test";
 import AddViewIntervals from "@/components/add-modals/add-view-intervals";
 import UploadDocument from '@/components/add-modals/upload-document';
-import { processCreateDocument, processGetDocument, processRemoveDocument } from '@/controllers/documents';
+
 
 
 export default function SchoolDashboard() {
@@ -492,11 +499,27 @@ export default function SchoolDashboard() {
       showStatusModal(statusMessages.errorDownloadingDocument, fetchStatuses.error);
     }
   };
+  const handleUpdateRecord = async (recordId: number, data: object) => {
+    showStatusModal(statusMessages.updatingRecord, fetchStatuses.loading);
+    try {
+      await processUpdateRecord(data, recordId);
+      showStatusModal(statusMessages.recordUpdated, fetchStatuses.success);
+    } catch (error) {
+      showStatusModal(statusMessages.errorUpdatingRecord, fetchStatuses.error);
+    } finally {
+      if (selectedIntervalId) {
+        await fetchRecords(selectedIntervalId);
+      }
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-100 p-8">
-      <CardTitle className="text-2xl font-bold flex items-center justify-center">
-        {translations.welcome}
-      </CardTitle>
+      <Card className="max-w-xl mx-auto mb-4" >
+        <CardTitle className="text-2xl font-bold flex items-center justify-center">
+          {translations.welcome}
+        </CardTitle>
+      </Card>
       <Card className="max-w-6xl mx-auto">
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle className="text-2xl font-bold flex items-center">
@@ -628,7 +651,7 @@ export default function SchoolDashboard() {
             setIsNewRecordModalOpen={setIsNewRecordModalOpen}
             handleRemoveInterval={handleRemoveInterval}
             handleRemoveRecord={handleRemoveRecord}
-            //!TODO: Fix this it should pass test barem not none
+            handleUpdateRecord={handleUpdateRecord}
             tests={(classes.length > 0 && classes.find((c) => c.id === selectedClassId)?.tests) || []}
             testId={selectedTestId || 0}
           />
@@ -643,6 +666,7 @@ export default function SchoolDashboard() {
             setNewRecord={setNewRecord}
             newRecord={newRecord}
             selectedYear={selectedYearId}
+            years={years}
           />
           <UploadDocument
             isModalOpen={isDocumentModalOpen}

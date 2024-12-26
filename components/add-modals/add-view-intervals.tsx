@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import AddViewRecord from './add-view-record';
 import RemoveDialog from '../generic/remove-dialog';
 import SimpleDialog from '../generic/simple-dialog';
-import { TestData } from '@/types/types';
+import { RecordData, TestData } from '@/types/types';
 import { Users } from 'lucide-react';
 interface AddViewIntervalsProps {
   intervals: any[];
@@ -19,7 +19,7 @@ interface AddViewIntervalsProps {
   records: any[];
   students: any[];
   handleSaveNewRecord: () => void;
-  handleUpdateRecord: () => void;
+  handleUpdateRecord: (recordId: number, newRecord: RecordData) => void;
   setSelectedIntervalId: (id: number) => void;
   handleViewEditRecords: (id: number) => Promise<void>;
   isNewRecordModalOpen: boolean;
@@ -36,7 +36,7 @@ export default function AddViewIntervals({
   isModalOpen,
   handleCloseModal,
   handleSaveModal,
-  handleUpdateRecord,
+  handleUpdateRecord: handleUpdateRecordGlobal,
   newRecord,
   setNewRecord,
   records,
@@ -62,8 +62,13 @@ export default function AddViewIntervals({
     handleViewEditRecords(id);
     // Add your edit logic here if needed
   };
-  const barem = tests.find((test) => test.id === testId)?.baremType;
+  const barem = tests.find((test) => test.id === testId)?.baremType || translations.none;
 
+  const handleUpdateRecord = (recordId: number, newRecord: RecordData) => {
+    // Add your update logic here if needed
+    handleUpdateRecordGlobal(recordId, newRecord);
+    setIsViewEditRecordsModalOpen(false);
+  };
   return (
     <GenericModal
       isOpen={isModalOpen}
@@ -104,6 +109,7 @@ export default function AddViewIntervals({
                             <TableHead>{translations.finalTime}</TableHead>
                             <TableHead>{translations.barem}</TableHead>
                             <TableHead>{translations.average}</TableHead>
+                            {/* // TODO -- fix this to be real value/ */}
                             <TableHead>{translations.edit}</TableHead>
                             <TableHead>{translations.removeRecord}</TableHead>
                           </TableRow>
@@ -113,17 +119,17 @@ export default function AddViewIntervals({
                             records.map((int: any) => (
                               <TableRow key={int.id}>
                                 <TableCell>{int.id}</TableCell>
+                                {/* //TODO - fix this to be ID of the stundet not DB Id */}
                                 <TableCell>{int.startTime}</TableCell>
                                 <TableCell>{int.endTime}</TableCell>
                                 <TableCell>{barem}</TableCell>
                                 {/* TODO: Fix this math calculation */}
                                 <TableCell>
                                   {int.startTime && int.endTime
-                                    ? parseInt(int.startTime) / parseInt(int.endTime)
+                                    ? (parseInt(int.startTime) / parseInt(int.endTime)).toFixed(2)
                                     : '-'}
                                 </TableCell>
                                 <TableCell>
-                                  {/* //TODO - fix this as not having anything to edit */}
                                   <Button
                                     variant="outline"
                                     size="sm"

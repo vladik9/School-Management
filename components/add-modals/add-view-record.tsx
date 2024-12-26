@@ -12,10 +12,10 @@ interface AddViewRecordProps {
   modalTitle: string;
   modalDescription: string;
   handleCloseModal: () => void;
-  handleSaveModal: (newRecord: RecordData) => void;
+  handleSaveModal: (recordId: number, newRecord: RecordData) => void;
   students: StudentData[];
   newRecord: RecordData;
-  setNewRecord: (data: Partial<RecordData>) => void;
+  setNewRecord: (data: { studentId: number, startTime: string, endTime: string; }) => void;
 }
 
 export default function AddViewRecord({
@@ -45,7 +45,7 @@ export default function AddViewRecord({
 
   const onSave = () => {
     if (newRecord.studentId && newRecord.startTime && newRecord.endTime) {
-      handleSaveModal(newRecord);
+      handleSaveModal(newRecord.id, newRecord,);
     } else {
       // Handle validation error
       console.error('All fields are required');

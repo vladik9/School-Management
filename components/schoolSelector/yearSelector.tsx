@@ -14,6 +14,7 @@ interface YearSelectorProps {
 
 }
 
+
 export default function YearSelector({ years, onSelectYear, onAddYear, onRemoveYear, }: YearSelectorProps) {
   return (
     <div style={{ marginTop: '20px' }}>

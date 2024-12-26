@@ -38,6 +38,7 @@ export default function AddTest({ isModalOpen, handleCloseModal, handleSaveModal
               setNewRecord((prev: any) => ({ ...prev, name: e.target.value }))
             } />
           <Label htmlFor="barem">{translations.barem}</Label>
+          {/* //TODO -  add a barem type field in order to make different tests work with different barems */}
           <Input id="barem" placeholder={translations.addBarem} value={newRecord.addBarem || ''} onChange={(e) =>
             setNewRecord((prev: any) => ({ ...prev, addBarem: e.target.value }))
           } />

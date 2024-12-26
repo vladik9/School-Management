@@ -11,6 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { YearData } from '@/types/types';
 
 interface AddStudentProps {
   isModalOpen: boolean;
@@ -19,9 +20,10 @@ interface AddStudentProps {
   setNewRecord: (data: { name: string; studentId: number, classId: number; study_class: number; orderNb: number; sex: string; }) => void;
   newRecord: any;
   selectedYear: number | null;
+  years: YearData[];
 }
 
-export default function AddStudent({ isModalOpen, handleCloseModal, handleSaveModal, setNewRecord, selectedYear, newRecord }: AddStudentProps) {
+export default function AddStudent({ isModalOpen, handleCloseModal, handleSaveModal, setNewRecord, selectedYear, newRecord, years }: AddStudentProps) {
   const [generatedId, setGeneratedId] = useState('');
 
   useEffect(() => {
@@ -38,7 +40,7 @@ export default function AddStudent({ isModalOpen, handleCloseModal, handleSaveMo
   const handleIdGeneration = () => {
     const { orderNb, sex, study_class } = newRecord;
     if (orderNb && sex && study_class) {
-      const studentId = `${sex}${orderNb}${study_class}${selectedYear}`;
+      const studentId = `${sex}${orderNb}${study_class}${years.find((year: YearData) => year.id === selectedYear)?.name || selectedYear}`;
       setGeneratedId(studentId);
       setNewRecord((prev: any) => ({ ...prev, studentId }));
     } else {

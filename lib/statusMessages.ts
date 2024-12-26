@@ -86,6 +86,9 @@ const statusMessages = {
   errorDeletingRecord: 'Eroare la ștergerea notei',
   deletingRecord: 'Ștergerea notei...',
   recordDeleted: 'Nota a fost ștearsă cu succes',
+  updatingRecord: 'Actualizarea notei...',
+  recordUpdated: 'Nota a fost actualizată cu succes',
+  errorUpdatingRecord: 'Eroare la actualizarea notei',
 
   // Documents
   errorFetchingDocuments: 'Eroare la încărcarea documentelor',

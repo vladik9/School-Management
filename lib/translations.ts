@@ -19,7 +19,7 @@ const translations = {
   //Dashboard
   dashboard: "Dashboard",
   dashboardDescription: "Aici puteți vedea informațiile despre școală",
-  dashboardTitle: "Pe pagina de administrare a școlilor",
+  dashboardTitle: "Pagina de administrare a școlilor",
 
   //Generic modal
   cancelText: "Anulare",

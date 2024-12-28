@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { logout } from '@/utils/auth';
+import { logout } from '@/controllers/auth';
 import { useRouter } from 'next/navigation';
 import translations from "@/lib/translations";
 
@@ -26,11 +26,11 @@ import {
   processGetStudents,
   processCreateStudent,
   processRemoveStudent
-} from "@/controllers/student";
+} from "@/controllers/students";
 import {
   processCreateTest,
   processRemoveTest
-} from "@/controllers/test";
+} from "@/controllers/tests";
 import {
   processGetIntervals,
   processCreateInterval,
@@ -39,8 +39,15 @@ import {
 import {
   processGetRecords,
   processCreateRecord,
-  processRemoveRecord
+  processRemoveRecord,
+  processUpdateRecord
 } from '@/controllers/records';
+
+import {
+  processCreateDocument,
+  processGetDocument,
+  processRemoveDocument
+} from '@/controllers/documents';
 
 import { School } from 'lucide-react';
 import {
@@ -51,8 +58,6 @@ import {
   ClassData,
   SchoolData,
   FetchStatuses,
-
-  DocumentData
 } from "@/types/types";
 
 import statusMessages, { fetchStatuses } from '@/lib/statusMessages';
@@ -71,7 +76,7 @@ import AddStudent from "@/components/add-modals/add-student";
 import AddTest from "@/components/add-modals/add-test";
 import AddViewIntervals from "@/components/add-modals/add-view-intervals";
 import UploadDocument from '@/components/add-modals/upload-document';
-import { processCreateDocument, processGetDocuments } from '@/controllers/document';
+
 
 
 export default function SchoolDashboard() {
@@ -79,14 +84,13 @@ export default function SchoolDashboard() {
   const [selectedSchoolId, setSelectedSchoolId] = useState<SchoolData | null>(null);
   const [classes, setClasses] = useState<ClassData[]>([]);
   const [selectedClassId, setSelectedClassId] = useState<number>();
+  const [selectedTestId, setSelectedTestId] = useState<number | null>(null);
   const [years, setYears] = useState<YearData[]>([]);
   const [selectedYearId, setSelectedYearId] = useState<number | null>(null);
   const [students, setStudents] = useState<StudentData[]>([]); //NOTE - fix this later use students from inside of classes
   const [intervals, setIntervals] = useState<IntervalData[]>([]);
   const [selectedIntervalId, setSelectedIntervalId] = useState<number>();
-  const [selectedTestId, setSelectedTestId] = useState<number | null>(null);
   const [records, setRecords] = useState<RecordData[]>([]);
-  const [documents, setDocuments] = useState<DocumentData[]>([]); //NOTE - fix this later use documents from inside of classes
 
   // Modal states
   const [isSchoolModalOpen, setIsSchoolModalOpen] = useState(false);
@@ -228,16 +232,6 @@ export default function SchoolDashboard() {
     }
   };
 
-  const fetchDocuments = async () => {
-    // showStatusModal(statusMessages.fetchingDocuments, fetchStatuses.loading);
-    try {
-      const documentList = (await processGetDocuments(selectedClassId)) || [];
-      setDocuments(documentList);
-      // showStatusModal(statusMessages.documentsFetched, fetchStatuses.success);
-    } catch (error) {
-      showStatusModal(statusMessages.errorFetchingDocuments, fetchStatuses.error);
-    }
-  };
 
   // =========================
   // Selection Handlers
@@ -362,10 +356,10 @@ export default function SchoolDashboard() {
         formData.append('file', newRecord.doc);
       }
 
-      await processCreateDocument(formData, selectedClassId);
+      await processCreateDocument(formData, selectedClassId || 0);
       setIsDocumentModalOpen(false);
       setNewRecord({});
-      await fetchDocuments();
+      await fetchClasses();
       showStatusModal(statusMessages.documentCreated, fetchStatuses.success);
     } catch (error) {
       showStatusModal(statusMessages.errorCreatingDocument, fetchStatuses.error);
@@ -486,28 +480,47 @@ export default function SchoolDashboard() {
     }
   };
   const handleRemoveDocument = async (documentId: number) => {
-    // showStatusModal(statusMessages.deletingDocument, fetchStatuses.loading);
-    // try {
-    //   await processRemoveDocument(documentId);
-    //   showStatusModal(statusMessages.documentDeleted, fetchStatuses.success);
-    // } catch (error) {
-    //   showStatusModal(statusMessages.errorDeletingDocument, fetchStatuses.error);
-    // } finally {
-    //   await fetchDocuments();
-    // }
+    showStatusModal(statusMessages.deletingDocument, fetchStatuses.loading);
+    try {
+      await processRemoveDocument(documentId);
+      showStatusModal(statusMessages.documentDeleted, fetchStatuses.success);
+    } catch (error) {
+      showStatusModal(statusMessages.errorDeletingDocument, fetchStatuses.error);
+    } finally {
+      await fetchClasses();
+    }
   };
   const handleDownloadDocument = async (documentId: number) => {
-    // showStatusModal(statusMessages.downloadingDocument, fetchStatuses.loading);
-    // try {
-    //   await processDownloadDocument(documentId);
-    //   showStatusModal(statusMessages.documentDownloaded, fetchStatuses.success);
-    // } catch (error) {
-    //   showStatusModal(statusMessages.errorDownloadingDocument, fetchStatuses.error);
-    // }
+    showStatusModal(statusMessages.downloadingDocument, fetchStatuses.loading);
+    try {
+      await processGetDocument(documentId);
+      showStatusModal(statusMessages.documentDownloaded, fetchStatuses.success);
+    } catch (error) {
+      showStatusModal(statusMessages.errorDownloadingDocument, fetchStatuses.error);
+    }
+  };
+  const handleUpdateRecord = async (recordId: number, data: object) => {
+    showStatusModal(statusMessages.updatingRecord, fetchStatuses.loading);
+    try {
+      await processUpdateRecord(data, recordId);
+      showStatusModal(statusMessages.recordUpdated, fetchStatuses.success);
+      setNewRecord({});
+    } catch (error) {
+      showStatusModal(statusMessages.errorUpdatingRecord, fetchStatuses.error);
+    } finally {
+      if (selectedIntervalId) {
+        await fetchRecords(selectedIntervalId);
+      }
+    }
   };
 
   return (
     <div className="min-h-screen bg-gray-100 p-8">
+      <Card className="max-w-xl mx-auto mb-4" >
+        <CardTitle className="text-2xl font-bold flex items-center justify-center">
+          {translations.welcome}
+        </CardTitle>
+      </Card>
       <Card className="max-w-6xl mx-auto">
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle className="text-2xl font-bold flex items-center">
@@ -639,6 +652,9 @@ export default function SchoolDashboard() {
             setIsNewRecordModalOpen={setIsNewRecordModalOpen}
             handleRemoveInterval={handleRemoveInterval}
             handleRemoveRecord={handleRemoveRecord}
+            handleUpdateRecord={handleUpdateRecord}
+            tests={(classes.length > 0 && classes.find((c) => c.id === selectedClassId)?.tests) || []}
+            testId={selectedTestId || 0}
           />
 
           <AddStudent
@@ -651,6 +667,7 @@ export default function SchoolDashboard() {
             setNewRecord={setNewRecord}
             newRecord={newRecord}
             selectedYear={selectedYearId}
+            years={years}
           />
           <UploadDocument
             isModalOpen={isDocumentModalOpen}

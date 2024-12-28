@@ -22,6 +22,10 @@ module.exports = {
         allowNull: false,
       },
       baremType: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+      },
+      barem: {
         type: Sequelize.STRING,
         allowNull: false,
       },

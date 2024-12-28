@@ -1,7 +1,10 @@
 'use client';
+
+import { urlEnum } from "@/utils/urlEnum";
+
 export const login = async (email: string, password: string): Promise<boolean> => {
 
-  const response = await fetch('/api/users', {
+  const response = await fetch(`${urlEnum.users}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -18,9 +21,9 @@ export const login = async (email: string, password: string): Promise<boolean> =
       resolve(true);
     });
   } else {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       localStorage.setItem('isAuthenticated', 'false');
-      resolve(false);
+      reject(false);
     });
   }
 

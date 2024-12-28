@@ -64,3 +64,22 @@ export const processRemoveRecord = async (recordId: number) => {
     throw new Error(statusMessages.errorDeletingRecord);
   }
 };
+
+export const processUpdateRecord = async (data: object, recordId: number) => {
+  try {
+    const response = await fetch(`${urlEnum.record}?id=${recordId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+    if (!response.ok) {
+      throw new Error(statusMessages.errorUpdatingRecord);
+    }
+    return response;
+  } catch (error) {
+    console.log(error);
+    throw new Error(statusMessages.errorUpdatingRecord);
+  }
+};

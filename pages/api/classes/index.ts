@@ -34,7 +34,7 @@ const getClasses = async (req: NextApiRequest, res: NextApiResponse) => {
         const [tests, students, documents] = await Promise.all([
           Test.findAll({
             where: { classId: classData.id }, // Use classId to fetch related tests
-            attributes: ['id', 'name'], // Select relevant fields
+            attributes: ['id', 'name', 'baremType', 'barem'], // Select relevant fields
           }),
           Student.findAll({
             where: { classId: classData.id }, // Use classId to fetch related students

@@ -6,7 +6,7 @@ import { DocumentData } from "@/types/types";
 import { Button } from '../ui/button';
 import RemoveDialog from '../generic/remove-dialog';
 import { Download, Upload } from 'lucide-react';
-
+import { Card } from '../ui/card';
 
 interface DocumentAccordionProps {
   documents: DocumentData[];
@@ -35,55 +35,53 @@ export default function DocumentAccordion({
             {translations.upload}
           </Button>
         </>
-
-      ) :
-        (<Accordion type="single" collapsible >
-          {documents.map((document) => (
-            <AccordionItem key={document.id} value={document.id.toString()}>
+      ) : (
+        <Card style={{ padding: '20px', borderRadius: '10px', marginTop: '20px' }}>
+          <Accordion type="single" collapsible>
+            <AccordionItem value="documents">
               <AccordionTrigger>
                 <div className="flex items-center justify-between w-full">
                   <span>
-                    {/* //TODO - here should be the  name for the list */}
                     {translations.documentsList} - {className}
                   </span>
                 </div>
               </AccordionTrigger>
               <AccordionContent>
-                {documents.length === 0 ? (
-                  <div style={{ marginTop: '20px', textAlign: 'center' }}>{translations.noStudentsAdded}</div>
-                ) : (
-                  <div>
-                    <Table style={{ marginTop: '10px' }}>
-                      <TableHeader>
-                        <TableRow>
-                          <TableHead>{translations.count}</TableHead>
-                          <TableHead>{translations.docName}</TableHead>
-                          <TableHead>{translations.download}</TableHead>
-                          <TableHead>{translations.remove}</TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        {documents.map((test, index: number) => (
-                          <TableRow key={test.id}>
-                            <TableCell>{index + 1}</TableCell>
-                            <TableCell>{test.fileName}</TableCell>
-                            <TableCell>
-                              {/* //NOTE - Student-level Remove Dialog */}
-                              <Button variant="outline" size="sm" onClick={() => handleDownloadDocument(test.id)}>
-                                <Download className="h-4 w-4 mr-2" />
-                                {translations.download}
-                              </Button>
-                            </TableCell>
-                            <TableCell>
-                              {/* //NOTE - Student-level Remove Dialog */}
-                              <RemoveDialog title={translations.removeDocument} description={translations.confirmRemoveDocument} confirmText={translations.removeDocument} cancelText={translations.cancel} onRemove={() => handleRemoveDocument(test.id)} id={test.id} />
-                            </TableCell>
-                          </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
-                  </div>
-                )}
+                <Table style={{ marginTop: '10px' }}>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>{translations.count}</TableHead>
+                      <TableHead>{translations.docName}</TableHead>
+                      <TableHead>{translations.download}</TableHead>
+                      <TableHead>{translations.removeDocument}</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {documents.map((document, index: number) => (
+                      <TableRow key={document.id}>
+                        <TableCell>{index + 1}</TableCell>
+                        <TableCell>{document.name}</TableCell>
+                        <TableCell>
+                          <Button variant="outline" size="sm" onClick={() => handleDownloadDocument(document.id)}>
+                            <Download className="h-4 w-4 mr-2" />
+                            {translations.download}
+                          </Button>
+                        </TableCell>
+                        <TableCell>
+                          <RemoveDialog
+                            title={translations.removeDocument}
+                            description={translations.confirmRemoveDocument}
+                            confirmText={translations.removeDocument}
+                            cancelText={translations.cancel}
+                            onRemove={() => handleRemoveDocument(document.id)}
+                            id={document.id}
+                            removeMessage={translations.removeDocument}
+                          />
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
                 <div style={{ marginTop: '10px', display: 'flex', justifyContent: 'space-between' }}>
                   <Button variant="outline" size="sm" onClick={handleUploadDocument}>
                     <Upload className="h-4 w-4 mr-2" />
@@ -92,8 +90,9 @@ export default function DocumentAccordion({
                 </div>
               </AccordionContent>
             </AccordionItem>
-          ))}
-        </Accordion>)}
+          </Accordion>
+        </Card>
+      )}
     </div>
   );
 }

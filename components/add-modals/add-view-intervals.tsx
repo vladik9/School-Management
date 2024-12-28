@@ -4,11 +4,14 @@ import GenericModal from '@/components/generic/generic-modal';
 import translations from '@/lib/translations';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { Edit, Users } from 'lucide-react';
-import AddNewRecord from './add-new-record';
+import AddViewRecord from './add-view-record';
 import RemoveDialog from '../generic/remove-dialog';
 import SimpleDialog from '../generic/simple-dialog';
-import ViewEditDialog from '../generic/view-edit-dialog';
+import { RecordData, TestData } from '@/types/types';
+import { Users } from 'lucide-react';
+import TimePicker from '../ui/time-picker';
+import { Input } from '@/components/ui/input';
+import { Label } from '@radix-ui/react-label';
 
 interface AddViewIntervalsProps {
   intervals: any[];
@@ -16,16 +19,20 @@ interface AddViewIntervalsProps {
   handleCloseModal: () => void;
   handleSaveModal: () => void;
   newRecord: any;
-  setNewRecord: (data: { name: string; }) => void;
+  setNewRecord: (data: { studentId: number, value: string; }) => void;
   records: any[];
   students: any[];
   handleSaveNewRecord: () => void;
+  handleUpdateRecord: (recordId: number, newRecord: RecordData) => void;
   setSelectedIntervalId: (id: number) => void;
   handleViewEditRecords: (id: number) => Promise<void>;
   isNewRecordModalOpen: boolean;
   setIsNewRecordModalOpen: (isOpen: boolean) => void;
   handleRemoveInterval: (id: number) => void;
   handleRemoveRecord: (id: number) => void;
+  tests: TestData[];
+  testId: number;
+
 }
 
 export default function AddViewIntervals({
@@ -33,6 +40,7 @@ export default function AddViewIntervals({
   isModalOpen,
   handleCloseModal,
   handleSaveModal,
+  handleUpdateRecord: handleUpdateRecordGlobal,
   newRecord,
   setNewRecord,
   records,
@@ -43,8 +51,11 @@ export default function AddViewIntervals({
   isNewRecordModalOpen,
   setIsNewRecordModalOpen,
   handleRemoveInterval,
-  handleRemoveRecord
+  handleRemoveRecord,
+  tests,
+  testId,
 }: AddViewIntervalsProps) {
+  const [isViewEditRecordsModalOpen, setIsViewEditRecordsModalOpen] = React.useState(false);
 
   const handleAddNewRecord = (id: number) => {
     setIsNewRecordModalOpen(true);
@@ -55,6 +66,75 @@ export default function AddViewIntervals({
     handleViewEditRecords(id);
     // Add your edit logic here if needed
   };
+  const { baremType = 0, barem = translations.none } = tests.find((test) => test.id === testId) || {};
+
+  const handleUpdateRecord = (recordId: number, newRecord: RecordData) => {
+    // Add your update logic here if needed
+    handleUpdateRecordGlobal(recordId, newRecord);
+    setIsViewEditRecordsModalOpen(false);
+  };
+
+  const onValueChange = (value: string | React.ChangeEvent<HTMLInputElement>) => {
+    if (typeof value === 'string') {
+      setNewRecord(prev => ({ ...prev, value }));
+    } else {
+      setNewRecord(prev => ({ ...prev, value: value.target.value }));
+    }
+  };
+
+  const inputBasedOnBaremType = (baremType: number) => {
+    switch (baremType) {
+      case 1:
+        return (
+          <>
+            <Label className="mb-5" htmlFor="docName">{translations.enterNumberOfMetres}</Label>
+            <Input
+              id="meters"
+              type="number"
+              placeholder={translations.enterNumberOfMetresPlaceholder}
+              value={newRecord.value || ''}
+              onChange={onValueChange}
+            />
+          </>
+        );
+      case 2:
+        return (
+          <>
+            <Label className="mb-5" htmlFor="docName">{translations.enterNumberOfCentimeters}</Label>
+            <Input
+              id="centimeters"
+              type="number"
+              placeholder={translations.eneterNumberOfCentimetersPlaceholder}
+              value={newRecord.value || ''}
+              onChange={onValueChange}
+            />
+          </>);
+      case 3:
+        return (
+          <TimePicker
+            label={translations.time}
+            id="startTime"
+            value={newRecord.value}
+            onChange={onValueChange}
+          />
+
+        );
+      case 4:
+        return (
+          <>
+            <Label className="mb-5" htmlFor="docName">{translations.enterNumber}</Label><Input
+              id="number"
+              type="number"
+              placeholder={translations.enterNumberPlaceholder}
+              value={newRecord.value}
+              onChange={onValueChange}
+            />
+          </>);
+      default:
+        return (null);
+    }
+  };
+
   return (
     <GenericModal
       isOpen={isModalOpen}
@@ -76,26 +156,27 @@ export default function AddViewIntervals({
               <TableRow>
                 <TableHead>{translations.intervalName}</TableHead>
                 <TableHead>{translations.viewOrEdit}</TableHead>
-                <TableHead>{translations.remove}</TableHead>
+                <TableHead>{translations.removeInterval}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {intervals.map((interval) => (
+              {intervals.map((interval, index) => (
                 <TableRow key={interval.id}>
-                  <TableCell>{translations.inter} {interval.id}</TableCell>
+                  <TableCell>{translations.inter} {index + 1}</TableCell>
                   <TableCell>
                     {/* View/Edit Dialog */}
-                    <SimpleDialog title={`${translations.inter} - ${interval.id}`} description={translations.viewOrEdit} triggerButtonTitle={translations.viewOrEdit} onOpen={() => handleViewOrEditRecord(interval.id)} id={interval.id}
+                    <SimpleDialog title={`${translations.inter} - ${index + 1}`} description={translations.viewOrEdit} triggerButtonTitle={translations.viewOrEdit} onOpen={() => handleViewOrEditRecord(interval.id)} id={interval.id}
                     >
                       <Table>
                         <TableHeader>
                           <TableRow>
                             <TableHead>{translations.studentId}</TableHead>
-                            <TableHead>{translations.startTime}</TableHead>
-                            <TableHead>{translations.finalTime}</TableHead>
+                            <TableHead>{translations.result}</TableHead>
+                            <TableHead>{translations.barem}</TableHead>
                             <TableHead>{translations.average}</TableHead>
-                            <TableHead>{translations.action}</TableHead>
-                            <TableHead>{translations.remove}</TableHead>
+                            {/* // TODO -- fix this to be real value/ */}
+                            <TableHead>{translations.edit}</TableHead>
+                            <TableHead>{translations.removeRecord}</TableHead>
                           </TableRow>
                         </TableHeader>
                         <TableBody>
@@ -103,19 +184,32 @@ export default function AddViewIntervals({
                             records.map((int: any) => (
                               <TableRow key={int.id}>
                                 <TableCell>{int.id}</TableCell>
-                                <TableCell>{int.startTime}</TableCell>
-                                <TableCell>{int.endTime}</TableCell>
-                                {/* TODO: Fix this math calculation */}
+                                {/* //TODO - fix this to be ID of the stundet not DB Id */}
+                                <TableCell>{int.value}</TableCell>
+                                <TableCell>{barem}</TableCell>
+                                {/* TODO: Fix this math calculation and average it should be calculate based on barem */}
                                 <TableCell>
-                                  {int.startTime && int.endTime
-                                    ? parseInt(int.startTime) / parseInt(int.endTime)
-                                    : '-'}
+                                  avearge
                                 </TableCell>
                                 <TableCell>
-                                  {/* //TODO - fix this as not having anything to edit */}
-                                  <ViewEditDialog title={translations.edit} description={translations.editRecord} onOpen={() => handleViewOrEditRecord(interval.id)} triggerButtonTitle={translations.edit} onSave={handleSaveNewRecord} id={int.id} cancelText={translations.cancel} confirmText={translations.update}>
-                                    <span>EDIT</span>
-                                  </ViewEditDialog>
+                                  <Button
+                                    variant="outline"
+                                    size="sm"
+                                    onClick={() => {
+                                      setNewRecord(int);
+                                      setIsViewEditRecordsModalOpen(true);
+                                    }}
+                                  >
+                                    <Users className="h-4 w-4 mr-2" />
+                                    {translations.edit}
+                                  </Button>
+                                  {/* //TODO - fix this to be a specific component render based on barem type */}
+                                  <AddViewRecord isModalOpen={isViewEditRecordsModalOpen}
+                                    modalTitle={translations.editRecord} modalDescription={translations.editRecordDescription}
+                                    handleCloseModal={() => setIsViewEditRecordsModalOpen(false)} handleSaveModal={handleUpdateRecord} students={students} newRecord={newRecord} setNewRecord={setNewRecord}
+                                  >
+                                    {inputBasedOnBaremType(baremType)}
+                                  </AddViewRecord>
                                 </TableCell>
                                 <TableCell>
                                   {/* Record-level Remove Dialog */}
@@ -123,6 +217,7 @@ export default function AddViewIntervals({
                                     description={translations.confirmRemoveRecord} confirmText={translations.removeRecord}
                                     cancelText={translations.cancel}
                                     onRemove={handleRemoveRecord}
+                                    removeMessage={translations.removeRecord}
                                     id={int.id} />
                                 </TableCell>
                               </TableRow>
@@ -153,6 +248,7 @@ export default function AddViewIntervals({
                       confirmText={translations.removeInterval}
                       cancelText={translations.cancel}
                       onRemove={handleRemoveInterval}
+                      removeMessage={translations.removeInterval}
                       id={interval.id} />
                   </TableCell>
                 </TableRow>
@@ -166,14 +262,19 @@ export default function AddViewIntervals({
           </Button>
         </div>
       </div>
-      <AddNewRecord
+      <AddViewRecord
+        modalTitle={translations.addNewRecord}
+        modalDescription={translations.addNewRecordDescription}
         isModalOpen={isNewRecordModalOpen}
         handleCloseModal={() => setIsNewRecordModalOpen(false)}
         handleSaveModal={handleSaveNewRecord}
         students={students}
         newRecord={newRecord}
         setNewRecord={setNewRecord}
-      />
+      >
+        {inputBasedOnBaremType(baremType)}
+      </AddViewRecord>
+
     </GenericModal>
   );
-}
+};

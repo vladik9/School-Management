@@ -1,5 +1,6 @@
 
 export const urlEnum = {
+  users: '/api/users',
   login: '/api/schools',
   school: '/api/schools',
   year: '/api/years',

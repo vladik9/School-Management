@@ -1,0 +1,32 @@
+Sequelize Migrations
+https://sequelize.org/docs/v6/other-topics/migrations/
+
+
+
+
+1. Alergare de viteză-30 m (secunde)
+2. Alergare de durată-3 min. (metri)
+3. Ridicări de trunchi-30 sec. (număr ridicări)
+4. Săritura în lungime de pe loc ( centimetri)
+5. Aruncarea mingii de oină (metri)
+6. Structură simplă din jocul de minihandbal (secunde)
+7. Mobilitate (centimetri)
+8. Echilibru (secunde)
+9. Atingerea plăcilor (secunde)?
+
+
+// metri  1
+// centimetri  2
+// secunde  3
+// numar  4
+
+
+
+Legenda ID
+
+b1A4
+
+b/f - sex
+1 - nr.de ordine in catalog
+A/B - clasa experiment/control
+3/4 - clasa

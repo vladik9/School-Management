@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import translations from "@/lib/translations";
-import { ClassData } from "@/types/types";
+import { ClassData, StudentData } from "@/types/types";
 import RemoveDialog from '../generic/remove-dialog';
 import ViewEditDialog from '../generic/view-edit-dialog';
 import PerformanceAccordion from './performanceAccordion';
@@ -26,8 +26,6 @@ interface ClassAccordionProps {
   handleUploadDocument: () => void;
   handleRemoveDocument: (documentId: number) => void;
   handleDownloadDocument: (documentId: number) => void;
-
-
 }
 
 export default function ClassAccordion({
@@ -47,7 +45,7 @@ export default function ClassAccordion({
 
 }: ClassAccordionProps) {
   return (
-    <div style={{ padding: '40px', borderRadius: '10px', marginTop: '20px', border: '0.5px solid lightgray' }}>
+    <Card style={{ padding: '40px', borderRadius: '10px', marginTop: '20px' }}>
       {classes.length === 0 ? (
         <div className="text-center">
           <p>{translations.noClassesAdded}</p>
@@ -77,14 +75,14 @@ export default function ClassAccordion({
                             <Button
                               variant="outline"
                               className="max-w-100"
+                              disabled={school_class.students.length === 0}
                               onClick={() => handleAddViewIntervals(testItem.id)}
                             >
                               {translations.viewAddIntervals}
                             </Button>
                             {/* //NOTE -Test-level Remove Button and Dialog  */}
-                            <RemoveDialog title={translations.removeTest} description={translations.confirmRemoveTest} confirmText={translations.removeTest} cancelText={translations.cancel} onRemove={() => handleRemoveTest(testItem.id)} id={testItem.id} />
+                            <RemoveDialog title={translations.removeTest} description={translations.confirmRemoveTest} confirmText={translations.removeTest} cancelText={translations.cancel} onRemove={() => handleRemoveTest(testItem.id)} id={testItem.id} removeMessage={translations.removeTest} />
                           </div>
-
                         </CardContent>
                       </Card>
                     ))
@@ -106,14 +104,14 @@ export default function ClassAccordion({
                   </div>
                   {/* //NOTE -Class-level Remove Button and Dialog  */}
                   <div style={{ display: 'flex', alignItems: 'center' }}>
-                    <RemoveDialog title={translations.removeClass} description={translations.confirmRemoveClass} confirmText={translations.removeSchool} cancelText={translations.cancel} onRemove={() => handleRemoveClass(school_class.id)} id={school_class.id} />
+                    <RemoveDialog title={translations.removeClass} description={translations.confirmRemoveClass} confirmText={translations.removeSchool} cancelText={translations.cancel} onRemove={() => handleRemoveClass(school_class.id)} id={school_class.id} removeMessage={translations.removeClass} />
                   </div>
                 </div>
 
                 {school_class.students.length === 0 ? (
-                  <div style={{ marginTop: '20px', textAlign: 'center' }}>{translations.noStudentsAdded}</div>
+                  <div style={{ marginTop: '20px', textAlign: 'center', padding: '20px' }}>{translations.noStudentsAdded}</div>
                 ) : (
-                  <div style={{ marginTop: '30px' }}>
+                  <Card style={{ margin: '30px 0', padding: '20px' }}>
                     <div style={{ marginBottom: '10px', textAlign: 'center', fontSize: '18px', fontWeight: 'bold' }}>{translations.studentTableList} - {school_class.name}</div>
                     <Table style={{ marginTop: '20px' }}>
                       <TableHeader>
@@ -121,7 +119,7 @@ export default function ClassAccordion({
                           <TableHead>{translations.studentId}</TableHead>
                           <TableHead>{translations.name}</TableHead>
                           <TableHead>{translations.viewOrEdit}</TableHead>
-                          <TableHead>{translations.remove}</TableHead>
+                          <TableHead>{translations.removeStudent}</TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
@@ -138,7 +136,6 @@ export default function ClassAccordion({
                                 cancelText={translations.cancel}
                                 confirmText={translations.update}
                                 onSave={handleUpdateStudent}
-
                               >
                                 {/* TODO- fix this to be a table to update students */}
                                 <Table>
@@ -157,26 +154,28 @@ export default function ClassAccordion({
                             </TableCell>
                             <TableCell>
                               {/* //NOTE - Student-level Remove Dialog */}
-                              <RemoveDialog title={translations.removeStudent} description={translations.confirmRemoveStudent} confirmText={translations.removeStudent} cancelText={translations.cancel} onRemove={() => handleRemoveStudent(student.id)} id={school_class.id} />
+                              <RemoveDialog title={translations.removeStudent} description={translations.confirmRemoveStudent} confirmText={translations.removeStudent} cancelText={translations.cancel} onRemove={() => handleRemoveStudent(student.id)} id={school_class.id}
+                                removeMessage={translations.removeStudent} />
                             </TableCell>
                           </TableRow>
                         ))}
                       </TableBody>
                     </Table>
-                  </div>
+                  </Card>
                 )}
                 <PerformanceAccordion
-                  performances={classes.performances || []} />
+                  performances={school_class.performances || []} />
                 <DocumentAccordion
-                  documents={classes.documents || []}
+                  documents={school_class.documents || []}
                   handleUploadDocument={handleUploadDocument}
                   handleRemoveDocument={handleRemoveDocument}
-                  handleDownloadDocument={handleDownloadDocument} />
+                  handleDownloadDocument={handleDownloadDocument}
+                  className={school_class.name} />
               </AccordionContent>
             </AccordionItem>
           ))}
 
         </Accordion>)}
-    </div>
+    </Card>
   );
 }

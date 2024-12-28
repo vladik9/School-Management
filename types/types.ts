@@ -13,6 +13,7 @@ type IntervalData = {
 type TestData = {
   id: number;
   name: string;
+  baremType: string;
   barem: string;
   intervals: IntervalData[];
 };
@@ -47,7 +48,7 @@ type PerformanceData = {
 type DocumentData = {
   id: number;
   filePath: string;
-  fileName: string;
+  name: string;
 };
 
 type SchoolData = {
@@ -57,8 +58,7 @@ type SchoolData = {
 type RecordData = {
   id: number;
   studentId: number;
-  startTime: Date;
-  endTime: Date;
+  value: Date | string | number;
   intervalId: number;
 }
  type FetchStatuses = "default" | "success" | "error" | "loading";

@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { login } from '@/utils/auth';
+import { login } from '@/controllers/auth';
 import translations from '@/lib/translations';
 
 export default function LoginPage() {
@@ -22,11 +22,12 @@ export default function LoginPage() {
     setError('');
     try {
       const response = await login(email, password);
+      console.log(response);
       if (response) {
         router.push('/dashboard');
       }
     } catch (error) {
-      setError('Invalid email or password');
+      setError(translations.loginError);
     }
   };
 
@@ -71,7 +72,7 @@ export default function LoginPage() {
                   size="icon"
                   className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
                   onClick={togglePasswordVisibility}
-                  aria-label={showPassword ? "Hide password" : "Show password"}
+                  aria-label={showPassword ? `${translations.hidePassword}` : `${translations.showPassword}`}
                 >
                   {showPassword ? (
                     <EyeOff className="h-4 w-4 text-gray-500" />

@@ -9,11 +9,7 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      startTime: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
-      endTime: {
+      value: {
         type: Sequelize.STRING,
         allowNull: false,
       },

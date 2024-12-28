@@ -12,6 +12,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { baremTypes } from '@/utils/dataEnums';
+import TimePicker from '../ui/time-picker';
 
 interface AddTestProps {
   isModalOpen: boolean;
@@ -47,12 +48,72 @@ export default function AddTest({
     setNewRecord((prev) => ({ ...prev, baremType: parseInt(value, 10) }));
   };
 
-  // Update barem when Input changes:
-  const handleBaremChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const parsedValue = parseInt(e.target.value, 10) || 0;
-    setNewRecord((prev) => ({ ...prev, barem: parsedValue }));
+  const handleBaremChange = (value: string | React.ChangeEvent<HTMLInputElement>) => {
+    if (typeof value === 'string') {
+      // Direct string value (e.g., from TimePicker)
+      setNewRecord((prev) => ({ ...prev, barem: value }));
+    } else {
+      // Event target value (e.g., from Input)
+      setNewRecord((prev) => ({ ...prev, barem: value.target.value }));
+    }
   };
 
+  const inputBasedOnBaremType = (baremType: number) => {
+    switch (baremType) {
+      case 1:
+        return (
+          <>
+            <Label className="mb-5" htmlFor="meters">{translations.enterBaremForMetersMeasurement}</Label>
+            <Input
+              id="meters"
+              type="number"
+              placeholder={translations.enterNumberOfMetresPlaceholder}
+              value={newRecord.barem || ''}
+              onChange={handleBaremChange}
+            />
+          </>
+        );
+      case 2:
+        return (
+          <>
+            <Label className="mb-5" htmlFor="centimeters">{translations.enterBaremForCentimetersMeasurement}</Label>
+            <Input
+              id="centimeters"
+              type="number"
+              placeholder={translations.eneterNumberOfCentimetersPlaceholder}
+              value={newRecord.barem || ''}
+              onChange={handleBaremChange}
+            />
+          </>
+        );
+      case 3:
+        return (
+          <TimePicker
+            label={translations.enterBaremForTimeMeasurement}
+            id="startTime"
+            value={newRecord.barem} // Ensure TimePicker takes this as input
+            onChange={(timeValue: string) =>
+              handleBaremChange(timeValue) // Pass timeValue directly
+            }
+          />
+        );
+      case 4:
+        return (
+          <>
+            <Label className="mb-5" htmlFor="number">{translations.enterBaremForNumberMeasurement}</Label>
+            <Input
+              id="number"
+              type="number"
+              placeholder={translations.enterNumberPlaceholder}
+              value={newRecord.barem || ''}
+              onChange={handleBaremChange}
+            />
+          </>
+        );
+      default:
+        return null;
+    }
+  };
   return (
     <GenericModal
       isOpen={isModalOpen}
@@ -98,13 +159,7 @@ export default function AddTest({
 
         {/* Barem Value */}
         <div>
-          <Label htmlFor="barem">{translations.barem}</Label>
-          <Input
-            id="barem"
-            placeholder={translations.barem}
-            value={newRecord.barem || ''}
-            onChange={handleBaremChange}
-          />
+          {inputBasedOnBaremType(newRecord.baremType)}
         </div>
       </div>
     </GenericModal>

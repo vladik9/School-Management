@@ -1,5 +1,4 @@
 const translations = {
-
   //Auth
   login: "Autentificare",
   logout: "Deconectare",
@@ -14,7 +13,7 @@ const translations = {
   logoutSuccess: "Deconectare reușită",
   logoutError: "Eroare la deconectare",
   hidePassword: "Ascunde parola",
-  showPassword: "Afișarea parola",
+  showPassword: "Afișează parola",
 
   //Dashboard
   dashboard: "Dashboard",
@@ -97,14 +96,6 @@ const translations = {
   deleteATest: "Șterge testul",
   removeTest: "Șterge test",
   confirmRemoveTest: "Sigur dorești să ștergi testul?",
-  chooseBaremType: "Alege tipul de barem",
-  selectMeasurement: "Selectează măsurătoarea",
-  selectedMeasurement: "Măsurătoarea selectată",
-  meters: "Metri",
-  centimeters: "Centimetri",
-  seconds: "Secunde",
-  minutes: "Minute",
-  subUnits: "Subunități",
 
   //Interval
   viewIntervals: "Vizualizare intervale",
@@ -115,11 +106,13 @@ const translations = {
   intervalName: "Nume interval",
   startTime: "Timp de start",
   finalTime: "Timp final",
+  timp: "Timp",
   points: "Puncte",
   average: "Medie",
   noIntervals: "Nu există intervale adăugate",
   removeInterval: "Șterge interval",
   confirmRemoveInterval: "Sigur dorești să ștergi intervalul?",
+  result: "Rezultat",
 
   //Records
   addNewRecord: "Adaugă o notă nouă",
@@ -131,9 +124,24 @@ const translations = {
   date: "Data",
   record: "Notă",
   editRecord: "Editare înregistrare",
-  editRecordDescription: "Editare înregistrare - administreă inregistrarea",
+  editRecordDescription: "Editare înregistrare - administrează înregistrarea",
   removeRecord: "Șterge înregistrare",
   confirmRemoveRecord: "Sigur dorești să ștergi înregistrarea?",
+  chooseBaremType: "Alege tipul de barem",
+  selectMeasurement: "Selectează măsurătoarea",
+  selectedMeasurement: "Măsurătoarea selectată",
+  meters: "Metri",
+  centimeters: "Centimetri",
+  enterNumberOfMetres: "Introduceți numărul de metri",
+  enterNumberOfMetresPlaceholder: "Numărul de metri",
+  enterNumberOfCentimeters: "Introduceți numărul de centimetri",
+  eneterNumberOfCentimetersPlaceholder: "Numărul de centimetri",
+  enterNumber: "Introduceți numărul",
+  enterNumberPlaceholder: "Introduceți numărul",
+  enterBaremForMetersMeasurement: "Introduceți baremul pentru măsurătoare în metri",
+  enterBaremForCentimetersMeasurement: "Introduceți baremul pentru măsurătoare în centimetri",
+  enterBaremForTimeMeasurement: "Introduceți baremul pentru măsurătoare în timp",
+  enterBaremForNumberMeasurement: "Introduceți baremul pentru măsurătoare în număr",
 
   //TimePicker
   selectTime: "Selectează timp",
@@ -141,6 +149,7 @@ const translations = {
   noTimeSelected: "Niciun timp selectat",
   seconds: "Secunde",
   minutes: "Minute",
+  time: "Timp",
 
   //Performance
   noPerformance: "Nu sunt performanțe adăugate",
@@ -166,6 +175,7 @@ const translations = {
   count: "Număr",
   none: "Niciunul",
   welcome: "Bine ai venit:",
+  value: "Valoare",
 
   // 404  - Not Found
   pageNotFound: "Pagina nu a fost găsită",
@@ -189,7 +199,6 @@ const translations = {
   dragDropFileHere: "Trage și dă click aici pentru a încărca fișierul",
   allowedFileFormats: "Formatele de fișier permise e.g. PDF, DOC, JPG, PNG...",
   fileNameUploaded: "Numele fișierului încărcat",
-
 };
 
 export default translations;

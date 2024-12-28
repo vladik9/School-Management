@@ -33,9 +33,9 @@ const getRecord = async (req: NextApiRequest, res: NextApiResponse) => {
 // Handle POST (create record)
 const createRecord = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    const { startTime, endTime, studentId,  intervalId } = req.body;
+    const { value, studentId,  intervalId } = req.body;
 
-    const newRecord = await Record.create({startTime, endTime, studentId, intervalId });
+    const newRecord = await Record.create({value, studentId, intervalId });
     res.status(201).json(newRecord);
   } catch (error) {
     res.status(500).json({ message: 'Error creating record', error });
@@ -45,13 +45,13 @@ const createRecord = async (req: NextApiRequest, res: NextApiResponse) => {
 // Handle PUT (update record)
 const updateRecord = async (req: NextApiRequest, res: NextApiResponse) => {
   const { id } = req.query;
-  const { startTime, endTime, studentId,  intervalId } = req.body;
+  const { value,  studentId,  intervalId } = req.body;
 
   try {
     const record = await Record.findByPk(id as string);
     if (!record) return res.status(404).json({ message: 'Record not found' });
 
-    await record.update({ startTime, endTime, studentId, intervalId });
+    await record.update({ value, studentId, intervalId });
     res.status(200).json({ message: 'Record updated' });
   } catch (error) {
     res.status(500).json({ message: 'Error updating record', error });

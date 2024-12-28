@@ -1,7 +1,6 @@
 'use client';
 import React from 'react';
 import GenericModal from '@/components/generic/generic-modal';
-import TimePicker from '@/components/ui/time-picker';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import translations from '@/lib/translations';
@@ -15,7 +14,8 @@ interface AddViewRecordProps {
   handleSaveModal: (recordId: number, newRecord: RecordData) => void;
   students: StudentData[];
   newRecord: RecordData;
-  setNewRecord: (data: { studentId: number, startTime: string, endTime: string; }) => void;
+  setNewRecord: (data: { studentId: number, value: string; }) => void;
+  children?: React.ReactNode;
 }
 
 export default function AddViewRecord({
@@ -27,6 +27,7 @@ export default function AddViewRecord({
   students,
   newRecord,
   setNewRecord,
+  children,
 }: AddViewRecordProps) {
   const onStudentSelect = (studentId: string) => {
     setNewRecord(prev => ({
@@ -35,16 +36,8 @@ export default function AddViewRecord({
     }));
   };
 
-  const onStartTimeChange = (startTime: string) => {
-    setNewRecord(prev => ({ ...prev, startTime }));
-  };
-
-  const onFinalTimeChange = (endTime: string) => {
-    setNewRecord(prev => ({ ...prev, endTime }));
-  };
-
   const onSave = () => {
-    if (newRecord.studentId && newRecord.startTime && newRecord.endTime) {
+    if (newRecord.studentId && newRecord.value) {
       handleSaveModal(newRecord.id, newRecord,);
     } else {
       // Handle validation error
@@ -53,8 +46,8 @@ export default function AddViewRecord({
   };
 
   const isFormValid = (): boolean => {
-    const { studentId, startTime, endTime } = newRecord;
-    return !!(studentId && startTime && endTime);
+    const { studentId, value } = newRecord;
+    return !!(studentId && value);
   };
 
   return (
@@ -83,20 +76,7 @@ export default function AddViewRecord({
           </Select>
         </div>
         <div>
-          <TimePicker
-            label={translations.startTime}
-            id="startTime"
-            value={newRecord.startTime}
-            onChange={onStartTimeChange}
-          />
-        </div>
-        <div>
-          <TimePicker
-            label={translations.finalTime}
-            id="endTime"
-            value={newRecord.endTime}
-            onChange={onFinalTimeChange}
-          />
+          {children}
         </div>
       </div>
     </GenericModal>

@@ -58,8 +58,7 @@ type SchoolData = {
 type RecordData = {
   id: number;
   studentId: number;
-  startTime: Date;
-  endTime: Date;
+  value: Date | string | number;
   intervalId: number;
 }
  type FetchStatuses = "default" | "success" | "error" | "loading";

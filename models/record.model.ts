@@ -5,8 +5,7 @@ import Student from './student.model';
 
 interface RecordAttributes {
   id: number;
-  startTime: string;
-  endTime: string;
+  value: string;
   intervalId: number;
   studentId: number;
 }
@@ -15,8 +14,7 @@ interface IntervalCreationAttributes extends Optional<RecordAttributes, 'id'> {}
 
 class Record extends Model<RecordAttributes, IntervalCreationAttributes> implements RecordAttributes {
   public id!: number;
-  public startTime!: string;
-  public endTime!: string;
+  public value!: string;
   public intervalId!: number;
   public studentId!: number;
 }
@@ -28,11 +26,7 @@ Record.init(
       autoIncrement: true,
       primaryKey: true,
     },
-    startTime: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    endTime: {
+    value: {
       type: DataTypes.STRING,
       allowNull: false,
     },

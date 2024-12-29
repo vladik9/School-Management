@@ -540,6 +540,7 @@ export default function SchoolDashboard() {
             onRemoveSchool={handleRemoveSchool}
           />
 
+
           {/* Year Selection (only show if school selected) */}
           {selectedSchoolId && (
             <YearSelector

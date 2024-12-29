@@ -16,25 +16,27 @@ interface SchoolSelectorProps {
 export default function SchoolSelector({ schools, onSelectSchool, onAddSchool, onRemoveSchool }: SchoolSelectorProps) {
   return (
     <div>
-      <Label htmlFor="school-select">{translations.chooseSchool}</Label>
-      <Select onValueChange={(value) => onSelectSchool(parseInt(value))}>
-        <SelectTrigger id="school-select">
-          <SelectValue placeholder={translations.chooseSchool} />
-        </SelectTrigger>
-        <SelectContent>
-          {schools.length > 0 ? (
-            schools.map((school) => (
-              <SelectItem key={school.id} value={school.id.toString()}>
-                {school.name}
+      {schools.length > 0 && (<>
+        <Label htmlFor="school-select">{translations.chooseSchool}</Label>
+        <Select onValueChange={(value) => onSelectSchool(parseInt(value))}>
+          <SelectTrigger id="school-select">
+            <SelectValue placeholder={translations.chooseSchool} />
+          </SelectTrigger>
+          <SelectContent>
+            {schools.length > 0 ? (
+              schools.map((school) => (
+                <SelectItem key={school.id} value={school.id.toString()}>
+                  {school.name}
+                </SelectItem>
+              ))
+            ) : (
+              <SelectItem disabled value="no-options">
+                {translations.noSchoolsAvailable}
               </SelectItem>
-            ))
-          ) : (
-            <SelectItem disabled value="no-options">
-              {translations.noSchoolsAvailable}
-            </SelectItem>
-          )}
-        </SelectContent>
-      </Select>
+            )}
+          </SelectContent>
+        </Select></>)}
+
       <div style={{ marginTop: '10px', display: 'flex', justifyContent: 'space-between' }}>
         <Button variant="outline" onClick={onAddSchool}>{translations.addSchool}</Button>
         {schools.length > 0 && <RemoveDialog title={translations.removeSchool} description=

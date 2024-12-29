@@ -86,6 +86,7 @@ const translations = {
   studentTableList: "Tabel Elevi atribuiți clasei",
   removeStudent: "Șterge elev",
   confirmRemoveStudent: "Sigur dorești să ștergi elevul?",
+  studentsList: "Elevi atribuiți clasei",
 
   //Test
   tasks: "Teme",

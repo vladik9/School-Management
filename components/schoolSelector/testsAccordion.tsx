@@ -1,59 +1,62 @@
 import React, { useState } from 'react';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { PerformanceData, StudentData, TestData } from "@/types/types";
+import { StudentData, TestData } from "@/types/types";
 import translations from "@/lib/translations";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import RemoveDialog from "../generic/remove-dialog";
 import { paginationConstants } from '@/utils/dataEnums';
+import PaginationButtons from '../ui/pagination-buttons';
 
-interface PerformanceAccordionProps {
-  performances: PerformanceData[];
+interface TestsAccordionProps {
+  tests: TestData[];
   students: StudentData[];
-  // handleRemoveTest: (testID: number) => void;
-  // handleAddViewIntervals: (testId: number) => void;
+  handleRemoveTest: (testID: number) => void;
+  handleAddViewIntervals: (testId: number) => void;
   className: string;
 }
 
-const PERFORMANCE_PER_PAGE = paginationConstants.PERFORMANCE_PER_PAGE;
+const TESTS_PER_PAGE = paginationConstants.TESTS_PER_PAGE;
 
-export default function PerformanceAccordion({
-  performances: tests,
+export default function TestAccordion({
+  tests,
   students,
+  handleRemoveTest,
+  handleAddViewIntervals,
   className,
-}: PerformanceAccordionProps) {
-  const [currentPerformancePage, setCurrentPerformancePage] = useState(0);
+}: TestsAccordionProps) {
+  const [currentStudentPage, setCurrentStudentPage] = useState(0);
 
-  const handleNextPerformancePage = () => {
-    setCurrentPerformancePage((prevPage) => prevPage + 1);
+  const handleNextStudentPage = () => {
+    setCurrentStudentPage((prevPage) => prevPage + 1);
   };
 
-  const handlePreviousPerformancePage = () => {
-    setCurrentPerformancePage((prevPage) => Math.max(prevPage - 1, 0));
+  const handlePreviousStudentPage = () => {
+    setCurrentStudentPage((prevPage) => Math.max(prevPage - 1, 0));
   };
 
-  const paginatedPerformances = (studentList: PerformanceData[]) => {
-    const startIndex = currentPerformancePage * PERFORMANCE_PER_PAGE;
-    return studentList.slice(startIndex, startIndex + PERFORMANCE_PER_PAGE);
+  const paginatedStudents = (studentList: TestData[]) => {
+    const startIndex = currentStudentPage * TESTS_PER_PAGE;
+    return studentList.slice(startIndex, startIndex + TESTS_PER_PAGE);
   };
-  // TODO -- complete this functions and logic
+
   return (
     <div style={{ marginTop: '20px' }}>
       {
         tests.length === 0 ? (
           <div style={{ marginTop: '20px', textAlign: 'center', padding: '20px' }}>
-            {translations.noPerformance}
+            {translations.noTestAdded}
           </div>
         ) : (
           <>
             <Card style={{ margin: '30px 0', padding: '20px' }}>
               <Accordion type="single" collapsible>
-                <AccordionItem value="performances">
+                <AccordionItem value="students">
                   <AccordionTrigger>
                     <div className="flex items-center justify-between w-full">
                       <span>
-                        {translations.performancesList} - {className}
+                        {translations.testsList} - {className}
                       </span>
                     </div>
                   </AccordionTrigger>
@@ -69,7 +72,7 @@ export default function PerformanceAccordion({
                         </TableRow>
                       </TableHeader>
                       <TableBody>
-                        {paginatedPerformances(tests).map((test, index) => (
+                        {paginatedStudents(tests).map((test, index) => (
                           <TableRow key={test.id}>
                             <TableCell>{index + 1}</TableCell>
                             <TableCell>{test.name}</TableCell>
@@ -101,29 +104,7 @@ export default function PerformanceAccordion({
                         ))}
                       </TableBody>
                     </Table>
-
-                    <div className="flex justify-between items-center mt-4">
-                      <Button
-                        variant="outline"
-                        onClick={handlePreviousPerformancePage}
-                        disabled={currentPerformancePage === 0}
-                      >
-                        {translations.previous}
-                      </Button>
-                      <span>
-                        {translations.page} {currentPerformancePage + 1} {translations.of}{' '}
-                        {Math.ceil(tests.length / PERFORMANCE_PER_PAGE)}
-                      </span>
-                      {translations.addedTest} {tests.length}
-                      {/* //TODO - fix this it should look better */}
-                      <Button
-                        variant="outline"
-                        onClick={handleNextPerformancePage}
-                        disabled={(currentPerformancePage + 1) * PERFORMANCE_PER_PAGE >= tests.length}
-                      >
-                        {translations.next}
-                      </Button>
-                    </div>
+                    <PaginationButtons itemSize={tests.length} itemsPerPage={TESTS_PER_PAGE} currentPage={currentStudentPage} handlePreviousPage={handlePreviousStudentPage} handleNextPage={handleNextStudentPage} />
                   </AccordionContent>
                 </AccordionItem>
               </Accordion>

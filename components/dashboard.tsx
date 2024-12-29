@@ -516,11 +516,6 @@ export default function SchoolDashboard() {
 
   return (
     <div className="min-h-screen bg-gray-100 p-8">
-      <Card className="max-w-xl mx-auto mb-4" >
-        <CardTitle className="text-2xl font-bold flex items-center justify-center">
-          {translations.welcome}
-        </CardTitle>
-      </Card>
       <Card className="max-w-6xl mx-auto">
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle className="text-2xl font-bold flex items-center">
@@ -539,8 +534,6 @@ export default function SchoolDashboard() {
             onAddSchool={() => setIsSchoolModalOpen(true)}
             onRemoveSchool={handleRemoveSchool}
           />
-
-
           {/* Year Selection (only show if school selected) */}
           {selectedSchoolId && (
             <YearSelector

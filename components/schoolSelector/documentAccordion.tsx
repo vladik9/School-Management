@@ -7,6 +7,8 @@ import { Button } from '../ui/button';
 import RemoveDialog from '../generic/remove-dialog';
 import { Download, Upload } from 'lucide-react';
 import { Card } from '../ui/card';
+import { paginationConstants } from '@/utils/dataEnums';
+import PaginationButtons from '../ui/pagination-buttons';
 
 interface DocumentAccordionProps {
   documents: DocumentData[];
@@ -16,7 +18,7 @@ interface DocumentAccordionProps {
   className?: string;
 }
 
-const DOCUMENTS_PER_PAGE = 5;
+const DOCUMENTS_PER_PAGE = paginationConstants.DOCUMENTS_PER_PAGE;
 
 export default function DocumentAccordion({
   documents,
@@ -99,23 +101,14 @@ export default function DocumentAccordion({
                     ))}
                   </TableBody>
                 </Table>
+
                 <div style={{ marginTop: '10px', display: 'flex', justifyContent: 'space-between' }}>
                   <Button variant="outline" size="sm" onClick={handleUploadDocument}>
                     <Upload className="h-4 w-4 mr-2" />
                     {translations.upload}
                   </Button>
                 </div>
-                <div className="flex justify-between items-center mt-4">
-                  <Button variant="outline" onClick={handlePreviousDocumentPage} disabled={currentDocumentPage === 0}>
-                    {translations.previous}
-                  </Button>
-                  <span>
-                    {translations.page} {currentDocumentPage + 1} {translations.of} {Math.ceil(documents.length / DOCUMENTS_PER_PAGE)}
-                  </span>
-                  <Button variant="outline" onClick={handleNextDocumentPage} disabled={(currentDocumentPage + 1) * DOCUMENTS_PER_PAGE >= documents.length}>
-                    {translations.next}
-                  </Button>
-                </div>
+                <PaginationButtons itemSize={documents.length} itemsPerPage={DOCUMENTS_PER_PAGE} currentPage={currentDocumentPage} handlePreviousPage={handlePreviousDocumentPage} handleNextPage={handleNextDocumentPage} />
               </AccordionContent>
             </AccordionItem>
           </Accordion>

@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import RemoveDialog from "../generic/remove-dialog";
 import ViewEditDialog from "../generic/view-edit-dialog";
+import PaginationButtons from '../ui/pagination-buttons';
 
 interface StudentsAccordionProps {
   /** Array of students for this class */
@@ -129,27 +130,7 @@ export default function StudentsAccordion({
                         ))}
                       </TableBody>
                     </Table>
-
-                    <div className="flex justify-between items-center mt-4">
-                      <Button
-                        variant="outline"
-                        onClick={handlePreviousStudentPage}
-                        disabled={currentStudentPage === 0}
-                      >
-                        {translations.previous}
-                      </Button>
-                      <span>
-                        {translations.page} {currentStudentPage + 1} {translations.of}{' '}
-                        {Math.ceil(students.length / STUDENTS_PER_PAGE)}
-                      </span>
-                      <Button
-                        variant="outline"
-                        onClick={handleNextStudentPage}
-                        disabled={(currentStudentPage + 1) * STUDENTS_PER_PAGE >= students.length}
-                      >
-                        {translations.next}
-                      </Button>
-                    </div>
+                    <PaginationButtons itemSize={students.length} itemsPerPage={STUDENTS_PER_PAGE} currentPage={currentStudentPage} handlePreviousPage={handlePreviousStudentPage} handleNextPage={handleNextStudentPage} />
                   </AccordionContent>
                 </AccordionItem>
               </Accordion>

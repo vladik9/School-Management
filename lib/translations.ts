@@ -90,17 +90,20 @@ const translations = {
 
   //Test
   tasks: "Teme",
+  testId: "Id test",
+  addedTest: "Teste adăugate",
   addTask: "Adaugă temă",
   name: "Nume",
   title: "Titlu",
   addTest: "Adaugă test",
-  testName: "Numele testului",
+  testName: "Nume test",
   noTestAdded: "Nu sunt teste adăugate",
   barem: "Valoare Barem",
   addBarem: "Adaugă barem",
   deleteATest: "Șterge testul",
   removeTest: "Șterge test",
   confirmRemoveTest: "Sigur dorești să ștergi testul?",
+  testsList: "Teste adăugate",
 
   //Interval
   viewIntervals: "Vizualizare intervale",
@@ -161,6 +164,7 @@ const translations = {
   score: "Scor",
   testBarem: "Barem test",
   studentListOfPerformance: "Lista de performanțe a elevilor",
+  performancesList: "Performanțe adăugate",
 
   //Common
   action: "Acțiune",
@@ -186,6 +190,7 @@ const translations = {
   pageNotFound: "Pagina nu a fost găsită",
   pageNotFoundMessage: "Ne pare rău, pagina pe care o căutați nu a fost găsită",
   backToHome: "Înapoi la pagina principală",
+
 
   //Docs
   documentsList: "Lista documentelor",

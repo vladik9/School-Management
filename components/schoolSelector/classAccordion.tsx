@@ -10,6 +10,8 @@ import DocumentAccordion from "./documentAccordion";
 
 /** Import the new StudentsAccordion component */
 import StudentsAccordion from "./studentsAccordion";
+import TestAccordion from './testsAccordion';
+import { paginationConstants } from '@/utils/dataEnums';
 
 interface ClassAccordionProps {
   classes: ClassData[];
@@ -29,8 +31,8 @@ interface ClassAccordionProps {
   handleDownloadDocument: (documentId: number) => void;
 }
 
-const TESTS_PER_PAGE = 3;
-const PERFORMANCES_PER_PAGE = 3;
+const TESTS_PER_PAGE = paginationConstants.TESTS_PER_PAGE;
+const PERFORMANCES_PER_PAGE = paginationConstants.PERFORMANCES_PER_PAGE;
 
 export default function ClassAccordion({
   classes,
@@ -100,79 +102,13 @@ export default function ClassAccordion({
                 </div>
               </AccordionTrigger>
               <AccordionContent>
-                <Card>
-                  <div className="space-y-4 p-3">
-                    {school_class.tests.length > 0 ? (
-                      <>
-                        {/* <TestAccordion tests={school_class.tests} handleRemoveDocument={handleRemoveDocument} handleDownloadDocument={handleDownloadDocument} handleUploadDocument={handleUploadDocument} /> */}
-                        {paginatedTests(school_class.tests).map((testItem) => (
-                          <Card className="space-y-2 space-x-2" key={testItem.id}>
-                            <CardHeader>
-                              <CardTitle className="text-lg">{testItem.name}</CardTitle>
-                            </CardHeader>
-                            <CardContent>
-                              <div
-                                style={{
-                                  marginTop: '10px',
-                                  display: 'flex',
-                                  justifyContent: 'space-between',
-                                }}
-                              >
-                                <Button
-                                  variant="outline"
-                                  className="max-w-100"
-                                  disabled={school_class.students.length === 0}
-                                  onClick={() => handleAddViewIntervals(testItem.id)}
-                                >
-                                  {translations.viewAddIntervals}
-                                </Button>
-
-                                {/* Test-level Remove Button & Dialog */}
-                                <RemoveDialog
-                                  title={translations.removeTest}
-                                  description={translations.confirmRemoveTest}
-                                  confirmText={translations.removeTest}
-                                  cancelText={translations.cancel}
-                                  onRemove={() => handleRemoveTest(testItem.id)}
-                                  id={testItem.id}
-                                  removeMessage={translations.removeTest}
-                                />
-                              </div>
-                            </CardContent>
-                          </Card>
-                        ))}
-
-                        <div className="flex justify-between items-center mt-4">
-                          <Button
-                            variant="outline"
-                            onClick={handlePreviousTestPage}
-                            disabled={currentTestPage === 0}
-                          >
-                            {translations.previous}
-                          </Button>
-                          <span>
-                            {translations.page} {currentTestPage + 1} {translations.of}{' '}
-                            {Math.ceil(school_class.tests.length / TESTS_PER_PAGE)}
-                          </span>
-                          <Button
-                            variant="outline"
-                            onClick={handleNextTestPage}
-                            disabled={
-                              (currentTestPage + 1) * TESTS_PER_PAGE >= school_class.tests.length
-                            }
-                          >
-                            {translations.next}
-                          </Button>
-                        </div>
-                      </>
-                    ) : (
-                      <div className="text-center">
-                        <p>{translations.noTestAdded}</p>
-                      </div>
-                    )}
-                  </div>
-                </Card>
-
+                <TestAccordion
+                  tests={school_class.tests}
+                  students={school_class.students}
+                  handleAddViewIntervals={handleAddViewIntervals}
+                  handleRemoveTest={handleRemoveTest}
+                  className={school_class.name}
+                />
                 {/* Buttons for adding a student or test */}
                 <div
                   style={{ marginTop: '10px', display: 'flex', justifyContent: 'space-between' }}
@@ -203,7 +139,6 @@ export default function ClassAccordion({
                     />
                   </div>
                 </div>
-
                 {/* -- Students Accordion (Extracted into its own component) -- */}
                 <StudentsAccordion
                   students={school_class.students}
@@ -216,32 +151,12 @@ export default function ClassAccordion({
 
                 {/* -- Performances -- */}
                 <PerformanceAccordion
-                  performances={paginatedPerformances(school_class.performances || [])}
+                  performances={school_class.performances}
+                  students={school_class.students}
+                  // handleAddViewIntervals={handleAddViewIntervals}
+                  // handleRemoveTest={handleRemoveTest}
+                  className={school_class.name}
                 />
-                <div className="flex justify-between items-center mt-4">
-                  <Button
-                    variant="outline"
-                    onClick={handlePreviousPerformancePage}
-                    disabled={currentPerformancePage === 0}
-                  >
-                    {translations.previous}
-                  </Button>
-                  <span>
-                    {translations.page} {currentPerformancePage + 1} {translations.of}{' '}
-                    {Math.ceil((school_class.performances || []).length / PERFORMANCES_PER_PAGE)}
-                  </span>
-                  <Button
-                    variant="outline"
-                    onClick={handleNextPerformancePage}
-                    disabled={
-                      (currentPerformancePage + 1) * PERFORMANCES_PER_PAGE >=
-                      (school_class.performances || []).length
-                    }
-                  >
-                    {translations.next}
-                  </Button>
-                </div>
-
                 {/* -- Documents -- */}
                 <DocumentAccordion
                   documents={school_class.documents || []}

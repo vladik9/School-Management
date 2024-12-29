@@ -58,6 +58,10 @@ const translations = {
   noClassesAdded: "Nu sunt clase adăugate",
   removeClass: "Șterge clasa",
   confirmRemoveClass: "Sigur dorești să ștergi o clasă?",
+  previous: "Anterior",
+  next: "Următor",
+  page: "Pagina",
+  of: "din",
 
   //Student
   studentId: "Id elev",

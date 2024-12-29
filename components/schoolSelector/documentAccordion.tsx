@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import translations from "@/lib/translations";
@@ -16,6 +16,8 @@ interface DocumentAccordionProps {
   className?: string;
 }
 
+const DOCUMENTS_PER_PAGE = 5;
+
 export default function DocumentAccordion({
   documents,
   handleRemoveDocument,
@@ -23,6 +25,21 @@ export default function DocumentAccordion({
   handleUploadDocument,
   className = 'document name',
 }: DocumentAccordionProps) {
+  const [currentDocumentPage, setCurrentDocumentPage] = useState(0);
+
+  const handleNextDocumentPage = () => {
+    setCurrentDocumentPage((prevPage) => prevPage + 1);
+  };
+
+  const handlePreviousDocumentPage = () => {
+    setCurrentDocumentPage((prevPage) => Math.max(prevPage - 1, 0));
+  };
+
+  const paginatedDocuments = (documents: DocumentData[]) => {
+    const startIndex = currentDocumentPage * DOCUMENTS_PER_PAGE;
+    return documents.slice(startIndex, startIndex + DOCUMENTS_PER_PAGE);
+  };
+
   return (
     <div style={{ marginTop: '20px' }}>
       {documents.length === 0 ? (
@@ -57,9 +74,9 @@ export default function DocumentAccordion({
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {documents.map((document, index: number) => (
+                    {paginatedDocuments(documents).map((document, index: number) => (
                       <TableRow key={document.id}>
-                        <TableCell>{index + 1}</TableCell>
+                        <TableCell>{index + 1 + currentDocumentPage * DOCUMENTS_PER_PAGE}</TableCell>
                         <TableCell>{document.name}</TableCell>
                         <TableCell>
                           <Button variant="outline" size="sm" onClick={() => handleDownloadDocument(document.id)}>
@@ -86,6 +103,17 @@ export default function DocumentAccordion({
                   <Button variant="outline" size="sm" onClick={handleUploadDocument}>
                     <Upload className="h-4 w-4 mr-2" />
                     {translations.upload}
+                  </Button>
+                </div>
+                <div className="flex justify-between items-center mt-4">
+                  <Button variant="outline" onClick={handlePreviousDocumentPage} disabled={currentDocumentPage === 0}>
+                    {translations.previous}
+                  </Button>
+                  <span>
+                    {translations.page} {currentDocumentPage + 1} {translations.of} {Math.ceil(documents.length / DOCUMENTS_PER_PAGE)}
+                  </span>
+                  <Button variant="outline" onClick={handleNextDocumentPage} disabled={(currentDocumentPage + 1) * DOCUMENTS_PER_PAGE >= documents.length}>
+                    {translations.next}
                   </Button>
                 </div>
               </AccordionContent>

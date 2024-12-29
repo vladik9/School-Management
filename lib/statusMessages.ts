@@ -1,5 +1,8 @@
 import {FetchStatuses} from '@/types/types';
 const statusMessages = {
+  //Auth
+  errorSigningOut: 'Eroare la deconectare',
+
   // Schools
   fetchingSchools: 'Încărcarea școlilor...',
   schoolsFetched: 'Școlile au fost încărcate cu succes',

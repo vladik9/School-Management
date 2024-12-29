@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import Year from '../../../models/year.model';
+import checkToken from '../middleware/index';
 
 // Handle GET (read all years)
 // API Route to get years by schoolId
@@ -27,8 +28,6 @@ const getYear = async (req: NextApiRequest, res: NextApiResponse) => {
     res.status(500).json({ message: 'Error fetching years', error });
   }
 };
-
-
 
 // Handle POST (create school)
 const createYear = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -74,6 +73,7 @@ const deleteYear = async (req: NextApiRequest, res: NextApiResponse) => {
 };
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  checkToken(req, res, async () => {
   switch (req.method) {
     case 'GET':
       return getYear(req, res);
@@ -87,4 +87,5 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       res.setHeader('Allow', ['POST','GET','PUT', 'DELETE']);
       res.status(405).end(`Method ${req.method} Not Allowed`);
   }
+});
 }

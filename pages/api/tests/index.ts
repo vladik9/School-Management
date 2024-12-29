@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import Test from '@/models/test.model';
+import checkToken from '../middleware/index';
 
 // Handle GET (read all schools)
 // API Route to get years by classId
@@ -72,6 +73,7 @@ const deleteTest = async (req: NextApiRequest, res: NextApiResponse) => {
 };
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  checkToken(req, res, async () => {
   switch (req.method) {
     case 'GET':
       return getTest(req, res);
@@ -85,4 +87,5 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       res.setHeader('Allow', ['POST','GET','PUT', 'DELETE']);
       res.status(405).end(`Method ${req.method} Not Allowed`);
   }
+  });
 }

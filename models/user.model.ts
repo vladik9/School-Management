@@ -6,6 +6,7 @@ interface UserAttributes {
   id: number;
   email: string;
   password_hash: string;
+  auth_token: string;
 }
 
 interface UserCreationAttributes extends Optional<UserAttributes, 'id'> {}
@@ -14,6 +15,7 @@ class User extends Model<UserAttributes, UserCreationAttributes> implements User
   public id!: number;
   public email!: string;
   public password_hash!: string;
+  public auth_token!: string;
 
   // Method to hash the password before saving the user
   static async hashPassword(password: string): Promise<string> {
@@ -42,6 +44,10 @@ User.init(
     password_hash: {
       type: DataTypes.STRING,
       allowNull: false,
+    },
+    auth_token: {
+      type: DataTypes.STRING,
+      allowNull: true,
     },
   },
   {

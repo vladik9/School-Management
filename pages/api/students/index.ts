@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import Student from '@/models/student.model';
+import checkToken from '../middleware';
 
 // Handle GET (read all schools)
 
@@ -79,6 +80,7 @@ const deleteStudent = async (req: NextApiRequest, res: NextApiResponse) => {
 
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  checkToken(req, res, async () => {
   switch (req.method) {
     case 'GET':
       return getStudents(req, res);
@@ -92,4 +94,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       res.setHeader('Allow', ['POST','GET','PUT', 'DELETE']);
       res.status(405).end(`Method ${req.method} Not Allowed`);
   }
+  });
+
 }

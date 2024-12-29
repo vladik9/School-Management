@@ -3,6 +3,7 @@ import { saveFile, parseForm } from '@/lib/fileSaving';
 import Document from '@/models/document.model';
 import fs from 'fs';
 import path from 'path';
+import checkToken from '../middleware';
 export const config = {
   api: {
     bodyParser: false,
@@ -69,6 +70,7 @@ const deleteDocument = async (req: NextApiRequest, res: NextApiResponse) => {
 };
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  checkToken(req, res, async () => {
   switch (req.method) {
     case 'GET':
       return getDocument(req, res);
@@ -80,4 +82,5 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       res.setHeader('Allow', ['POST', 'GET', 'DELETE']);
       res.status(405).end(`Method ${req.method} Not Allowed`);
   }
+});
 }

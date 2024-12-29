@@ -121,8 +121,8 @@ export default function SchoolDashboard() {
   };
 
   // Logout Handler
-  const handleLogout = () => {
-    logout();
+  const handleLogout = async () => {
+    await logout();
     router.push('/');
   };
 

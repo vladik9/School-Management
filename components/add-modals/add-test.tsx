@@ -45,7 +45,10 @@ export default function AddTest({
 
   // Update baremType when Select changes:
   const handleBaremTypeChange = (value: string) => {
-    setNewRecord((prev) => ({ ...prev, baremType: parseInt(value, 10) }));
+    setNewRecord((prev) => ({
+      ...prev,
+      baremType: parseInt(value, 10)
+    }));
   };
 
   const handleBaremChange = (value: string | React.ChangeEvent<HTMLInputElement>) => {

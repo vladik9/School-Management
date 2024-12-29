@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import Record from '../../../models/record.model';
+import checkToken from '../middleware/index';
 
 // Handle GET (read all records)
 // API Route to get records by intervalId
@@ -76,6 +77,7 @@ const deleteRecord = async (req: NextApiRequest, res: NextApiResponse) => {
 
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  checkToken(req, res, async () => {
   switch (req.method) {
     case 'GET':
       return getRecord(req, res);
@@ -89,4 +91,5 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       res.setHeader('Allow', ['POST','GET','PUT', 'DELETE']);
       res.status(405).end(`Method ${req.method} Not Allowed`);
   }
+  });
 }

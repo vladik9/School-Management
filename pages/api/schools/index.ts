@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import School from '../../../models/school.model';
+import checkToken from '../middleware/index';
 
 // Handle GET (read all schools)
 const getSchools = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -58,20 +59,20 @@ const deleteSchool = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 };
 
-
-
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  switch (req.method) {
-    case 'GET':
-      return getSchools(req, res);
-    case 'POST':
-      return createSchool(req, res);
-    case 'PUT':
-      return updateSchool(req, res);
-    case 'DELETE':
-      return deleteSchool(req, res);
-    default:
-      res.setHeader('Allow', ['POST','GET','PUT', 'DELETE']);
-      res.status(405).end(`Method ${req.method} Not Allowed`);
-  }
+  checkToken(req, res, async () => {
+    switch (req.method) {
+      case 'GET':
+        return getSchools(req, res);
+      case 'POST':
+        return createSchool(req, res);
+      case 'PUT':
+        return updateSchool(req, res);
+      case 'DELETE':
+        return deleteSchool(req, res);
+      default:
+        res.setHeader('Allow', ['POST', 'GET', 'PUT', 'DELETE']);
+        res.status(405).end(`Method ${req.method} Not Allowed`);
+    }
+  });
 }

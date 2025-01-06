@@ -8,6 +8,7 @@ interface RecordAttributes {
   value: string;
   intervalId: number;
   studentId: number;
+  studentGeneratedId: number;
 }
 
 interface IntervalCreationAttributes extends Optional<RecordAttributes, 'id'> {}
@@ -17,6 +18,8 @@ class Record extends Model<RecordAttributes, IntervalCreationAttributes> impleme
   public value!: string;
   public intervalId!: number;
   public studentId!: number;
+  public studentGeneratedId!: number;
+
 }
 
 Record.init(
@@ -44,6 +47,10 @@ Record.init(
         key: 'id',
       },
     },
+    studentGeneratedId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    }
   },
   {
     sequelize,

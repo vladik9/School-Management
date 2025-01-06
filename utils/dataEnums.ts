@@ -28,4 +28,5 @@ export const paginationConstants: Record<string, number> = {
   PERFORMANCES_PER_PAGE: 3,
   STUDENTS_PER_PAGE: 5,
   DOCUMENTS_PER_PAGE: 5,
+  INTERVALS_PER_PAGE: 5,
 };

@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { PerformanceData, StudentData, TestData } from "@/types/types";
+import { PerformanceData, StudentData } from "@/types/types";
 import translations from "@/lib/translations";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import RemoveDialog from "../generic/remove-dialog";
 import { paginationConstants } from '@/utils/dataEnums';
+import PaginationButtons from '../ui/pagination-buttons';
 
 interface PerformanceAccordionProps {
   performances: PerformanceData[];
@@ -19,7 +20,7 @@ interface PerformanceAccordionProps {
 const PERFORMANCE_PER_PAGE = paginationConstants.PERFORMANCE_PER_PAGE;
 
 export default function PerformanceAccordion({
-  performances: tests,
+  performances,
   students,
   className,
 }: PerformanceAccordionProps) {
@@ -33,15 +34,17 @@ export default function PerformanceAccordion({
     setCurrentPerformancePage((prevPage) => Math.max(prevPage - 1, 0));
   };
 
-  const paginatedPerformances = (studentList: PerformanceData[]) => {
+  const paginatedPerformances = (performanceList: PerformanceData[]) => {
     const startIndex = currentPerformancePage * PERFORMANCE_PER_PAGE;
-    return studentList.slice(startIndex, startIndex + PERFORMANCE_PER_PAGE);
+    return performanceList.slice(startIndex, startIndex + PERFORMANCE_PER_PAGE);
   };
+  console.log('performances', performances);
+
   // TODO -- complete this functions and logic
   return (
     <div style={{ marginTop: '20px' }}>
       {
-        tests.length === 0 ? (
+        performances.length === 0 ? (
           <div style={{ marginTop: '20px', textAlign: 'center', padding: '20px' }}>
             {translations.noPerformance}
           </div>
@@ -69,18 +72,18 @@ export default function PerformanceAccordion({
                         </TableRow>
                       </TableHeader>
                       <TableBody>
-                        {paginatedPerformances(tests).map((test, index) => (
-                          <TableRow key={test.id}>
+                        {paginatedPerformances(performances).map((performance, index) => (
+                          <TableRow key={performance.id}>
                             <TableCell>{index + 1}</TableCell>
-                            <TableCell>{test.name}</TableCell>
-                            <TableCell>{test.barem}</TableCell>
+                            <TableCell>{performance.name}</TableCell>
+                            <TableCell>{performance.barem}</TableCell>
                             <TableCell className="flex justify-center space-x-2">
                               {/* View/Edit Dialog */}
                               <Button
                                 variant="outline"
                                 className="max-w-100"
                                 disabled={students.length === 0}
-                                onClick={() => handleAddViewIntervals(test.id)}
+                                onClick={() => handleAddViewIntervals(performance.id)}
                               >
                                 {translations.viewAddIntervals}
                               </Button>
@@ -92,8 +95,8 @@ export default function PerformanceAccordion({
                                 description={translations.confirmRemoveTest}
                                 confirmText={translations.removeTest}
                                 cancelText={translations.cancel}
-                                onRemove={() => handleRemoveTest(test.id)}
-                                id={test.id}
+                                onRemove={() => handleRemoveTest(performance.id)}
+                                id={performance.id}
                                 removeMessage={translations.removeTest}
                               />
                             </TableCell>
@@ -101,7 +104,13 @@ export default function PerformanceAccordion({
                         ))}
                       </TableBody>
                     </Table>
-
+                    <PaginationButtons
+                      itemSize={tests.length}
+                      itemsPerPage={PERFORMANCE_PER_PAGE}
+                      currentPage={currentPerformancePage}
+                      handlePreviousPage={handlePreviousPerformancePage}
+                      handleNextPage={handleNextPerformancePage}
+                    />
                     <div className="flex justify-between items-center mt-4">
                       <Button
                         variant="outline"

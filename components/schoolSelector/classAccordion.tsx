@@ -49,37 +49,6 @@ export default function ClassAccordion({
   handleRemoveDocument,
   handleDownloadDocument,
 }: ClassAccordionProps) {
-  const [currentTestPage, setCurrentTestPage] = useState(0);
-  const [currentPerformancePage, setCurrentPerformancePage] = useState(0);
-
-  // --- Tests pagination
-  const handleNextTestPage = () => {
-    setCurrentTestPage((prevPage) => prevPage + 1);
-  };
-
-  const handlePreviousTestPage = () => {
-    setCurrentTestPage((prevPage) => Math.max(prevPage - 1, 0));
-  };
-
-  const paginatedTests = (tests: TestData[]) => {
-    const startIndex = currentTestPage * TESTS_PER_PAGE;
-    return tests.slice(startIndex, startIndex + TESTS_PER_PAGE);
-  };
-
-  // --- Performances pagination
-  const handleNextPerformancePage = () => {
-    setCurrentPerformancePage((prevPage) => prevPage + 1);
-  };
-
-  const handlePreviousPerformancePage = () => {
-    setCurrentPerformancePage((prevPage) => Math.max(prevPage - 1, 0));
-  };
-
-  const paginatedPerformances = (performances: any[]) => {
-    const startIndex = currentPerformancePage * PERFORMANCES_PER_PAGE;
-    return performances.slice(startIndex, startIndex + PERFORMANCES_PER_PAGE);
-  };
-
   return (
     <Card style={{ padding: '40px', borderRadius: '10px', marginTop: '20px' }}>
       {classes.length === 0 ? (
@@ -109,36 +78,6 @@ export default function ClassAccordion({
                   handleRemoveTest={handleRemoveTest}
                   className={school_class.name}
                 />
-                {/* Buttons for adding a student or test */}
-                <div
-                  style={{ marginTop: '10px', display: 'flex', justifyContent: 'space-between' }}
-                >
-                  <div>
-                    <Button
-                      variant="outline"
-                      style={{ marginRight: '10px' }}
-                      onClick={() => handleAddStudent(school_class.id)}
-                    >
-                      {translations.addStudent}
-                    </Button>
-                    <Button variant="outline" onClick={() => handleSelectingTest(school_class.id)}>
-                      {translations.addTest}
-                    </Button>
-                  </div>
-
-                  {/* Class-level Remove Button & Dialog */}
-                  <div style={{ display: 'flex', alignItems: 'center' }}>
-                    <RemoveDialog
-                      title={translations.removeClass}
-                      description={translations.confirmRemoveClass}
-                      confirmText={translations.removeSchool}
-                      cancelText={translations.cancel}
-                      onRemove={() => handleRemoveClass(school_class.id)}
-                      id={school_class.id}
-                      removeMessage={translations.removeClass}
-                    />
-                  </div>
-                </div>
                 {/* -- Students Accordion (Extracted into its own component) -- */}
                 <StudentsAccordion
                   students={school_class.students}
@@ -165,6 +104,35 @@ export default function ClassAccordion({
                   handleDownloadDocument={handleDownloadDocument}
                   className={school_class.name}
                 />
+                {/* Buttons for adding a student or test */}
+                <div
+                  style={{ marginTop: '10px', display: 'flex', justifyContent: 'space-between' }}
+                >
+                  <div>
+                    <Button
+                      variant="outline"
+                      style={{ marginRight: '10px' }}
+                      onClick={() => handleAddStudent(school_class.id)}
+                    >
+                      {translations.addStudent}
+                    </Button>
+                    <Button variant="outline" onClick={() => handleSelectingTest(school_class.id)}>
+                      {translations.addTest}
+                    </Button>
+                  </div>
+                  {/* Class-level Remove Button & Dialog */}
+                  <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <RemoveDialog
+                      title={translations.removeClass}
+                      description={translations.confirmRemoveClass}
+                      confirmText={translations.removeSchool}
+                      cancelText={translations.cancel}
+                      onRemove={() => handleRemoveClass(school_class.id)}
+                      id={school_class.id}
+                      removeMessage={translations.removeClass}
+                    />
+                  </div>
+                </div>
               </AccordionContent>
             </AccordionItem>
           ))}

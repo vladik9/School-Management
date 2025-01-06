@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import Record from '../../../models/record.model';
+import Student from '../../../models/student.model';
 import checkToken from '../middleware/index';
 
 // Handle GET (read all records)
@@ -12,7 +13,7 @@ const getRecord = async (req: NextApiRequest, res: NextApiResponse) => {
       return res.status(400).json({ message: 'IntervalId is required' });
     }
 
-    // Query the 'Record' table to find all records for the given schoolId
+    // Query the 'Record' table to find all records for the given intervalId
     const records = await Record.findAll({
       where: { intervalId },  // Use `where` to filter by intervalId
     });
@@ -22,7 +23,17 @@ const getRecord = async (req: NextApiRequest, res: NextApiResponse) => {
       return res.status(200).json([]);
     }
 
-    // Return the found records
+    // Find students that match the studentIds in the records
+    const studentIds = records.map(record => record.studentId);
+    const students = await Student.findAll({
+      where: { id: studentIds },
+    });
+    if (students) {
+      for (let i = 0; i < records.length; i++) {
+        records[i].studentData = students.find(student => student.id === records[i].studentId);
+      }
+    }
+    // Return the found students
     res.status(200).json(records);
   } catch (error) {
     res.status(500).json({ message: 'Error fetching records', error });

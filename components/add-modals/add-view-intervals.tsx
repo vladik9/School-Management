@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import React, { useState } from 'react';
 import GenericModal from '@/components/generic/generic-modal';
 import translations from '@/lib/translations';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -7,11 +7,13 @@ import { Button } from "@/components/ui/button";
 import AddViewRecord from './add-view-record';
 import RemoveDialog from '../generic/remove-dialog';
 import SimpleDialog from '../generic/simple-dialog';
-import { RecordData, TestData } from '@/types/types';
+import { IntervalData, RecordData, TestData } from '@/types/types';
 import { Users } from 'lucide-react';
 import TimePicker from '../ui/time-picker';
 import { Input } from '@/components/ui/input';
 import { Label } from '@radix-ui/react-label';
+import PaginationButtons from '../ui/pagination-buttons';
+import { paginationConstants } from '@/utils/dataEnums';
 
 interface AddViewIntervalsProps {
   intervals: any[];
@@ -32,7 +34,6 @@ interface AddViewIntervalsProps {
   handleRemoveRecord: (id: number) => void;
   tests: TestData[];
   testId: number;
-
 }
 
 export default function AddViewIntervals({
@@ -56,6 +57,22 @@ export default function AddViewIntervals({
   testId,
 }: AddViewIntervalsProps) {
   const [isViewEditRecordsModalOpen, setIsViewEditRecordsModalOpen] = React.useState(false);
+  const [currentIntervalPage, setCurrentIntervalPage] = useState(0);
+
+  const STUDENTS_PER_PAGE = paginationConstants.INTERVALS_PER_PAGE;
+
+  const handleNextIntervalPage = () => {
+    setCurrentIntervalPage((prevPage) => prevPage + 1);
+  };
+
+  const handlePreviousIntervalPage = () => {
+    setCurrentIntervalPage((prevPage) => Math.max(prevPage - 1, 0));
+  };
+
+  const paginatedInterval = (studentList: IntervalData[]) => {
+    const startIndex = currentIntervalPage * STUDENTS_PER_PAGE;
+    return studentList.slice(startIndex, startIndex + STUDENTS_PER_PAGE);
+  };
 
   const handleAddNewRecord = (id: number) => {
     setIsNewRecordModalOpen(true);
@@ -64,12 +81,10 @@ export default function AddViewIntervals({
 
   const handleViewOrEditRecord = (id: number) => {
     handleViewEditRecords(id);
-    // Add your edit logic here if needed
   };
-  const { baremType = 0, barem = translations.none } = tests.find((test) => test.id === testId) || {};
+  const { baremType, barem = translations.none } = tests.find((test) => test.id === testId) || {};
 
   const handleUpdateRecord = (recordId: number, newRecord: RecordData) => {
-    // Add your update logic here if needed
     handleUpdateRecordGlobal(recordId, newRecord);
     setIsViewEditRecordsModalOpen(false);
   };
@@ -183,7 +198,7 @@ export default function AddViewIntervals({
                           {records && records.length > 0 ? (
                             records.map((int: any) => (
                               <TableRow key={int.id}>
-                                <TableCell>{int.id}</TableCell>
+                                <TableCell>{int.studentGeneratedId}</TableCell>
                                 {/* //TODO - fix this to be ID of the stundet not DB Id */}
                                 <TableCell>{int.value}</TableCell>
                                 <TableCell>{barem}</TableCell>
@@ -261,6 +276,7 @@ export default function AddViewIntervals({
             {translations.addInterval} <span>+</span>
           </Button>
         </div>
+        <PaginationButtons itemSize={intervals.length} itemsPerPage={intervals.length} currentPage={currentIntervalPage} handlePreviousPage={handlePreviousIntervalPage} handleNextPage={handleNextIntervalPage} />
       </div>
       <AddViewRecord
         modalTitle={translations.addNewRecord}

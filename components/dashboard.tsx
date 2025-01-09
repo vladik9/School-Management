@@ -379,6 +379,7 @@ export default function SchoolDashboard() {
   const handleViewEditRecords = async (intervalId: number) => {
     setSelectedIntervalId(intervalId);
     await fetchRecords(intervalId);
+    setNewRecord({});
   };
 
   const handleViewEditStudents = async (classId: number) => {

@@ -18,7 +18,14 @@ interface AddStudentProps {
   handleCloseModal: () => void;
   handleSaveModal: () => void;
   setNewRecord: (data: { name: string; studentId: number, classId: number; study_class: number; orderNb: number; sex: string; }) => void;
-  newRecord: any;
+  newRecord: {
+    name: string;
+    orderNb: string;
+    studentId: number;
+    classId: number;
+    study_class: number;
+    sex: string;
+  };
   selectedYear: number | null;
   years: YearData[];
 }

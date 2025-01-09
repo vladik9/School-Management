@@ -197,7 +197,7 @@ const translations = {
   noDocuments: "Nu sunt documente adăugate",
   docName: "Nume document",
   download: "Descarcă",
-  upload: "Încarcă",
+  upload: "Încarcă un document",
   addDocument: "Adaugă document",
   addDocumentDescription: "Adaugă documente aici",
   removeDocument: "Șterge document",

@@ -44,10 +44,14 @@ export default function TestAccordion({
   return (
     <div style={{ marginTop: '20px' }}>
       {
+
         tests.length === 0 ? (
-          <div style={{ marginTop: '20px', textAlign: 'center', padding: '20px' }}>
-            {translations.noTestAdded}
-          </div>
+          <>
+            <hr />
+            <div style={{ marginTop: '20px', textAlign: 'center', padding: '20px' }}>
+              {translations.noTestAdded}
+            </div>
+          </>
         ) : (
           <>
             <Card style={{ margin: '30px 0', padding: '20px' }}>

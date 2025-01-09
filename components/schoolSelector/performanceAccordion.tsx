@@ -45,9 +45,11 @@ export default function PerformanceAccordion({
     <div style={{ marginTop: '20px' }}>
       {
         performances.length === 0 ? (
-          <div style={{ marginTop: '20px', textAlign: 'center', padding: '20px' }}>
-            {translations.noPerformance}
-          </div>
+          <><hr />
+            <div style={{ marginTop: '20px', textAlign: 'center', padding: '20px' }}>
+              {translations.noPerformance}
+            </div>
+          </>
         ) : (
           <>
             <Card style={{ margin: '30px 0', padding: '20px' }}>

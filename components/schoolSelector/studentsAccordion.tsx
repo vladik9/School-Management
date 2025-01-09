@@ -58,9 +58,12 @@ export default function StudentsAccordion({
     <div style={{ marginTop: '20px' }}>
       {
         students.length === 0 ? (
-          <div style={{ marginTop: '20px', textAlign: 'center', padding: '20px' }}>
-            {translations.noStudentsAdded}
-          </div>
+          <>
+            <hr />
+            <div style={{ marginTop: '20px', textAlign: 'center', padding: '20px' }}>
+              {translations.noStudentsAdded}
+            </div>
+          </>
         ) : (
           <>
             <Card style={{ margin: '30px 0', padding: '20px' }}>

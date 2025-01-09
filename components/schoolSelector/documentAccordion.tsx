@@ -46,7 +46,8 @@ export default function DocumentAccordion({
     <div style={{ marginTop: '20px' }}>
       {documents.length === 0 ? (
         <>
-          <div className="text-center">
+          <hr />
+          <div style={{ marginTop: '20px', textAlign: 'center', padding: '20px' }}>
             <p>{translations.noDocuments}</p>
           </div>
           <Button variant="outline" size="sm" onClick={handleUploadDocument}>

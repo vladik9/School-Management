@@ -1,3 +1,4 @@
+
 'use client';
 import React from 'react';
 import GenericModal from '@/components/generic/generic-modal';
@@ -14,7 +15,7 @@ interface AddViewRecordProps {
   handleSaveModal: (recordId: number, newRecord: RecordData) => void;
   students: StudentData[];
   newRecord: RecordData;
-  setNewRecord: (data: { studentId: number, value: string; }) => void;
+  setNewRecord: (data: RecordData) => void;
   children?: React.ReactNode;
 }
 
@@ -30,15 +31,21 @@ export default function AddViewRecord({
   children,
 }: AddViewRecordProps) {
   const onStudentSelect = (studentId: string) => {
-    setNewRecord(prev => ({
-      ...prev,
-      studentId: parseInt(studentId, 10)
-    }));
+    const student = students.find((student) => student.id === parseInt(studentId));
+    if (student) {
+      setNewRecord((prev: RecordData) => ({
+        ...prev,
+        studentId: parseInt(studentId, 10),
+        studentGeneratedId: student.studentId
+      }));
+    } else {
+      console.error('Student not found');
+    }
   };
 
   const onSave = () => {
     if (newRecord.studentId && newRecord.value) {
-      handleSaveModal(newRecord.id, newRecord,);
+      handleSaveModal(newRecord.studentId, newRecord);
     } else {
       // Handle validation error
       console.error('All fields are required');
@@ -49,7 +56,6 @@ export default function AddViewRecord({
     const { studentId, value } = newRecord;
     return !!(studentId && value);
   };
-
   return (
     <GenericModal
       isOpen={isModalOpen}

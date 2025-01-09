@@ -45,9 +45,9 @@ const getRecord = async (req: NextApiRequest, res: NextApiResponse) => {
 // Handle POST (create record)
 const createRecord = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    const { value, studentId,  intervalId } = req.body;
+    const { value, studentId,  intervalId,studentGeneratedId } = req.body;
 
-    const newRecord = await Record.create({value, studentId, intervalId });
+    const newRecord = await Record.create({value, studentId, studentGeneratedId, intervalId });
     res.status(201).json(newRecord);
   } catch (error) {
     res.status(500).json({ message: 'Error creating record', error });

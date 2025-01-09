@@ -23,7 +23,7 @@ export default function PaginationButtons({
         {translations.previous}
       </Button>
       <span>
-        {translations.page} {currentPage + 1} {translations.of} {Math.ceil(itemSize / itemsPerPage)}
+        {translations.page} {currentPage + 1} {translations.of} {Math.ceil(itemSize / itemsPerPage) || 1}
       </span>
       <Button variant="outline" onClick={handleNextPage} disabled={(currentPage + 1) * itemsPerPage >= itemSize}>
         {translations.next}

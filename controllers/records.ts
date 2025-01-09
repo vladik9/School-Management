@@ -27,7 +27,7 @@ export const processGetRecords = async (intervalId: number) => {
 
 
 export const processCreateRecord = async (data: object, intervalId: number) => {
-try {
+  try {
   const response = await fetch(`${urlEnum.record}`, {
     method: 'POST',
     headers: {

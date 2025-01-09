@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import AddViewRecord from './add-view-record';
 import RemoveDialog from '../generic/remove-dialog';
 import SimpleDialog from '../generic/simple-dialog';
-import { IntervalData, RecordData, TestData } from '@/types/types';
+import { IntervalData, RecordData, StudentData, TestData } from '@/types/types';
 import { Users } from 'lucide-react';
 import TimePicker from '../ui/time-picker';
 import { Input } from '@/components/ui/input';
@@ -16,14 +16,14 @@ import PaginationButtons from '../ui/pagination-buttons';
 import { paginationConstants } from '@/utils/dataEnums';
 
 interface AddViewIntervalsProps {
-  intervals: any[];
+  intervals: IntervalData[];
   isModalOpen: boolean;
   handleCloseModal: () => void;
   handleSaveModal: () => void;
-  newRecord: any;
+  newRecord: { studentId: number, value: string; };
   setNewRecord: (data: { studentId: number, value: string; }) => void;
-  records: any[];
-  students: any[];
+  records: RecordData[];
+  students: StudentData[];
   handleSaveNewRecord: () => void;
   handleUpdateRecord: (recordId: number, newRecord: RecordData) => void;
   setSelectedIntervalId: (id: number) => void;

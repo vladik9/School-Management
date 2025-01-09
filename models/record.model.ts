@@ -48,7 +48,7 @@ Record.init(
       },
     },
     studentGeneratedId: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING,
       allowNull: false,
     }
   },

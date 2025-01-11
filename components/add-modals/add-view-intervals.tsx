@@ -97,7 +97,7 @@ export default function AddViewIntervals({
     }
   };
 
-  const inputBasedOnBaremType = (baremType: number) => {
+  const inputBasedOnBaremType = (baremType: number,) => {
     switch (baremType) {
       case 1:
         return (
@@ -149,7 +149,32 @@ export default function AddViewIntervals({
         return (null);
     }
   };
+  const averageBasedOnBaremType = (baremType: number, result: any, barem: any) => {
+    switch (baremType) {
+      case 1:
+        return (barem / result).toFixed(2);
+      case 2:
+        return (barem / result).toFixed(2);
+      case 3:
+        // Extract [minutes, seconds] from both values
+        const [rM, rS] = result.split(':').map(Number);
+        const [bM, bS] = barem.split(':').map(Number);
 
+        // Convert them to total seconds
+        const totalResultSeconds = rM * 60 + rS;
+        const totalBaremSeconds = bM * 60 + bS;
+
+        // Calculate the difference
+        const difference = totalResultSeconds / totalBaremSeconds;
+
+        // Return a float with 2 decimal places
+        return Number(difference.toFixed(2));
+      case 4:
+        return (barem / result).toFixed(2);
+      default:
+        return null;
+    }
+  };
   return (
     <GenericModal
       isOpen={isModalOpen}
@@ -205,7 +230,7 @@ export default function AddViewIntervals({
                                   <TableCell>{barem}</TableCell>
                                   {/* TODO: --Fix this math calculation and average it should be calculate based on barem */}
                                   <TableCell>
-                                    avearge
+                                    {averageBasedOnBaremType(baremType, int.value, barem)}
                                   </TableCell>
                                   <TableCell>
                                     <Button

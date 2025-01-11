@@ -113,7 +113,6 @@ const deleteClass = async (req: NextApiRequest, res: NextApiResponse) => {
 };
 
 
-
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   checkToken(req, res, async () => {
     switch (req.method) {

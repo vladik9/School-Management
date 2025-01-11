@@ -56,9 +56,7 @@ const createRecord = async (req: NextApiRequest, res: NextApiResponse) => {
 
 // Handle PUT (update record)
 const updateRecord = async (req: NextApiRequest, res: NextApiResponse) => {
-  const { id } = req.query;
-  const { value,  studentId,  intervalId } = req.body;
-
+  const {id , value,  studentId,  intervalId } = req.body;
   try {
     const record = await Record.findByPk(id as string);
     if (!record) return res.status(404).json({ message: 'Record not found' });

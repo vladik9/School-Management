@@ -158,6 +158,7 @@ const translations = {
   seconds: "Secunde",
   minutes: "Minute",
   time: "Timp",
+  number: "Numar",
 
   //Performance
   noPerformance: "Nu sunt performanțe adăugate",

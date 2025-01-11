@@ -517,7 +517,7 @@ export default function SchoolDashboard() {
 
   return (
     <div className="min-h-screen bg-gray-100 p-8">
-      <Card className="max-w-6xl mx-auto">
+      <Card className="max-w-1xl mx-auto">
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle className="text-2xl font-bold flex items-center">
             <School className="mr-2 h-6 w-6" />

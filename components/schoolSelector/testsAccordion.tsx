@@ -44,7 +44,6 @@ export default function TestAccordion({
   return (
     <div style={{ marginTop: '20px' }}>
       {
-
         tests.length === 0 ? (
           <>
             <hr />

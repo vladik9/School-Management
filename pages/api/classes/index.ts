@@ -47,12 +47,13 @@ const getClasses = async (req: NextApiRequest, res: NextApiResponse) => {
           }),
         ]);
 
+
         return {
           ...classData.toJSON(), // Convert Sequelize instance to plain object
           tests,
           students,
           documents,
-          performances: [], // Placeholder for performances
+          performances: tests, // Placeholder for performances
         };
       })
     );

@@ -45,7 +45,8 @@ export default function PerformanceAccordion({
     <div style={{ marginTop: '20px' }}>
       {
         performances.length === 0 ? (
-          <><hr />
+          <>
+            <hr />
             <div style={{ marginTop: '20px', textAlign: 'center', padding: '20px' }}>
               {translations.noPerformance}
             </div>
@@ -107,34 +108,12 @@ export default function PerformanceAccordion({
                       </TableBody>
                     </Table>
                     <PaginationButtons
-                      itemSize={tests.length}
+                      itemSize={performances.length}
                       itemsPerPage={PERFORMANCE_PER_PAGE}
                       currentPage={currentPerformancePage}
                       handlePreviousPage={handlePreviousPerformancePage}
                       handleNextPage={handleNextPerformancePage}
                     />
-                    <div className="flex justify-between items-center mt-4">
-                      <Button
-                        variant="outline"
-                        onClick={handlePreviousPerformancePage}
-                        disabled={currentPerformancePage === 0}
-                      >
-                        {translations.previous}
-                      </Button>
-                      <span>
-                        {translations.page} {currentPerformancePage + 1} {translations.of}{' '}
-                        {Math.ceil(tests.length / PERFORMANCE_PER_PAGE)}
-                      </span>
-                      {translations.addedTest} {tests.length}
-                      {/* //TODO - fix this it should look better */}
-                      <Button
-                        variant="outline"
-                        onClick={handleNextPerformancePage}
-                        disabled={(currentPerformancePage + 1) * PERFORMANCE_PER_PAGE >= tests.length}
-                      >
-                        {translations.next}
-                      </Button>
-                    </div>
                   </AccordionContent>
                 </AccordionItem>
               </Accordion>

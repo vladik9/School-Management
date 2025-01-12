@@ -25,7 +25,8 @@ import {
 import {
   processGetStudents,
   processCreateStudent,
-  processRemoveStudent
+  processRemoveStudent,
+  processUpdateStudent
 } from "@/controllers/students";
 import {
   processCreateTest,
@@ -387,7 +388,18 @@ export default function SchoolDashboard() {
   };
 
   const handleUpdateStudent = async (studentId: number, data: object) => {
-    // Provide your logic to update a student here (if needed).
+    showStatusModal(statusMessages.updatingStudent, fetchStatuses.loading);
+    try {
+      await processUpdateStudent(data, studentId,);
+      showStatusModal(statusMessages.studentUpdated, fetchStatuses.success);
+      setNewRecord({});
+    } catch (error) {
+      showStatusModal(statusMessages.errorUpdatingStudent, fetchStatuses.error);
+    } finally {
+      if (selectedIntervalId) {
+        await fetchClasses();
+      }
+    }
   };
 
   // =========================
@@ -562,6 +574,8 @@ export default function SchoolDashboard() {
                 handleUploadDocument={() => setIsDocumentModalOpen(true)}
                 handleRemoveDocument={handleRemoveDocument}
                 handleDownloadDocument={handleDownloadDocument}
+                newRecord={newRecord}
+                setNewRecord={setNewRecord}
               />
             </div>
           )}

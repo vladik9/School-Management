@@ -46,6 +46,9 @@ const statusMessages = {
   errorDeletingStudent: 'Eroare la ștergerea elevului',
   deletingStudent: 'Ștergerea elevului...',
   studentDeleted: 'Elevul a fost șters cu succes',
+  updatingStudent: 'Actualizarea elevului...',
+  studentUpdated: 'Elevul a fost actualizat cu succes',
+  errorUpdatingStudent: 'Eroare la actualizarea elevului',
 
   // Disciplines
   fetchingDisciplines: 'Încărcarea disciplinelor...',

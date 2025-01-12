@@ -6,41 +6,35 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import RemoveDialog from "../generic/remove-dialog";
-import ViewEditDialog from "../generic/view-edit-dialog";
 import PaginationButtons from '../ui/pagination-buttons';
+import { Users } from 'lucide-react';
+import AddViewStudent from '../add-modals/add-view-student';
 
 interface StudentsAccordionProps {
-  /** Array of students for this class */
   students: StudentData[];
-
-  /** Function to handle opening the View/Edit modal for a specific student */
   handleViewEditStudents: (studentId: number) => void;
-
-  /** Function to handle the actual "update student" action */
   handleUpdateStudent: (studentId: number, data: object) => void;
-
-  /** Function to remove a student by ID */
   handleRemoveStudent: (studentId: number) => void;
-
-  /** The ID of the class this accordion belongs to (used in remove dialogs) */
   classId: number;
-
-  /** The name of the class to display in the UI */
   className: string;
+  newRecord: StudentData;
+  setNewRecord: (data: StudentData) => void;
 }
 
 const STUDENTS_PER_PAGE = 5;
 
 export default function StudentsAccordion({
   students,
-  handleViewEditStudents,
-  handleUpdateStudent,
+  handleUpdateStudent: handleUpdateStudentGlobal,
   handleRemoveStudent,
   classId,
   className,
+  newRecord,
+  setNewRecord,
 }: StudentsAccordionProps) {
-  const [currentStudentPage, setCurrentStudentPage] = useState(0);
 
+  const [currentStudentPage, setCurrentStudentPage] = useState(0);
+  const [isStudentModalOpen, setIsStudentModalOpen] = useState(false);
   const handleNextStudentPage = () => {
     setCurrentStudentPage((prevPage) => prevPage + 1);
   };
@@ -52,6 +46,10 @@ export default function StudentsAccordion({
   const paginatedStudents = (studentList: StudentData[]) => {
     const startIndex = currentStudentPage * STUDENTS_PER_PAGE;
     return studentList.slice(startIndex, startIndex + STUDENTS_PER_PAGE);
+  };
+  const handleUpdateStudent = (studentId: number, data: object) => {
+    handleUpdateStudentGlobal(studentId, data);
+    setIsStudentModalOpen(false);
   };
 
   return (
@@ -93,29 +91,26 @@ export default function StudentsAccordion({
                             <TableCell>{student.name}</TableCell>
                             <TableCell className="flex justify-center space-x-2">
                               {/* View/Edit Dialog */}
-                              <ViewEditDialog
-                                title={translations.viewEditStudent}
-                                description={translations.viewEditStudentDescription}
-                                onOpen={() => handleViewEditStudents(student.id)}
-                                triggerButtonTitle={translations.viewOrEdit}
-                                id={student.id}
-                                cancelText={translations.cancel}
-                                confirmText={translations.update}
-                                onSave={handleUpdateStudent}
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => {
+                                  setIsStudentModalOpen(true);
+                                  setNewRecord(student);
+                                }}
                               >
-                                <Table>
-                                  <TableHeader>
-                                    <TableRow>
-                                      <TableHead>{translations.studentId}</TableHead>
-                                      <TableHead>{translations.name}</TableHead>
-                                    </TableRow>
-                                  </TableHeader>
-                                  <TableRow key={student.id}>
-                                    <TableCell>{student.studentId}</TableCell>
-                                    <TableCell>{student.name}</TableCell>
-                                  </TableRow>
-                                </Table>
-                              </ViewEditDialog>
+                                <Users className="h-4 w-4 mr-2" />
+                                {translations.edit}
+                              </Button>
+                              <AddViewStudent
+                                modalTitle={translations.viewEditStudent}
+                                modalDescription={translations.viewEditStudentDescription}
+                                isModalOpen={isStudentModalOpen}
+                                handleCloseModal={() => setIsStudentModalOpen(false)} handleSaveModal={handleUpdateStudent}
+                                newRecord={newRecord}
+                                setNewRecord={setNewRecord}
+                              >
+                              </AddViewStudent>
                             </TableCell>
                             <TableCell>
                               {/* Student-level Remove Dialog */}

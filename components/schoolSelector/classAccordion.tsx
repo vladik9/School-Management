@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import translations from "@/lib/translations";
-import { ClassData, TestData } from "@/types/types";
+import { ClassData } from "@/types/types";
 import RemoveDialog from "../generic/remove-dialog";
 import PerformanceAccordion from "./performanceAccordion";
 import DocumentAccordion from "./documentAccordion";
@@ -11,7 +11,6 @@ import DocumentAccordion from "./documentAccordion";
 /** Import the new StudentsAccordion component */
 import StudentsAccordion from "./studentsAccordion";
 import TestAccordion from './testsAccordion';
-import { paginationConstants } from '@/utils/dataEnums';
 
 interface ClassAccordionProps {
   classes: ClassData[];
@@ -29,10 +28,10 @@ interface ClassAccordionProps {
   handleUploadDocument: () => void;
   handleRemoveDocument: (documentId: number) => void;
   handleDownloadDocument: (documentId: number) => void;
+  newRecord: any;
+  setNewRecord: (data: any) => void;
 }
 
-const TESTS_PER_PAGE = paginationConstants.TESTS_PER_PAGE;
-const PERFORMANCES_PER_PAGE = paginationConstants.PERFORMANCES_PER_PAGE;
 
 export default function ClassAccordion({
   classes,
@@ -48,6 +47,8 @@ export default function ClassAccordion({
   handleUploadDocument,
   handleRemoveDocument,
   handleDownloadDocument,
+  newRecord,
+  setNewRecord
 }: ClassAccordionProps) {
   return (
     <Card style={{ padding: '40px', borderRadius: '10px', marginTop: '20px' }}>
@@ -86,6 +87,8 @@ export default function ClassAccordion({
                   handleRemoveStudent={handleRemoveStudent}
                   classId={school_class.id}
                   className={school_class.name}
+                  newRecord={newRecord}
+                  setNewRecord={setNewRecord}
                 />
 
                 {/* -- Performances -- */}

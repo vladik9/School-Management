@@ -24,8 +24,8 @@ export const baremTypes: [number, string][] = [
 
 
 export const paginationConstants: Record<string, number> = {
-  TESTS_PER_PAGE: 3,
-  PERFORMANCES_PER_PAGE: 3,
+  TESTS_PER_PAGE: 4,
+  PERFORMANCES_PER_PAGE: 4,
   STUDENTS_PER_PAGE: 5,
   DOCUMENTS_PER_PAGE: 5,
   INTERVALS_PER_PAGE: 5,

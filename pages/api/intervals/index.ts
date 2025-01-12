@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import Interval from '@/models/interval.model';
+import checkToken from '../middleware';
 
 // Handle GET (read all schools)
 // API Route to get interval by testId
@@ -73,6 +74,7 @@ const deleteInterval = async (req: NextApiRequest, res: NextApiResponse) => {
 };
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  checkToken(req, res, async () => {
   switch (req.method) {
     case 'GET':
       return getInterval(req, res);
@@ -86,4 +88,5 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       res.setHeader('Allow', ['POST','GET','PUT', 'DELETE']);
       res.status(405).end(`Method ${req.method} Not Allowed`);
   }
+});
 }

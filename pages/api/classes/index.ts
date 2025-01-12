@@ -3,6 +3,7 @@ import Class from '@/models/class.model';
 import Test from '@/models/test.model';
 import Student from '@/models/student.model';
 import Document from '@/models/document.model';
+import checkToken from '../middleware';
 
 
 // Handle GET (read all schools)
@@ -46,12 +47,13 @@ const getClasses = async (req: NextApiRequest, res: NextApiResponse) => {
           }),
         ]);
 
+
         return {
           ...classData.toJSON(), // Convert Sequelize instance to plain object
           tests,
           students,
           documents,
-          performances: [], // Placeholder for performances
+          performances: tests, // Placeholder for performances
         };
       })
     );
@@ -111,19 +113,20 @@ const deleteClass = async (req: NextApiRequest, res: NextApiResponse) => {
 };
 
 
-
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  switch (req.method) {
-    case 'GET':
-      return getClasses(req, res);
-    case 'POST':
-      return createClass(req, res);
-    case 'PUT':
-      return updateClass(req, res);
-    case 'DELETE':
-      return deleteClass(req, res);
-    default:
-      res.setHeader('Allow', ['POST','GET','PUT', 'DELETE']);
-      res.status(405).end(`Method ${req.method} Not Allowed`);
-  }
+  checkToken(req, res, async () => {
+    switch (req.method) {
+      case 'GET':
+        return getClasses(req, res);
+      case 'POST':
+        return createClass(req, res);
+      case 'PUT':
+        return updateClass(req, res);
+      case 'DELETE':
+        return deleteClass(req, res);
+      default:
+        res.setHeader('Allow', ['POST', 'GET', 'PUT', 'DELETE']);
+        res.status(405).end(`Method ${req.method} Not Allowed`);
+    }
+  });
 }

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import translations from "@/lib/translations";
@@ -7,6 +7,8 @@ import { Button } from '../ui/button';
 import RemoveDialog from '../generic/remove-dialog';
 import { Download, Upload } from 'lucide-react';
 import { Card } from '../ui/card';
+import { paginationConstants } from '@/utils/dataEnums';
+import PaginationButtons from '../ui/pagination-buttons';
 
 interface DocumentAccordionProps {
   documents: DocumentData[];
@@ -16,6 +18,8 @@ interface DocumentAccordionProps {
   className?: string;
 }
 
+const DOCUMENTS_PER_PAGE = paginationConstants.DOCUMENTS_PER_PAGE;
+
 export default function DocumentAccordion({
   documents,
   handleRemoveDocument,
@@ -23,11 +27,27 @@ export default function DocumentAccordion({
   handleUploadDocument,
   className = 'document name',
 }: DocumentAccordionProps) {
+  const [currentDocumentPage, setCurrentDocumentPage] = useState(0);
+
+  const handleNextDocumentPage = () => {
+    setCurrentDocumentPage((prevPage) => prevPage + 1);
+  };
+
+  const handlePreviousDocumentPage = () => {
+    setCurrentDocumentPage((prevPage) => Math.max(prevPage - 1, 0));
+  };
+
+  const paginatedDocuments = (documents: DocumentData[]) => {
+    const startIndex = currentDocumentPage * DOCUMENTS_PER_PAGE;
+    return documents.slice(startIndex, startIndex + DOCUMENTS_PER_PAGE);
+  };
+
   return (
     <div style={{ marginTop: '20px' }}>
       {documents.length === 0 ? (
         <>
-          <div className="text-center">
+          <hr />
+          <div style={{ marginTop: '20px', textAlign: 'center', padding: '20px' }}>
             <p>{translations.noDocuments}</p>
           </div>
           <Button variant="outline" size="sm" onClick={handleUploadDocument}>
@@ -57,9 +77,9 @@ export default function DocumentAccordion({
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {documents.map((document, index: number) => (
+                    {paginatedDocuments(documents).map((document, index: number) => (
                       <TableRow key={document.id}>
-                        <TableCell>{index + 1}</TableCell>
+                        <TableCell>{index + 1 + currentDocumentPage * DOCUMENTS_PER_PAGE}</TableCell>
                         <TableCell>{document.name}</TableCell>
                         <TableCell>
                           <Button variant="outline" size="sm" onClick={() => handleDownloadDocument(document.id)}>
@@ -82,12 +102,14 @@ export default function DocumentAccordion({
                     ))}
                   </TableBody>
                 </Table>
+
                 <div style={{ marginTop: '10px', display: 'flex', justifyContent: 'space-between' }}>
                   <Button variant="outline" size="sm" onClick={handleUploadDocument}>
                     <Upload className="h-4 w-4 mr-2" />
                     {translations.upload}
                   </Button>
                 </div>
+                <PaginationButtons itemSize={documents.length} itemsPerPage={DOCUMENTS_PER_PAGE} currentPage={currentDocumentPage} handlePreviousPage={handlePreviousDocumentPage} handleNextPage={handleNextDocumentPage} />
               </AccordionContent>
             </AccordionItem>
           </Accordion>

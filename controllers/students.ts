@@ -64,3 +64,22 @@ export const processRemoveStudent = async (studentId: number) => {
     throw new Error(statusMessages.errorDeletingStudent);
   }
 };
+
+export const processUpdateStudent = async (data: object, studentId: number) => {
+  try {
+    const response = await fetch(`${urlEnum.student}?id=${studentId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+    if (!response.ok) {
+      throw new Error(statusMessages.errorUpdatingStudent);
+    }
+    return response;
+  } catch (error) {
+    console.log(error);
+    throw new Error(statusMessages.errorUpdatingStudent);
+  }
+};

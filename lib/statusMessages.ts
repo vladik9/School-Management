@@ -1,5 +1,8 @@
 import {FetchStatuses} from '@/types/types';
 const statusMessages = {
+  //Auth
+  errorSigningOut: 'Eroare la deconectare',
+
   // Schools
   fetchingSchools: 'Încărcarea școlilor...',
   schoolsFetched: 'Școlile au fost încărcate cu succes',
@@ -43,6 +46,9 @@ const statusMessages = {
   errorDeletingStudent: 'Eroare la ștergerea elevului',
   deletingStudent: 'Ștergerea elevului...',
   studentDeleted: 'Elevul a fost șters cu succes',
+  updatingStudent: 'Actualizarea elevului...',
+  studentUpdated: 'Elevul a fost actualizat cu succes',
+  errorUpdatingStudent: 'Eroare la actualizarea elevului',
 
   // Disciplines
   fetchingDisciplines: 'Încărcarea disciplinelor...',

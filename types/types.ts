@@ -58,6 +58,7 @@ type SchoolData = {
 type RecordData = {
   id: number;
   studentId: number;
+  studentGeneratedId: number;
   value: Date | string | number;
   intervalId: number;
 }

@@ -1,14 +1,16 @@
 import React from 'react';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import translations from "@/lib/translations";
-import { ClassData, StudentData } from "@/types/types";
-import RemoveDialog from '../generic/remove-dialog';
-import ViewEditDialog from '../generic/view-edit-dialog';
-import PerformanceAccordion from './performanceAccordion';
-import DocumentAccordion from './documentAccordion';
+import { ClassData } from "@/types/types";
+import RemoveDialog from "../generic/remove-dialog";
+import PerformanceAccordion from "./performanceAccordion";
+import DocumentAccordion from "./documentAccordion";
+
+/** Import the new StudentsAccordion component */
+import StudentsAccordion from "./studentsAccordion";
+import TestAccordion from './testsAccordion';
 
 interface ClassAccordionProps {
   classes: ClassData[];
@@ -16,17 +18,20 @@ interface ClassAccordionProps {
   handleUpdateStudent: (studentId: number, data: object) => void;
   handleSelectingTest: (classId: number) => void;
   handleAddViewIntervals: (testId: number) => void;
-  handleViewEditStudents: (classId: number) => void;
+  handleViewEditStudents: (studentId: number) => void;
   setSelectedClassId: (classId: number) => void;
   handleRemoveStudent: (studentId: number) => void;
   handleRemoveClass: (classId: number) => void;
   handleRemoveTest: (testId: number) => void;
 
-  // NOTE - Document-related props
+  /** Document-related props */
   handleUploadDocument: () => void;
   handleRemoveDocument: (documentId: number) => void;
   handleDownloadDocument: (documentId: number) => void;
+  newRecord: any;
+  setNewRecord: (data: any) => void;
 }
+
 
 export default function ClassAccordion({
   classes,
@@ -42,7 +47,8 @@ export default function ClassAccordion({
   handleUploadDocument,
   handleRemoveDocument,
   handleDownloadDocument,
-
+  newRecord,
+  setNewRecord
 }: ClassAccordionProps) {
   return (
     <Card style={{ padding: '40px', borderRadius: '10px', marginTop: '20px' }}>
@@ -50,8 +56,12 @@ export default function ClassAccordion({
         <div className="text-center">
           <p>{translations.noClassesAdded}</p>
         </div>
-      ) :
-        (<Accordion type="single" collapsible onValueChange={(value) => setSelectedClassId(parseInt(value))}>
+      ) : (
+        <Accordion
+          type="single"
+          collapsible
+          onValueChange={(value) => setSelectedClassId(parseInt(value))}
+        >
           {classes.map((school_class) => (
             <AccordionItem key={school_class.id} value={school_class.id.toString()}>
               <AccordionTrigger>
@@ -59,123 +69,78 @@ export default function ClassAccordion({
                   <span>
                     {school_class.name} - {school_class.teacher}
                   </span>
-
                 </div>
               </AccordionTrigger>
               <AccordionContent>
-                <div className="space-y-4">
-                  {school_class.tests.length > 0 ? (
-                    school_class.tests.map((testItem) => (
-                      <Card key={testItem.id}>
-                        <CardHeader>
-                          <CardTitle className="text-lg">{testItem.name}</CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                          <div style={{ marginTop: '10px', display: 'flex', justifyContent: 'space-between' }}>
-                            <Button
-                              variant="outline"
-                              className="max-w-100"
-                              disabled={school_class.students.length === 0}
-                              onClick={() => handleAddViewIntervals(testItem.id)}
-                            >
-                              {translations.viewAddIntervals}
-                            </Button>
-                            {/* //NOTE -Test-level Remove Button and Dialog  */}
-                            <RemoveDialog title={translations.removeTest} description={translations.confirmRemoveTest} confirmText={translations.removeTest} cancelText={translations.cancel} onRemove={() => handleRemoveTest(testItem.id)} id={testItem.id} removeMessage={translations.removeTest} />
-                          </div>
-                        </CardContent>
-                      </Card>
-                    ))
+                <TestAccordion
+                  tests={school_class.tests}
+                  students={school_class.students}
+                  handleAddViewIntervals={handleAddViewIntervals}
+                  handleRemoveTest={handleRemoveTest}
+                  className={school_class.name}
+                />
+                {/* -- Students Accordion (Extracted into its own component) -- */}
+                <StudentsAccordion
+                  students={school_class.students}
+                  handleViewEditStudents={handleViewEditStudents}
+                  handleUpdateStudent={handleUpdateStudent}
+                  handleRemoveStudent={handleRemoveStudent}
+                  classId={school_class.id}
+                  className={school_class.name}
+                  newRecord={newRecord}
+                  setNewRecord={setNewRecord}
+                />
 
-                  ) : (
-                    <div className="text-center">
-                      <p>{translations.noTestAdded}</p>
-                    </div>
-                  )}
-                </div>
-                <div style={{ marginTop: '10px', display: 'flex', justifyContent: 'space-between' }}>
+                {/* -- Performances -- */}
+                <PerformanceAccordion
+                  performances={school_class.performances}
+                  students={school_class.students}
+                  // handleAddViewIntervals={handleAddViewIntervals}
+                  // handleRemoveTest={handleRemoveTest}
+                  className={school_class.name}
+                />
+                {/* -- Documents -- */}
+                <DocumentAccordion
+                  documents={school_class.documents || []}
+                  handleUploadDocument={handleUploadDocument}
+                  handleRemoveDocument={handleRemoveDocument}
+                  handleDownloadDocument={handleDownloadDocument}
+                  className={school_class.name}
+                />
+                {/* Buttons for adding a student or test */}
+                <div
+                  style={{ marginTop: '10px', display: 'flex', justifyContent: 'space-between' }}
+                >
                   <div>
-                    <Button variant="outline" style={{ marginRight: '10px' }} onClick={() => handleAddStudent(school_class.id)}>
+                    <Button
+                      variant="outline"
+                      style={{ marginRight: '10px' }}
+                      onClick={() => handleAddStudent(school_class.id)}
+                    >
                       {translations.addStudent}
                     </Button>
                     <Button variant="outline" onClick={() => handleSelectingTest(school_class.id)}>
                       {translations.addTest}
                     </Button>
                   </div>
-                  {/* //NOTE -Class-level Remove Button and Dialog  */}
+                  {/* Class-level Remove Button & Dialog */}
                   <div style={{ display: 'flex', alignItems: 'center' }}>
-                    <RemoveDialog title={translations.removeClass} description={translations.confirmRemoveClass} confirmText={translations.removeSchool} cancelText={translations.cancel} onRemove={() => handleRemoveClass(school_class.id)} id={school_class.id} removeMessage={translations.removeClass} />
+                    <RemoveDialog
+                      title={translations.removeClass}
+                      description={translations.confirmRemoveClass}
+                      confirmText={translations.removeSchool}
+                      cancelText={translations.cancel}
+                      onRemove={() => handleRemoveClass(school_class.id)}
+                      id={school_class.id}
+                      removeMessage={translations.removeClass}
+                    />
                   </div>
                 </div>
-
-                {school_class.students.length === 0 ? (
-                  <div style={{ marginTop: '20px', textAlign: 'center', padding: '20px' }}>{translations.noStudentsAdded}</div>
-                ) : (
-                  <Card style={{ margin: '30px 0', padding: '20px' }}>
-                    <div style={{ marginBottom: '10px', textAlign: 'center', fontSize: '18px', fontWeight: 'bold' }}>{translations.studentTableList} - {school_class.name}</div>
-                    <Table style={{ marginTop: '20px' }}>
-                      <TableHeader>
-                        <TableRow>
-                          <TableHead>{translations.studentId}</TableHead>
-                          <TableHead>{translations.name}</TableHead>
-                          <TableHead>{translations.viewOrEdit}</TableHead>
-                          <TableHead>{translations.removeStudent}</TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        {school_class.students.map((student) => (
-                          <TableRow key={student.id}>
-                            <TableCell>{student.studentId}</TableCell>
-                            <TableCell>{student.name}</TableCell>
-                            <TableCell className="flex justify-center space-x-2">
-                              {/* //NOTE - View/Edit Dialog */}
-                              <ViewEditDialog
-                                title={translations.viewEditStudent} description={translations.viewEditStudentDescription} onOpen={() => handleViewEditStudents(student.id)}
-                                triggerButtonTitle={translations.viewOrEdit}
-                                id={student.id}
-                                cancelText={translations.cancel}
-                                confirmText={translations.update}
-                                onSave={handleUpdateStudent}
-                              >
-                                {/* TODO- fix this to be a table to update students */}
-                                <Table>
-                                  <TableHeader>
-                                    <TableRow>
-                                      <TableHead>{translations.studentId}</TableHead>
-                                      <TableHead>{translations.name}</TableHead>
-                                    </TableRow>
-                                  </TableHeader>
-                                  <TableRow key={student.id}>
-                                    <TableCell>{student.studentId}</TableCell>
-                                    <TableCell>{student.name}</TableCell>
-                                  </TableRow>
-                                </Table>
-                              </ViewEditDialog>
-                            </TableCell>
-                            <TableCell>
-                              {/* //NOTE - Student-level Remove Dialog */}
-                              <RemoveDialog title={translations.removeStudent} description={translations.confirmRemoveStudent} confirmText={translations.removeStudent} cancelText={translations.cancel} onRemove={() => handleRemoveStudent(student.id)} id={school_class.id}
-                                removeMessage={translations.removeStudent} />
-                            </TableCell>
-                          </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
-                  </Card>
-                )}
-                <PerformanceAccordion
-                  performances={school_class.performances || []} />
-                <DocumentAccordion
-                  documents={school_class.documents || []}
-                  handleUploadDocument={handleUploadDocument}
-                  handleRemoveDocument={handleRemoveDocument}
-                  handleDownloadDocument={handleDownloadDocument}
-                  className={school_class.name} />
               </AccordionContent>
             </AccordionItem>
           ))}
-
-        </Accordion>)}
+        </Accordion>
+      )}
     </Card>
   );
 }

@@ -1,6 +1,8 @@
 'use client';
 
+import statusMessages from "@/lib/statusMessages";
 import { urlEnum } from "@/utils/urlEnum";
+import { resolve } from "path";
 
 export const login = async (email: string, password: string): Promise<boolean> => {
 
@@ -14,9 +16,10 @@ export const login = async (email: string, password: string): Promise<boolean> =
 
   const data = await response.json();
 
-  if (response.ok) {
-    // Successfully logged in
+  if (response.ok && data.token) {
+    // Successfully logged in and token received
     return new Promise((resolve) => {
+      localStorage.setItem('token', data.token);
       localStorage.setItem('isAuthenticated', 'true');
       resolve(true);
     });
@@ -26,17 +29,28 @@ export const login = async (email: string, password: string): Promise<boolean> =
       reject(false);
     });
   }
-
-  // // This is a mock login function. In a real app, you'd validate against a backend.
-  // if (email === 'test99@em.com' && password === 'test99') {
-  //   localStorage.setItem('isAuthenticated', 'true');
-  //   return true;
-  // }
-  // return false;
 };
 
-export const logout = (): void => {
-  localStorage.removeItem('isAuthenticated');
+export const logout = async (): Promise<void> => {
+  try {
+    const response = await fetch(`${urlEnum.users}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    });
+
+    if (response.ok) {
+      localStorage.removeItem('token');
+      localStorage.removeItem('isAuthenticated');
+      resolve();
+    }
+  }
+  catch (error) {
+    console.error(error);
+    throw new Error(statusMessages.errorSigningOut);
+  }
+
 };
 
 export const checkAuth = (): boolean => {

@@ -20,3 +20,13 @@ export const baremTypes: [number, string][] = [
   [3, 'secunde'],
   [4, 'numar'],
 ];
+
+
+
+export const paginationConstants: Record<string, number> = {
+  TESTS_PER_PAGE: 4,
+  PERFORMANCES_PER_PAGE: 4,
+  STUDENTS_PER_PAGE: 5,
+  DOCUMENTS_PER_PAGE: 5,
+  INTERVALS_PER_PAGE: 5,
+};

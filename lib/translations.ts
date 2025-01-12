@@ -58,6 +58,10 @@ const translations = {
   noClassesAdded: "Nu sunt clase adăugate",
   removeClass: "Șterge clasa",
   confirmRemoveClass: "Sigur dorești să ștergi o clasă?",
+  previous: "Anterior",
+  next: "Următor",
+  page: "Pagina",
+  of: "din",
 
   //Student
   studentId: "Id elev",
@@ -82,20 +86,24 @@ const translations = {
   studentTableList: "Tabel Elevi atribuiți clasei",
   removeStudent: "Șterge elev",
   confirmRemoveStudent: "Sigur dorești să ștergi elevul?",
+  studentsList: "Elevi atribuiți clasei",
 
   //Test
   tasks: "Teme",
+  testId: "Id test",
+  addedTest: "Teste adăugate",
   addTask: "Adaugă temă",
   name: "Nume",
   title: "Titlu",
   addTest: "Adaugă test",
-  testName: "Numele testului",
+  testName: "Nume test",
   noTestAdded: "Nu sunt teste adăugate",
   barem: "Valoare Barem",
   addBarem: "Adaugă barem",
   deleteATest: "Șterge testul",
   removeTest: "Șterge test",
   confirmRemoveTest: "Sigur dorești să ștergi testul?",
+  testsList: "Teste adăugate",
 
   //Interval
   viewIntervals: "Vizualizare intervale",
@@ -150,12 +158,14 @@ const translations = {
   seconds: "Secunde",
   minutes: "Minute",
   time: "Timp",
+  number: "Numar",
 
   //Performance
   noPerformance: "Nu sunt performanțe adăugate",
   score: "Scor",
   testBarem: "Barem test",
   studentListOfPerformance: "Lista de performanțe a elevilor",
+  performancesList: "Performanțe adăugate",
 
   //Common
   action: "Acțiune",
@@ -182,12 +192,13 @@ const translations = {
   pageNotFoundMessage: "Ne pare rău, pagina pe care o căutați nu a fost găsită",
   backToHome: "Înapoi la pagina principală",
 
+
   //Docs
   documentsList: "Lista documentelor",
   noDocuments: "Nu sunt documente adăugate",
   docName: "Nume document",
   download: "Descarcă",
-  upload: "Încarcă",
+  upload: "Încarcă un document",
   addDocument: "Adaugă document",
   addDocumentDescription: "Adaugă documente aici",
   removeDocument: "Șterge document",

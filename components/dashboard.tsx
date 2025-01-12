@@ -25,7 +25,8 @@ import {
 import {
   processGetStudents,
   processCreateStudent,
-  processRemoveStudent
+  processRemoveStudent,
+  processUpdateStudent
 } from "@/controllers/students";
 import {
   processCreateTest,
@@ -121,8 +122,8 @@ export default function SchoolDashboard() {
   };
 
   // Logout Handler
-  const handleLogout = () => {
-    logout();
+  const handleLogout = async () => {
+    await logout();
     router.push('/');
   };
 
@@ -379,6 +380,7 @@ export default function SchoolDashboard() {
   const handleViewEditRecords = async (intervalId: number) => {
     setSelectedIntervalId(intervalId);
     await fetchRecords(intervalId);
+    setNewRecord({});
   };
 
   const handleViewEditStudents = async (classId: number) => {
@@ -386,7 +388,18 @@ export default function SchoolDashboard() {
   };
 
   const handleUpdateStudent = async (studentId: number, data: object) => {
-    // Provide your logic to update a student here (if needed).
+    showStatusModal(statusMessages.updatingStudent, fetchStatuses.loading);
+    try {
+      await processUpdateStudent(data, studentId,);
+      showStatusModal(statusMessages.studentUpdated, fetchStatuses.success);
+      setNewRecord({});
+    } catch (error) {
+      showStatusModal(statusMessages.errorUpdatingStudent, fetchStatuses.error);
+    } finally {
+      if (selectedIntervalId) {
+        await fetchClasses();
+      }
+    }
   };
 
   // =========================
@@ -516,12 +529,7 @@ export default function SchoolDashboard() {
 
   return (
     <div className="min-h-screen bg-gray-100 p-8">
-      <Card className="max-w-xl mx-auto mb-4" >
-        <CardTitle className="text-2xl font-bold flex items-center justify-center">
-          {translations.welcome}
-        </CardTitle>
-      </Card>
-      <Card className="max-w-6xl mx-auto">
+      <Card className="max-w-1xl mx-auto">
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle className="text-2xl font-bold flex items-center">
             <School className="mr-2 h-6 w-6" />
@@ -539,7 +547,6 @@ export default function SchoolDashboard() {
             onAddSchool={() => setIsSchoolModalOpen(true)}
             onRemoveSchool={handleRemoveSchool}
           />
-
           {/* Year Selection (only show if school selected) */}
           {selectedSchoolId && (
             <YearSelector
@@ -567,6 +574,8 @@ export default function SchoolDashboard() {
                 handleUploadDocument={() => setIsDocumentModalOpen(true)}
                 handleRemoveDocument={handleRemoveDocument}
                 handleDownloadDocument={handleDownloadDocument}
+                newRecord={newRecord}
+                setNewRecord={setNewRecord}
               />
             </div>
           )}

@@ -20,24 +20,27 @@ export default function YearSelector({ years, onSelectYear, onAddYear, onRemoveY
 
   return (
     <div style={{ marginTop: '20px' }}>
-      <Label htmlFor="year-select">{translations.chooseYear}</Label>
+
       {years.length > 0 && (
-        <Select onValueChange={(value) => onSelectYear(parseInt(value))}>
-          <SelectTrigger id="year-select">
-            <SelectValue placeholder={translations.chooseYear} />
-          </SelectTrigger>
-          <SelectContent>
-            {years.length > 0 ? (
-              years.map((year) => (
-                <SelectItem key={year.id} value={year.id.toString()}>
-                  {arabicToRoman(parseInt(year.name))}
-                </SelectItem>
-              ))
-            ) : (
-              <div>{translations.noYears}</div>
-            )}
-          </SelectContent>
-        </Select>
+        <>
+          <Label htmlFor="year-select">{translations.chooseYear}</Label>
+          <Select onValueChange={(value) => onSelectYear(parseInt(value))}>
+            <SelectTrigger id="year-select">
+              <SelectValue placeholder={translations.chooseYear} />
+            </SelectTrigger>
+            <SelectContent>
+              {years.length > 0 ? (
+                years.map((year) => (
+                  <SelectItem key={year.id} value={year.id.toString()}>
+                    {arabicToRoman(parseInt(year.name))}
+                  </SelectItem>
+                ))
+              ) : (
+                <div>{translations.noYears}</div>
+              )}
+            </SelectContent>
+          </Select>
+        </>
       )}
       <div style={{ marginTop: '10px', display: 'flex', justifyContent: 'space-between' }}>
         {

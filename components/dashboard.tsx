@@ -23,7 +23,6 @@ import {
   processRemoveYear
 } from "@/controllers/years";
 import {
-  processGetStudents,
   processCreateStudent,
   processRemoveStudent,
   processUpdateStudent
@@ -52,7 +51,6 @@ import {
 
 import { School } from 'lucide-react';
 import {
-  StudentData,
   IntervalData,
   RecordData,
   YearData,
@@ -88,7 +86,6 @@ export default function SchoolDashboard() {
   const [selectedTestId, setSelectedTestId] = useState<number | null>(null);
   const [years, setYears] = useState<YearData[]>([]);
   const [selectedYearId, setSelectedYearId] = useState<number | null>(null);
-  const [students, setStudents] = useState<StudentData[]>([]); //NOTE - fix this later use students from inside of classes
   const [intervals, setIntervals] = useState<IntervalData[]>([]);
   const [selectedIntervalId, setSelectedIntervalId] = useState<number>();
   const [records, setRecords] = useState<RecordData[]>([]);
@@ -146,13 +143,6 @@ export default function SchoolDashboard() {
     }
   }, [selectedYearId]);
 
-  // Fetch students when class selected
-  useEffect(() => {
-    if (selectedClassId) {
-      fetchStudents();
-    }
-  }, [selectedClassId]);
-
   // Fetch records when interval selected
   useEffect(() => {
     if (selectedIntervalId) {
@@ -198,17 +188,6 @@ export default function SchoolDashboard() {
     }
   };
 
-  const fetchStudents = async () => {
-    if (!selectedClassId) return;
-    // showStatusModal(statusMessages.fetchingStudents, fetchStatuses.loading);
-    try {
-      const studentList = (await processGetStudents(selectedClassId.toString())) || [];
-      setStudents(studentList);
-      // showStatusModal(statusMessages.studentsFetched, fetchStatuses.success);
-    } catch (error) {
-      showStatusModal(statusMessages.errorFetchingStudents, fetchStatuses.error);
-    }
-  };
 
   const fetchIntervals = async (testId: number) => {
     if (!testId) return;
@@ -383,10 +362,6 @@ export default function SchoolDashboard() {
     setNewRecord({});
   };
 
-  const handleViewEditStudents = async (classId: number) => {
-    // Provide your logic to view/edit students here (if needed).
-  };
-
   const handleUpdateStudent = async (studentId: number, data: object) => {
     showStatusModal(statusMessages.updatingStudent, fetchStatuses.loading);
     try {
@@ -556,7 +531,6 @@ export default function SchoolDashboard() {
               onRemoveYear={handleRemoveYear}
             />
           )}
-
           {/* Classes and Tests */}
           {classes.length > 0 && (
             <div>
@@ -566,7 +540,6 @@ export default function SchoolDashboard() {
                 handleSelectingTest={() => setIsTestModalOpen(true)}
                 handleAddViewIntervals={handleAddViewIntervals}
                 setSelectedClassId={setSelectedClassId}
-                handleViewEditStudents={handleViewEditStudents}
                 handleRemoveClass={handleRemoveClass}
                 handleRemoveStudent={handleRemoveStudent}
                 handleUpdateStudent={handleUpdateStudent}

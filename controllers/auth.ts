@@ -54,5 +54,5 @@ export const logout = async (): Promise<void> => {
 };
 
 export const checkAuth = (): boolean => {
-  return localStorage.getItem('isAuthenticated') === 'true';
+  return localStorage.getItem('isAuthenticated') === 'true' && localStorage.getItem('token') !== null;
 };

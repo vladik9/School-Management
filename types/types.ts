@@ -1,3 +1,5 @@
+import Interval from "@/models/interval.model";
+
 type StudentData = {
   id: number;
   studentId: number;
@@ -61,8 +63,8 @@ type RecordData = {
   studentGeneratedId: number;
   value: Date | string | number;
   intervalId: number;
-}
- type FetchStatuses = "default" | "success" | "error" | "loading";
+};
+type FetchStatuses = "default" | "success" | "error" | "loading";
 
 
 export type{
@@ -75,5 +77,5 @@ export type{
   TestData,
   RecordData,
   FetchStatuses,
-  DocumentData
+  DocumentData,
 };

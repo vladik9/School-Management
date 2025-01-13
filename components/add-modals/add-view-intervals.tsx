@@ -20,7 +20,7 @@ interface AddViewIntervalsProps {
   isModalOpen: boolean;
   handleCloseModal: () => void;
   handleSaveModal: () => void;
-  newRecord: { studentId: number, value: string; };
+  newRecord: any;
   setNewRecord: (data: { studentId: number, value: string; }) => void;
   records: RecordData[];
   students: StudentData[];
@@ -244,7 +244,6 @@ export default function AddViewIntervals({
                                       <Users className="h-4 w-4 mr-2" />
                                       {translations.edit}
                                     </Button>
-                                    {/* //TODO - fix this to be a specific component render based on barem type */}
                                     <AddViewRecord isModalOpen={isViewEditRecordsModalOpen}
                                       modalTitle={translations.editRecord} modalDescription={translations.editRecordDescription}
                                       handleCloseModal={() => setIsViewEditRecordsModalOpen(false)} handleSaveModal={handleUpdateRecord} students={students} newRecord={newRecord} setNewRecord={setNewRecord}

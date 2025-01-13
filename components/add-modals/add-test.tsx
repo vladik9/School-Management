@@ -18,11 +18,7 @@ interface AddTestProps {
   isModalOpen: boolean;
   handleCloseModal: () => void;
   handleSaveModal: () => void;
-  newRecord: {
-    name: string;
-    baremType: number;
-    barem: number;
-  };
+  newRecord: any;
   setNewRecord: (data: {
     name: string;
     baremType: number;

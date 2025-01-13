@@ -53,7 +53,7 @@ const getClasses = async (req: NextApiRequest, res: NextApiResponse) => {
           tests,
           students,
           documents,
-          performances: tests, // Placeholder for performances
+          performances: [], // Placeholder for performances
         };
       })
     );

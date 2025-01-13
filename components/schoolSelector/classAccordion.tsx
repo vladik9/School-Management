@@ -18,7 +18,6 @@ interface ClassAccordionProps {
   handleUpdateStudent: (studentId: number, data: object) => void;
   handleSelectingTest: (classId: number) => void;
   handleAddViewIntervals: (testId: number) => void;
-  handleViewEditStudents: (studentId: number) => void;
   setSelectedClassId: (classId: number) => void;
   handleRemoveStudent: (studentId: number) => void;
   handleRemoveClass: (classId: number) => void;
@@ -39,7 +38,6 @@ export default function ClassAccordion({
   handleSelectingTest,
   handleAddViewIntervals,
   handleUpdateStudent,
-  handleViewEditStudents,
   setSelectedClassId,
   handleRemoveStudent,
   handleRemoveClass,
@@ -82,7 +80,6 @@ export default function ClassAccordion({
                 {/* -- Students Accordion (Extracted into its own component) -- */}
                 <StudentsAccordion
                   students={school_class.students}
-                  handleViewEditStudents={handleViewEditStudents}
                   handleUpdateStudent={handleUpdateStudent}
                   handleRemoveStudent={handleRemoveStudent}
                   classId={school_class.id}

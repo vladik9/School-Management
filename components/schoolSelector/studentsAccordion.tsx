@@ -12,7 +12,6 @@ import AddViewStudent from '../add-modals/add-view-student';
 
 interface StudentsAccordionProps {
   students: StudentData[];
-  handleViewEditStudents: (studentId: number) => void;
   handleUpdateStudent: (studentId: number, data: object) => void;
   handleRemoveStudent: (studentId: number) => void;
   classId: number;

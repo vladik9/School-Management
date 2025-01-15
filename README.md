@@ -58,3 +58,42 @@ npx sequelize-cli db:migrate
 ```bash
 npx sequelize-cli db:migrate:undo
 ```
+
+## Creating db and user in db
+
+
+#### Step 1: Create the database
+
+```bash
+CREATE DATABASE school_management;
+```
+
+#### Step 2: Create a user and grant privileges
+
+-- Replace 'root' and '0000' with your desired username and password
+
+```bash
+CREATE USER 'root'@'localhost' IDENTIFIED BY '0000';
+```
+
+#### Step 3: Grant full access to the database for this user
+
+```bash
+GRANT ALL PRIVILEGES ON school_management.* TO 'root'@'localhost';
+```
+
+#### Step 4: Apply the changes
+
+```bash
+FLUSH PRIVILEGES;
+```
+
+#### Step 5: Make Mysql have root access only (optional)
+
+```bash
+UPDATE mysql.user SET authentication_string='0000', plugin='mysql_native_password' WHERE user='root';
+```
+
+```bash
+FLUSH PRIVILEGES;
+```

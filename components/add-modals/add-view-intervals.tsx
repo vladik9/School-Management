@@ -152,9 +152,9 @@ export default function AddViewIntervals({
   const averageBasedOnBaremType = (baremType: number, result: any, barem: any) => {
     switch (baremType) {
       case 1:
-        return (barem / result).toFixed(2);
+        return (result / barem).toFixed(2);
       case 2:
-        return (barem / result).toFixed(2);
+        return (result / barem).toFixed(2);
       case 3:
         // Extract [minutes, seconds] from both values
         const [rM, rS] = result.split(':').map(Number);
@@ -170,7 +170,7 @@ export default function AddViewIntervals({
         // Return a float with 2 decimal places
         return Number(difference.toFixed(2));
       case 4:
-        return (barem / result).toFixed(2);
+        return (result / barem).toFixed(2);
       default:
         return null;
     }
@@ -215,7 +215,7 @@ export default function AddViewIntervals({
                               <TableHead>{translations.studentId}</TableHead>
                               <TableHead>{translations.result}</TableHead>
                               <TableHead>{translations.barem}</TableHead>
-                              <TableHead>{translations.average}</TableHead>
+                              <TableHead>{translations.score}</TableHead>
                               {/* // TODO -- fix this to be real value/ */}
                               <TableHead>{translations.edit}</TableHead>
                               <TableHead>{translations.removeRecord}</TableHead>

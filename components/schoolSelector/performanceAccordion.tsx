@@ -69,7 +69,7 @@ export default function PerformanceAccordion({
                           <AccordionContent>
                             <div className="grid grid-cols-2 gap-4">
                               <div>
-                                <div className="text-center">{translations.boysPerformanceList}</div>
+                                <div className="text-center font-bold">{translations.boysPerformanceList}</div>
                                 {performance.boys.length > 0 ? (
                                   <Table>
                                     <TableHeader>
@@ -94,7 +94,7 @@ export default function PerformanceAccordion({
                                 )}
                               </div>
                               <div>
-                                <div className="text-center">{translations.girlsPerformanceList}</div>
+                                <div className="text-center font-bold">{translations.girlsPerformanceList}</div>
                                 {performance.girls.length > 0 ? (
                                   <Table>
                                     <TableHeader>

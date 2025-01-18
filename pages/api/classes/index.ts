@@ -92,12 +92,20 @@ const getPerformancesWithDetails = async (performances: any) => {
           girls.push(bestRec);
         }
       });
-      //TODO - LIMIT THIS TO RETURN MAX 5 RECORDS TOP FIVE
+
+      // Sort boys and girls by performanceScore descending
+      boys.sort((a, b) => b.performanceScore - a.performanceScore);
+      girls.sort((a, b) => b.performanceScore - a.performanceScore);
+
+      // Limit to top 5 records
+      const topBoys = boys.slice(0, 5);
+      const topGirls = girls.slice(0, 5);
+
       // 6. Return aggregated data for this single test
       return {
         ...performance,
-        boys,
-        girls,
+        boys: topBoys,
+        girls: topGirls,
       };
     })
   );

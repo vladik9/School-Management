@@ -44,7 +44,8 @@ type PerformanceData = {
   testId: number;
   testBarem: string;
   score: number;
-  intervals: IntervalData[];
+  boys: Array<RecordData>;
+  girls: Array<RecordData>;
 };
 
 type DocumentData = {
@@ -63,6 +64,7 @@ type RecordData = {
   studentGeneratedId: number;
   value: Date | string | number;
   intervalId: number;
+  performanceScore: number;
 };
 type FetchStatuses = "default" | "success" | "error" | "loading";
 

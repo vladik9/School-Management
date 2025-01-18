@@ -69,42 +69,55 @@ export default function PerformanceAccordion({
                           <AccordionContent>
                             <div className="grid grid-cols-2 gap-4">
                               <div>
-                                <span>MAN</span>
-                                <Table>
-                                  <TableHeader>
-                                    <TableRow>
-                                      <TableHead>{translations.student}</TableHead>
-                                      <TableHead>{translations.score}</TableHead>
-                                    </TableRow>
-                                  </TableHeader>
-                                  {/* <TableBody>
-                              {performance.intervals.map((int) => (
-                                <TableRow key={int.id}>
-                                  <TableCell>{int.name}</TableCell>
-                                  <TableCell>{int.score}</TableCell>
-                                </TableRow>
-                              ))}
-                            </TableBody> */}
-                                </Table>
+                                <div className="text-center">{translations.boysPerformanceList}</div>
+                                {performance.boys.length > 0 ? (
+                                  <Table>
+                                    <TableHeader>
+                                      <TableRow>
+                                        <TableHead>{translations.count}</TableHead>
+                                        <TableHead>{translations.studentId}</TableHead>
+                                        <TableHead>{translations.score}</TableHead>
+                                      </TableRow>
+                                    </TableHeader>
+                                    <TableBody>
+                                      {performance.boys.map((int, index) => (
+                                        <TableRow key={int.id}>
+                                          <TableCell>{index + 1}</TableCell>
+                                          <TableCell>{int.studentGeneratedId}</TableCell>
+                                          <TableCell>{int.performanceScore}</TableCell>
+                                        </TableRow>
+                                      ))}
+                                    </TableBody>
+                                  </Table>
+                                ) : (
+                                  <div className="text-center w-full pt-10">{translations.noGirlsAdded}</div>
+                                )}
                               </div>
                               <div>
-                                <span>FAME</span>
-                                <Table>
-                                  <TableHeader>
-                                    <TableRow>
-                                      <TableHead>{translations.student}</TableHead>
-                                      <TableHead>{translations.score}</TableHead>
-                                    </TableRow>
-                                  </TableHeader>
-                                  {/* <TableBody>
-                              {performance.intervals.map((int) => (
-                                <TableRow key={int.id}>
-                                  <TableCell>{int.name}</TableCell>
-                                  <TableCell>{int.score}</TableCell>
-                                </TableRow>
-                              ))}
-                            </TableBody> */}
-                                </Table></div>
+                                <div className="text-center">{translations.girlsPerformanceList}</div>
+                                {performance.girls.length > 0 ? (
+                                  <Table>
+                                    <TableHeader>
+                                      <TableRow>
+                                        <TableHead>{translations.count}</TableHead>
+                                        <TableHead>{translations.studentId}</TableHead>
+                                        <TableHead>{translations.score}</TableHead>
+                                      </TableRow>
+                                    </TableHeader>
+                                    <TableBody>
+                                      {performance.girls.map((int, index) => (
+                                        <TableRow key={int.id}>
+                                          <TableCell>{index + 1}</TableCell>
+                                          <TableCell>{int.studentGeneratedId}</TableCell>
+                                          <TableCell>{int.performanceScore}</TableCell>
+                                        </TableRow>
+                                      ))}
+                                    </TableBody>
+                                  </Table>
+                                ) : (
+                                  <div className="text-center w-full pt-10">{translations.noGirlsAdded}</div>
+                                )}
+                              </div>
                             </div>
                           </AccordionContent>
                         </AccordionItem>

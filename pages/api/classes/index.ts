@@ -58,7 +58,6 @@ const getPerformancesWithDetails = async (performances: any) => {
           // Calculate the difference
           const difference = totalResultSeconds / totalBaremSeconds;
           performanceScore = record.value;
-          console.log("difference", difference);
           // Assign the performance score
           performanceScore = Number(difference.toFixed(2));
         }

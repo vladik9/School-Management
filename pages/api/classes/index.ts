@@ -17,6 +17,7 @@ const getPerformancesWithDetails = async (performances: any) => {
       const records = await Record.findAll({
         where: { intervalId: intervals.map((interval) => interval.id) },
         attributes: ['id', 'studentId', 'studentGeneratedId', 'value', 'intervalId'],
+
       });
 
       // Map records to their respective intervals and divide them into intervalB and intervalF
@@ -42,7 +43,7 @@ const getPerformancesWithDetails = async (performances: any) => {
         return {
           ...interval.toJSON(),
           intervalB,
-          intervalF
+          intervalF,
         };
       });
 
@@ -153,7 +154,7 @@ const getClasses = async (req: NextApiRequest, res: NextApiResponse) => {
         const performancesWithTest = tests.map((test) => {
           return {
             testId: test.id,
-            name: test.name,
+            testName: test.name,
             baremType: test.baremType,
             barem: test.barem
 

@@ -20,6 +20,7 @@ export default function PerformanceAccordion({
   performances,
   className,
 }: PerformanceAccordionProps) {
+  console.log("🚀 ~ performances:", performances);
 
   const [currentPerformancePage, setCurrentPerformancePage] = useState(0);
 
@@ -35,9 +36,7 @@ export default function PerformanceAccordion({
     const startIndex = currentPerformancePage * PERFORMANCE_PER_PAGE;
     return performanceList.slice(startIndex, startIndex + PERFORMANCE_PER_PAGE);
   };
-  console.log('performances', performances);
 
-  // TODO -- complete this functions and logic
   return (
     <div style={{ marginTop: '20px' }}>
       {
@@ -52,7 +51,7 @@ export default function PerformanceAccordion({
           <>
             <Card style={{ margin: '30px 0', padding: '20px' }}>
               <Accordion type="single" collapsible>
-                <AccordionItem value="performances">
+                <AccordionItem value="performances-accordion">
                   <AccordionTrigger>
                     <div className="flex items-center justify-between w-full">
                       <span>
@@ -61,37 +60,61 @@ export default function PerformanceAccordion({
                     </div>
                   </AccordionTrigger>
                   <AccordionContent>
-
-                    {paginatedPerformances(performances).map((performance) => (
-                      <AccordionItem key={performance.id} value={`performance-${performance.id}`}>
-                        <AccordionTrigger>
-                          <h3>{performance.name}</h3>
-                        </AccordionTrigger>
-                        <AccordionContent>
-                          <Table>
-                            <TableHeader>
-                              <TableRow>
-                                <TableHead>{translations.student}</TableHead>
-                                <TableHead>{translations.score}</TableHead>
-                              </TableRow>
-                            </TableHeader>
-                            <TableBody>
+                    <Accordion type="single" collapsible>
+                      {paginatedPerformances(performances).map((performance) => (
+                        <AccordionItem key={performance.testId} value={`test-performance-${performance.testId}`}>
+                          <AccordionTrigger>
+                            <h3>{performance.testName}</h3>
+                          </AccordionTrigger>
+                          <AccordionContent>
+                            <div className="grid grid-cols-2 gap-4">
+                              <div>
+                                <span>MAN</span>
+                                <Table>
+                                  <TableHeader>
+                                    <TableRow>
+                                      <TableHead>{translations.student}</TableHead>
+                                      <TableHead>{translations.score}</TableHead>
+                                    </TableRow>
+                                  </TableHeader>
+                                  {/* <TableBody>
                               {performance.intervals.map((int) => (
                                 <TableRow key={int.id}>
                                   <TableCell>{int.name}</TableCell>
                                   <TableCell>{int.score}</TableCell>
                                 </TableRow>
                               ))}
-                            </TableBody>
-                          </Table>
-                        </AccordionContent>
-                      </AccordionItem>
-                    ))}
+                            </TableBody> */}
+                                </Table>
+                              </div>
+                              <div>
+                                <span>FAME</span>
+                                <Table>
+                                  <TableHeader>
+                                    <TableRow>
+                                      <TableHead>{translations.student}</TableHead>
+                                      <TableHead>{translations.score}</TableHead>
+                                    </TableRow>
+                                  </TableHeader>
+                                  {/* <TableBody>
+                              {performance.intervals.map((int) => (
+                                <TableRow key={int.id}>
+                                  <TableCell>{int.name}</TableCell>
+                                  <TableCell>{int.score}</TableCell>
+                                </TableRow>
+                              ))}
+                            </TableBody> */}
+                                </Table></div>
+                            </div>
+                          </AccordionContent>
+                        </AccordionItem>
+                      ))}
+                    </Accordion>
                     <PaginationButtons
+                      itemSize={performances.length}
+                      itemsPerPage={PERFORMANCE_PER_PAGE}
                       currentPage={currentPerformancePage}
-                      totalPages={Math.ceil(performances.length / PERFORMANCE_PER_PAGE)}
-                      onNextPage={handleNextPerformancePage}
-                      onPreviousPage={handlePreviousPerformancePage}
+                      handlePreviousPage={handlePreviousPerformancePage} handleNextPage={handleNextPerformancePage}
                     />
                   </AccordionContent>
                 </AccordionItem>

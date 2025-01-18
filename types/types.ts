@@ -1,4 +1,3 @@
-import Interval from "@/models/interval.model";
 
 type StudentData = {
   id: number;
@@ -45,6 +44,7 @@ type PerformanceData = {
   testId: number;
   testBarem: string;
   score: number;
+  intervals: IntervalData[];
 };
 
 type DocumentData = {

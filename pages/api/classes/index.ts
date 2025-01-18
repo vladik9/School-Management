@@ -8,52 +8,100 @@ import checkToken from '../middleware';
 import Record from '@/models/record.model';
 
 
+
+function isBetterRecord(oldRecord: any, newRecord: any) {
+  if (!oldRecord) return true; // If no record yet, new one is better by default
+  // Compare performanceScores, bigger is better
+  return Number(newRecord.performanceScore) > Number(oldRecord.performanceScore);
+}
+
 const getPerformancesWithDetails = async (performances: any) => {
-  const performancesWithDetails = await Promise.all(
+  return Promise.all(
     performances.map(async (performance: any) => {
+      // 1. Get all intervals for the test
       const intervals = await Interval.findAll({
         where: { testId: performance.testId },
       });
+      // 2. Get all records for these intervals in one go
+      const intervalIds = intervals.map((interval) => interval.id);
       const records = await Record.findAll({
-        where: { intervalId: intervals.map((interval) => interval.id) },
+        where: { intervalId: intervalIds },
         attributes: ['id', 'studentId', 'studentGeneratedId', 'value', 'intervalId'],
-
       });
+      // 3. Compute performanceScore and group by student
+      //    We'll store best record in a dictionary keyed by studentGeneratedId.
+      const bestRecordsByStudent = {};
 
-      // Map records to their respective intervals and divide them into intervalB and intervalF
-      const intervalsWithRecords = intervals.map((interval) => {
-        const intervalB = records.filter((record) => record.intervalId === interval.id && record.studentGeneratedId.toString().startsWith('B')).map((record) => ({
+      for (const record of records) {
+        // Compute performanceScore
+        // For demonstration, let's assume numeric data => record.value / performance.barem
+        // You might need to adapt if it's time-based, etc.
+        let performanceScore = null;
+
+        // Simple numeric scenario:
+        if (performance.baremType === 1 || performance.baremType === 2 || performance.baremType === 4) {
+          // Convert to number for safety
+          const numericValue = Number(record.value);
+          const numericBarem = Number(performance.barem);
+          if (!isNaN(numericValue) && !isNaN(numericBarem)) {
+            performanceScore = numericValue / numericBarem;
+          }
+        }
+        if (performance.baremType === 3) {
+          const [rM, rS] = record.value.split(':').map(Number);
+          const [bM, bS] = performance.barem.split(':').map(Number);
+
+          // Convert them to total seconds
+          const totalResultSeconds = rM * 60 + rS;
+          const totalBaremSeconds = bM * 60 + bS;
+
+          // Calculate the difference
+          const difference = totalResultSeconds / totalBaremSeconds;
+          performanceScore = record.value;
+          console.log("difference", difference);
+          // Assign the performance score
+          performanceScore = Number(difference.toFixed(2));
+        }
+        const currentStudentId = record.studentGeneratedId;
+
+        // Construct a partial object for the student's record:
+        const recordObj = {
           id: record.id,
           studentId: record.studentId,
-          studentGeneratedId: record.studentGeneratedId,
-          score: record.value,
+          studentGeneratedId: currentStudentId,
           intervalId: record.intervalId,
-          performanceScore: record.value / performance.barem
-        }));
-
-        const intervalF = records.filter((record) => record.intervalId === interval.id && record.studentGeneratedId.toString().startsWith('F')).map((record) => ({
-          id: record.id,
-          studentId: record.studentId,
-          studentGeneratedId: record.studentGeneratedId,
           score: record.value,
-          intervalId: record.intervalId,
-          performanceScore: record.value / performance.barem
-        }));
-
-        return {
-          ...interval.toJSON(),
-          intervalB,
-          intervalF,
+          performanceScore,
         };
-      });
 
+        // 4. Check if this is better than the best we have so far
+        if (!bestRecordsByStudent[currentStudentId] ||
+          isBetterRecord(bestRecordsByStudent[currentStudentId], recordObj)) {
+          bestRecordsByStudent[currentStudentId] = recordObj;
+        }
+      }
+
+      // 5. Separate best records by sex (B / F)
+      const boys: Array<object> = [];
+      const girls: Array<object> = [];
+
+      Object.keys(bestRecordsByStudent).forEach((studentKey) => {
+        const bestRec = bestRecordsByStudent[studentKey];
+        if (studentKey.startsWith('B')) {
+          boys.push(bestRec);
+        } else if (studentKey.startsWith('F')) {
+          girls.push(bestRec);
+        }
+      });
+      //TODO - LIMIT THIS TO RETURN MAX 5 RECORDS TOP FIVE
+      // 6. Return aggregated data for this single test
       return {
         ...performance,
-        intervals: intervalsWithRecords,
+        boys,
+        girls,
       };
     })
   );
-  return performancesWithDetails;
 };
 
 // const getPerformancesWithDetailsFirstFive = async (performances: any) => {

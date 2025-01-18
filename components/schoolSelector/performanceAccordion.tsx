@@ -69,9 +69,7 @@ export default function PerformanceAccordion({
                         <TableRow>
                           <TableHead>{translations.count}</TableHead>
                           <TableHead>{translations.name}</TableHead>
-                          <TableHead>{translations.barem}</TableHead>
                           <TableHead>{translations.viewOrEdit}</TableHead>
-                          <TableHead>{translations.removeTest}</TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
@@ -79,29 +77,16 @@ export default function PerformanceAccordion({
                           <TableRow key={performance.id}>
                             <TableCell>{index + 1}</TableCell>
                             <TableCell>{performance.name}</TableCell>
-                            <TableCell>{performance.barem}</TableCell>
                             <TableCell className="flex justify-center space-x-2">
                               {/* View/Edit Dialog */}
                               <Button
                                 variant="outline"
                                 className="max-w-100"
                                 disabled={students.length === 0}
-                                onClick={() => handleAddViewIntervals(performance.id)}
+                                onClick={() => handleAddViewViewPerformance(performance.id)}
                               >
                                 {translations.viewAddIntervals}
                               </Button>
-                            </TableCell>
-                            <TableCell>
-                              {/* Student-level Remove Dialog */}
-                              <RemoveDialog
-                                title={translations.removeTest}
-                                description={translations.confirmRemoveTest}
-                                confirmText={translations.removeTest}
-                                cancelText={translations.cancel}
-                                onRemove={() => handleRemoveTest(performance.id)}
-                                id={performance.id}
-                                removeMessage={translations.removeTest}
-                              />
                             </TableCell>
                           </TableRow>
                         ))}

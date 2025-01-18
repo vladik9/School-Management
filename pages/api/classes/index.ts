@@ -3,11 +3,12 @@ import Class from '@/models/class.model';
 import Test from '@/models/test.model';
 import Student from '@/models/student.model';
 import Document from '@/models/document.model';
+import Interval from '@/models/interval.model';
 import checkToken from '../middleware';
+import Record from '@/models/record.model';
 
 
 // Handle GET (read all schools)
-
 const getClasses = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const { yearId } = req.query;
@@ -39,7 +40,7 @@ const getClasses = async (req: NextApiRequest, res: NextApiResponse) => {
           }),
           Student.findAll({
             where: { classId: classData.id }, // Use classId to fetch related students
-            attributes: ['id', 'name','studentId'], // Select relevant fields
+            attributes: ['id', 'name', 'studentId'], // Select relevant fields
           }),
           Document.findAll({
             where: { classId: classData.id }, // Use classId to fetch related documents
@@ -47,13 +48,72 @@ const getClasses = async (req: NextApiRequest, res: NextApiResponse) => {
           }),
         ]);
 
+        const performancesWithTest = tests.map((test) => {
+          return {
+            testId: test.id,
+            name: test.name,
+            baremType: test.baremType,
+            barem: test.barem
+
+          };
+        });
+        const getPerformancesWithDetails = async (performances: any) => {
+          const performancesWithDetails = await Promise.all(
+            performances.map(async (performance: any) => {
+              const intervals = await Interval.findAll({
+                where: { testId: performance.testId },
+              });
+              const records = await Record.findAll({
+                where: { intervalId: intervals.map((interval) => interval.id) },
+                attributes: ['id', 'studentId', 'studentGeneratedId', 'value', 'intervalId'],
+              });
+
+              // Map records to their respective intervals and divide them into intervalB and intervalF
+              const intervalsWithRecords = intervals.map((interval) => {
+                const intervalB = records.filter((record) => record.intervalId === interval.id && record.studentGeneratedId.toString().startsWith('B')).map((record) => ({
+                  id: record.id,
+                  studentId: record.studentId,
+                  studentGeneratedId: record.studentGeneratedId,
+                  score: record.value,
+                  intervalId: record.intervalId,
+                  performanceScore: record.value / performance.barem // Calculate performanceScore
+                }));
+
+                const intervalF = records.filter((record) => record.intervalId === interval.id && record.studentGeneratedId.toString().startsWith('F')).map((record) => ({
+                  id: record.id,
+                  studentId: record.studentId,
+                  studentGeneratedId: record.studentGeneratedId,
+                  score: record.value,
+                  intervalId: record.intervalId,
+                  performanceScore: record.value / performance.barem // Calculate performanceScore
+                }));
+
+                return {
+                  ...interval.toJSON(),
+                  intervalB,
+                  intervalF
+                };
+              });
+
+              return {
+                ...performance,
+                intervals: intervalsWithRecords,
+              };
+            })
+          );
+          return performancesWithDetails;
+        };
+        //TODO - make performances devision on sex
+        const performances = await getPerformancesWithDetails(performancesWithTest);
+        console.log("performancesWithTestAndDetails", performances);
+
 
         return {
           ...classData.toJSON(), // Convert Sequelize instance to plain object
           tests,
           students,
           documents,
-          performances: [], // Placeholder for performances
+          performances, // Placeholder for performances
         };
       })
     );
@@ -71,9 +131,9 @@ const getClasses = async (req: NextApiRequest, res: NextApiResponse) => {
 // Handle POST (create school)
 const createClass = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    const { name, teacher,  yearId } = req.body;
+    const { name, teacher, yearId } = req.body;
 
-    const newClass = await Class.create({ name,teacher, yearId });
+    const newClass = await Class.create({ name, teacher, yearId });
     res.status(201).json(newClass);
   } catch (error) {
     res.status(500).json({ message: 'Error creating class', error });

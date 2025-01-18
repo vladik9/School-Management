@@ -165,7 +165,7 @@ const translations = {
   score: "Scor",
   testBarem: "Barem test",
   studentListOfPerformance: "Lista de performanțe a elevilor",
-  performancesList: "Performanțe adăugate",
+  performancesList: "Lista de performanțe",
 
   //Common
   action: "Acțiune",

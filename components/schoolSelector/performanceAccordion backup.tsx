@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { PerformanceData } from "@/types/types";
+import { PerformanceData, StudentData } from "@/types/types";
 import translations from "@/lib/translations";
 import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import RemoveDialog from "../generic/remove-dialog";
 import { paginationConstants } from '@/utils/dataEnums';
 import PaginationButtons from '../ui/pagination-buttons';
 
 interface PerformanceAccordionProps {
   performances: PerformanceData[];
+  students: StudentData[];
   // handleRemoveTest: (testID: number) => void;
   // handleAddViewIntervals: (testId: number) => void;
   className: string;
@@ -18,6 +21,7 @@ const PERFORMANCE_PER_PAGE = paginationConstants.PERFORMANCE_PER_PAGE;
 
 export default function PerformanceAccordion({
   performances,
+  students,
   className,
 }: PerformanceAccordionProps) {
 
@@ -61,37 +65,40 @@ export default function PerformanceAccordion({
                     </div>
                   </AccordionTrigger>
                   <AccordionContent>
-
-                    {paginatedPerformances(performances).map((performance) => (
-                      <AccordionItem key={performance.id} value={`performance-${performance.id}`}>
-                        <AccordionTrigger>
-                          <h3>{performance.name}</h3>
-                        </AccordionTrigger>
-                        <AccordionContent>
-                          <Table>
-                            <TableHeader>
-                              <TableRow>
-                                <TableHead>{translations.student}</TableHead>
-                                <TableHead>{translations.score}</TableHead>
-                              </TableRow>
-                            </TableHeader>
-                            <TableBody>
-                              {performance.intervals.map((int) => (
-                                <TableRow key={int.id}>
-                                  <TableCell>{int.name}</TableCell>
-                                  <TableCell>{int.score}</TableCell>
-                                </TableRow>
-                              ))}
-                            </TableBody>
-                          </Table>
-                        </AccordionContent>
-                      </AccordionItem>
-                    ))}
+                    <Table style={{ marginTop: '20px' }}>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead>{translations.count}</TableHead>
+                          <TableHead>{translations.name}</TableHead>
+                          <TableHead>{translations.viewOrEdit}</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {paginatedPerformances(performances).map((performance, index) => (
+                          <TableRow key={performance.id}>
+                            <TableCell>{index + 1}</TableCell>
+                            <TableCell>{performance.name}</TableCell>
+                            <TableCell className="flex justify-center space-x-2">
+                              {/* View/Edit Dialog */}
+                              <Button
+                                variant="outline"
+                                className="max-w-100"
+                                disabled={students.length === 0}
+                                onClick={() => handleAddViewViewPerformance(performance.id)}
+                              >
+                                {translations.viewAddIntervals}
+                              </Button>
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
                     <PaginationButtons
+                      itemSize={performances.length}
+                      itemsPerPage={PERFORMANCE_PER_PAGE}
                       currentPage={currentPerformancePage}
-                      totalPages={Math.ceil(performances.length / PERFORMANCE_PER_PAGE)}
-                      onNextPage={handleNextPerformancePage}
-                      onPreviousPage={handlePreviousPerformancePage}
+                      handlePreviousPage={handlePreviousPerformancePage}
+                      handleNextPage={handleNextPerformancePage}
                     />
                   </AccordionContent>
                 </AccordionItem>

@@ -8,6 +8,108 @@ import checkToken from '../middleware';
 import Record from '@/models/record.model';
 
 
+const getPerformancesWithDetails = async (performances: any) => {
+  const performancesWithDetails = await Promise.all(
+    performances.map(async (performance: any) => {
+      const intervals = await Interval.findAll({
+        where: { testId: performance.testId },
+      });
+      const records = await Record.findAll({
+        where: { intervalId: intervals.map((interval) => interval.id) },
+        attributes: ['id', 'studentId', 'studentGeneratedId', 'value', 'intervalId'],
+      });
+
+      // Map records to their respective intervals and divide them into intervalB and intervalF
+      const intervalsWithRecords = intervals.map((interval) => {
+        const intervalB = records.filter((record) => record.intervalId === interval.id && record.studentGeneratedId.toString().startsWith('B')).map((record) => ({
+          id: record.id,
+          studentId: record.studentId,
+          studentGeneratedId: record.studentGeneratedId,
+          score: record.value,
+          intervalId: record.intervalId,
+          performanceScore: record.value / performance.barem
+        }));
+
+        const intervalF = records.filter((record) => record.intervalId === interval.id && record.studentGeneratedId.toString().startsWith('F')).map((record) => ({
+          id: record.id,
+          studentId: record.studentId,
+          studentGeneratedId: record.studentGeneratedId,
+          score: record.value,
+          intervalId: record.intervalId,
+          performanceScore: record.value / performance.barem
+        }));
+
+        return {
+          ...interval.toJSON(),
+          intervalB,
+          intervalF
+        };
+      });
+
+      return {
+        ...performance,
+        intervals: intervalsWithRecords,
+      };
+    })
+  );
+  return performancesWithDetails;
+};
+
+// const getPerformancesWithDetailsFirstFive = async (performances: any) => {
+//   const performancesWithDetails = await Promise.all(
+//     performances.map(async (performance: any) => {
+//       const intervals = await Interval.findAll({
+//         where: { testId: performance.testId },
+//       });
+//       const records = await Record.findAll({
+//         where: { intervalId: intervals.map((interval) => interval.id) },
+//         attributes: ['id', 'studentId', 'studentGeneratedId', 'value', 'intervalId'],
+//       });
+
+//       // Map records to their respective intervals and divide them into intervalB and intervalF
+//       const intervalsWithRecords = intervals.map((interval) => {
+//         const intervalB = records
+//           .filter((record) => record.intervalId === interval.id && record.studentGeneratedId.toString().startsWith('B'))
+//           .map((record) => ({
+//             id: record.id,
+//             studentId: record.studentId,
+//             studentGeneratedId: record.studentGeneratedId,
+//             score: record.value,
+//             intervalId: record.intervalId,
+//             performanceScore: record.value / performance.barem
+//           }))
+//           .sort((a, b) => b.performanceScore - a.performanceScore) // Sort by performanceScore descending
+//           .slice(0, 5); // Take top 5
+
+//         const intervalF = records
+//           .filter((record) => record.intervalId === interval.id && record.studentGeneratedId.toString().startsWith('F'))
+//           .map((record) => ({
+//             id: record.id,
+//             studentId: record.studentId,
+//             studentGeneratedId: record.studentGeneratedId,
+//             score: record.value,
+//             intervalId: record.intervalId,
+//             performanceScore: record.value / performance.barem
+//           }))
+//           .sort((a, b) => b.performanceScore - a.performanceScore) // Sort by performanceScore descending
+//           .slice(0, 5); // Take top 5
+
+//         return {
+//           ...interval.toJSON(),
+//           intervalB,
+//           intervalF
+//         };
+//       });
+
+//       return {
+//         ...performance,
+//         intervals: intervalsWithRecords,
+//       };
+//     })
+//   );
+//   return performancesWithDetails;
+// };
+
 // Handle GET (read all schools)
 const getClasses = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
@@ -57,63 +159,15 @@ const getClasses = async (req: NextApiRequest, res: NextApiResponse) => {
 
           };
         });
-        const getPerformancesWithDetails = async (performances: any) => {
-          const performancesWithDetails = await Promise.all(
-            performances.map(async (performance: any) => {
-              const intervals = await Interval.findAll({
-                where: { testId: performance.testId },
-              });
-              const records = await Record.findAll({
-                where: { intervalId: intervals.map((interval) => interval.id) },
-                attributes: ['id', 'studentId', 'studentGeneratedId', 'value', 'intervalId'],
-              });
 
-              // Map records to their respective intervals and divide them into intervalB and intervalF
-              const intervalsWithRecords = intervals.map((interval) => {
-                const intervalB = records.filter((record) => record.intervalId === interval.id && record.studentGeneratedId.toString().startsWith('B')).map((record) => ({
-                  id: record.id,
-                  studentId: record.studentId,
-                  studentGeneratedId: record.studentGeneratedId,
-                  score: record.value,
-                  intervalId: record.intervalId,
-                  performanceScore: record.value / performance.barem // Calculate performanceScore
-                }));
-
-                const intervalF = records.filter((record) => record.intervalId === interval.id && record.studentGeneratedId.toString().startsWith('F')).map((record) => ({
-                  id: record.id,
-                  studentId: record.studentId,
-                  studentGeneratedId: record.studentGeneratedId,
-                  score: record.value,
-                  intervalId: record.intervalId,
-                  performanceScore: record.value / performance.barem // Calculate performanceScore
-                }));
-
-                return {
-                  ...interval.toJSON(),
-                  intervalB,
-                  intervalF
-                };
-              });
-
-              return {
-                ...performance,
-                intervals: intervalsWithRecords,
-              };
-            })
-          );
-          return performancesWithDetails;
-        };
-        //TODO - make performances devision on sex
         const performances = await getPerformancesWithDetails(performancesWithTest);
-        console.log("performancesWithTestAndDetails", performances);
-
 
         return {
           ...classData.toJSON(), // Convert Sequelize instance to plain object
           tests,
           students,
           documents,
-          performances, // Placeholder for performances
+          performances,
         };
       })
     );

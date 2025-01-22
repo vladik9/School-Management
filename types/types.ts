@@ -1,4 +1,3 @@
-import Interval from "@/models/interval.model";
 
 type StudentData = {
   id: number;
@@ -45,6 +44,8 @@ type PerformanceData = {
   testId: number;
   testBarem: string;
   score: number;
+  boys: Array<RecordData>;
+  girls: Array<RecordData>;
 };
 
 type DocumentData = {
@@ -63,6 +64,7 @@ type RecordData = {
   studentGeneratedId: number;
   value: Date | string | number;
   intervalId: number;
+  performanceScore: number;
 };
 type FetchStatuses = "default" | "success" | "error" | "loading";
 

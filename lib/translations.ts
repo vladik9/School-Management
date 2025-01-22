@@ -165,7 +165,11 @@ const translations = {
   score: "Scor",
   testBarem: "Barem test",
   studentListOfPerformance: "Lista de performanțe a elevilor",
-  performancesList: "Performanțe adăugate",
+  performancesList: "Lista de performanțe",
+  boysPerformanceList: "Lista de performanțe baieți",
+  girlsPerformanceList: "Lista de performanțe fete",
+  noGirlsAdded: "Nu sunt fete adăugate",
+  noBoysAdded: "Nu sunt baieci adăugate",
 
   //Common
   action: "Acțiune",

@@ -91,7 +91,6 @@ export default function ClassAccordion({
                 {/* -- Performances -- */}
                 <PerformanceAccordion
                   performances={school_class.performances}
-                  students={school_class.students}
                   // handleAddViewIntervals={handleAddViewIntervals}
                   // handleRemoveTest={handleRemoveTest}
                   className={school_class.name}

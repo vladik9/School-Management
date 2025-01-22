@@ -1,17 +1,14 @@
 import React, { useState } from 'react';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { PerformanceData, StudentData } from "@/types/types";
+import { PerformanceData } from "@/types/types";
 import translations from "@/lib/translations";
 import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import RemoveDialog from "../generic/remove-dialog";
 import { paginationConstants } from '@/utils/dataEnums';
 import PaginationButtons from '../ui/pagination-buttons';
 
 interface PerformanceAccordionProps {
   performances: PerformanceData[];
-  students: StudentData[];
   // handleRemoveTest: (testID: number) => void;
   // handleAddViewIntervals: (testId: number) => void;
   className: string;
@@ -21,9 +18,10 @@ const PERFORMANCE_PER_PAGE = paginationConstants.PERFORMANCE_PER_PAGE;
 
 export default function PerformanceAccordion({
   performances,
-  students,
   className,
 }: PerformanceAccordionProps) {
+  console.log("🚀 ~ performances:", performances);
+
   const [currentPerformancePage, setCurrentPerformancePage] = useState(0);
 
   const handleNextPerformancePage = () => {
@@ -38,9 +36,7 @@ export default function PerformanceAccordion({
     const startIndex = currentPerformancePage * PERFORMANCE_PER_PAGE;
     return performanceList.slice(startIndex, startIndex + PERFORMANCE_PER_PAGE);
   };
-  console.log('performances', performances);
 
-  // TODO -- complete this functions and logic
   return (
     <div style={{ marginTop: '20px' }}>
       {
@@ -55,7 +51,7 @@ export default function PerformanceAccordion({
           <>
             <Card style={{ margin: '30px 0', padding: '20px' }}>
               <Accordion type="single" collapsible>
-                <AccordionItem value="performances">
+                <AccordionItem value="performances-accordion">
                   <AccordionTrigger>
                     <div className="flex items-center justify-between w-full">
                       <span>
@@ -64,55 +60,74 @@ export default function PerformanceAccordion({
                     </div>
                   </AccordionTrigger>
                   <AccordionContent>
-                    <Table style={{ marginTop: '20px' }}>
-                      <TableHeader>
-                        <TableRow>
-                          <TableHead>{translations.count}</TableHead>
-                          <TableHead>{translations.name}</TableHead>
-                          <TableHead>{translations.barem}</TableHead>
-                          <TableHead>{translations.viewOrEdit}</TableHead>
-                          <TableHead>{translations.removeTest}</TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        {paginatedPerformances(performances).map((performance, index) => (
-                          <TableRow key={performance.id}>
-                            <TableCell>{index + 1}</TableCell>
-                            <TableCell>{performance.name}</TableCell>
-                            <TableCell>{performance.barem}</TableCell>
-                            <TableCell className="flex justify-center space-x-2">
-                              {/* View/Edit Dialog */}
-                              <Button
-                                variant="outline"
-                                className="max-w-100"
-                                disabled={students.length === 0}
-                                onClick={() => handleAddViewIntervals(performance.id)}
-                              >
-                                {translations.viewAddIntervals}
-                              </Button>
-                            </TableCell>
-                            <TableCell>
-                              {/* Student-level Remove Dialog */}
-                              <RemoveDialog
-                                title={translations.removeTest}
-                                description={translations.confirmRemoveTest}
-                                confirmText={translations.removeTest}
-                                cancelText={translations.cancel}
-                                onRemove={() => handleRemoveTest(performance.id)}
-                                id={performance.id}
-                                removeMessage={translations.removeTest}
-                              />
-                            </TableCell>
-                          </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
+                    <Accordion type="single" collapsible>
+                      {paginatedPerformances(performances).map((performance) => (
+                        <AccordionItem key={performance.testId} value={`test-performance-${performance.testId}`}>
+                          <AccordionTrigger>
+                            <h3>{performance.testName}</h3>
+                          </AccordionTrigger>
+                          <AccordionContent>
+                            <div className="grid grid-cols-2 gap-4">
+                              <div>
+                                <div className="text-center font-bold">{translations.boysPerformanceList}</div>
+                                {performance.boys.length > 0 ? (
+                                  <Table>
+                                    <TableHeader>
+                                      <TableRow>
+                                        <TableHead>{translations.count}</TableHead>
+                                        <TableHead>{translations.studentId}</TableHead>
+                                        <TableHead>{translations.score}</TableHead>
+                                      </TableRow>
+                                    </TableHeader>
+                                    <TableBody>
+                                      {performance.boys.map((int, index) => (
+                                        <TableRow key={int.id}>
+                                          <TableCell>{index + 1}</TableCell>
+                                          <TableCell>{int.studentGeneratedId}</TableCell>
+                                          <TableCell>{int.performanceScore}</TableCell>
+                                        </TableRow>
+                                      ))}
+                                    </TableBody>
+                                  </Table>
+                                ) : (
+                                  <div className="text-center w-full pt-10">{translations.noGirlsAdded}</div>
+                                )}
+                              </div>
+                              <div>
+                                <div className="text-center font-bold">{translations.girlsPerformanceList}</div>
+                                {performance.girls.length > 0 ? (
+                                  <Table>
+                                    <TableHeader>
+                                      <TableRow>
+                                        <TableHead>{translations.count}</TableHead>
+                                        <TableHead>{translations.studentId}</TableHead>
+                                        <TableHead>{translations.score}</TableHead>
+                                      </TableRow>
+                                    </TableHeader>
+                                    <TableBody>
+                                      {performance.girls.map((int, index) => (
+                                        <TableRow key={int.id}>
+                                          <TableCell>{index + 1}</TableCell>
+                                          <TableCell>{int.studentGeneratedId}</TableCell>
+                                          <TableCell>{int.performanceScore}</TableCell>
+                                        </TableRow>
+                                      ))}
+                                    </TableBody>
+                                  </Table>
+                                ) : (
+                                  <div className="text-center w-full pt-10">{translations.noGirlsAdded}</div>
+                                )}
+                              </div>
+                            </div>
+                          </AccordionContent>
+                        </AccordionItem>
+                      ))}
+                    </Accordion>
                     <PaginationButtons
                       itemSize={performances.length}
                       itemsPerPage={PERFORMANCE_PER_PAGE}
                       currentPage={currentPerformancePage}
-                      handlePreviousPage={handlePreviousPerformancePage}
-                      handleNextPage={handleNextPerformancePage}
+                      handlePreviousPage={handlePreviousPerformancePage} handleNextPage={handleNextPerformancePage}
                     />
                   </AccordionContent>
                 </AccordionItem>

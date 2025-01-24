@@ -14,6 +14,21 @@ interface PerformanceAccordionProps {
 
 const PERFORMANCE_PER_PAGE = paginationConstants.PERFORMANCE_PER_PAGE;
 
+/**
+ * Renders an accordion component for managing and displaying performances.
+ *
+ * This component provides a paginated view of performances, allowing users to
+ * navigate through different pages of performance data. It organizes the data
+ * into an accordion format, separating performances by test and displaying
+ * detailed performance scores for boys and girls.
+ *
+ * Props:
+ * - performances (PerformanceData[]): An array of performance data to display.
+ * - className (string): The CSS class name for styling the accordion.
+ *
+ * Returns:
+ * - A JSX element representing the performance accordion with pagination controls.
+ */
 export default function PerformanceAccordion({
   performances,
   className,
@@ -21,14 +36,36 @@ export default function PerformanceAccordion({
 
   const [currentPerformancePage, setCurrentPerformancePage] = useState(0);
 
+  /**
+   * Advances to the next page of performances.
+   *
+   * This function increments the current performance page state, allowing
+   * the user to navigate to the next set of performances in the list.
+   */
   const handleNextPerformancePage = () => {
     setCurrentPerformancePage((prevPage) => prevPage + 1);
   };
 
+  /**
+   * Moves to the previous page of performances.
+   *
+   * This function decrements the current performance page state, allowing
+   * the user to navigate to the previous set of performances in the list.
+   * If the current performance page is 0, it does not change the state.
+   */
   const handlePreviousPerformancePage = () => {
     setCurrentPerformancePage((prevPage) => Math.max(prevPage - 1, 0));
   };
 
+  /**
+   * Paginates the given list of performances.
+   *
+   * This function takes a list of performances and returns a slice of it, based on the current page number.
+   * The number of items per page is determined by the PERFORMANCE_PER_PAGE constant.
+   *
+   * @param {PerformanceData[]} performanceList - The list of performances to paginate.
+   * @returns {PerformanceData[]} - The paginated list of performances.
+   */
   const paginatedPerformances = (performanceList: PerformanceData[]) => {
     const startIndex = currentPerformancePage * PERFORMANCE_PER_PAGE;
     return performanceList.slice(startIndex, startIndex + PERFORMANCE_PER_PAGE);

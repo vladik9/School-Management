@@ -14,6 +14,21 @@ interface RemoveDialogProps {
   id: number;
 
 }
+/**
+ * A dialog component that triggers a remove action when confirmed.
+ *
+ * Props:
+ * - `title` (string): The title of the dialog.
+ * - `description` (string): The description text for the dialog.
+ * - `confirmText` (string): The confirm button text.
+ * - `cancelText` (string): The cancel button text.
+ * - `onRemove` (function): The function to call when the confirm button is clicked.
+ * - `id` (number): The id to pass to the `onRemove` function.
+ * - `removeMessage` (string, optional): The remove button text. Defaults to the translation for "remove".
+ *
+ * Returns:
+ * - A JSX element representing the remove dialog.
+ */
 export default function RemoveDialog({
   title,
   description,

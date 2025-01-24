@@ -28,13 +28,21 @@ interface StatusModalProps extends VariantProps<typeof statusModalVariants> {
   onClose: () => void;
 }
 
+/**
+ * A modal component to display a status message.
+ *
+ * @param {string} message The text to display in the modal.
+ * @param {boolean} isVisible Whether the modal is visible.
+ * @param {FetchStatuses} variant The variant of the message, which determines the color of the modal.
+ * @param {function} onClose A callback function to call when the modal is closed.
+ * @returns A JSX element representing the modal.
+ */
 export function StatusModal({ message, isVisible, variant, onClose }: StatusModalProps) {
   useEffect(() => {
     if (isVisible) {
       const timer = setTimeout(() => {
         onClose();
       }, 3000);
-
       return () => clearTimeout(timer);
     }
   }, [isVisible, onClose]);

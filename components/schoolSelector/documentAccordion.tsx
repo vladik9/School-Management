@@ -20,6 +20,23 @@ interface DocumentAccordionProps {
 
 const DOCUMENTS_PER_PAGE = paginationConstants.DOCUMENTS_PER_PAGE;
 
+/**
+ * Renders an accordion component for managing and displaying documents.
+ *
+ * This component provides a paginated view of documents, allowing users to
+ * upload, download, and remove documents. It displays a message when no
+ * documents are present and provides buttons for navigating between pages.
+ *
+ * Props:
+ * - documents (DocumentData[]): An array of documents to display.
+ * - handleRemoveDocument (function): Function to remove a document by its ID.
+ * - handleDownloadDocument (function): Function to download a document by its ID.
+ * - handleUploadDocument (function): Function to handle document uploads.
+ * - className (string, optional): The CSS class name for styling the accordion.
+ *
+ * Returns:
+ * - A JSX element representing the document accordion with pagination controls.
+ */
 export default function DocumentAccordion({
   documents,
   handleRemoveDocument,
@@ -29,14 +46,36 @@ export default function DocumentAccordion({
 }: DocumentAccordionProps) {
   const [currentDocumentPage, setCurrentDocumentPage] = useState(0);
 
+  /**
+   * Increments the current page number for document pagination.
+   *
+   * Updates the local state by incrementing the current page number by one.
+   * This is used to navigate to the next page of documents.
+   */
   const handleNextDocumentPage = () => {
     setCurrentDocumentPage((prevPage) => prevPage + 1);
   };
 
+  /**
+   * Decrements the current page number for document pagination.
+   *
+   * Updates the local state by decrementing the current page number by one,
+   * but not below 0 (i.e., the first page). This is used to navigate to the
+   * previous page of documents.
+   */
   const handlePreviousDocumentPage = () => {
     setCurrentDocumentPage((prevPage) => Math.max(prevPage - 1, 0));
   };
 
+  /**
+   * Paginates the given list of documents.
+   *
+   * This function takes a list of documents and returns a slice of it, based on the current page number.
+   * The number of items per page is determined by the DOCUMENTS_PER_PAGE constant.
+   *
+   * @param {DocumentData[]} documents - The list of documents to paginate.
+   * @returns {DocumentData[]} - The paginated list of documents.
+   */
   const paginatedDocuments = (documents: DocumentData[]) => {
     const startIndex = currentDocumentPage * DOCUMENTS_PER_PAGE;
     return documents.slice(startIndex, startIndex + DOCUMENTS_PER_PAGE);
@@ -102,7 +141,6 @@ export default function DocumentAccordion({
                     ))}
                   </TableBody>
                 </Table>
-
                 <div style={{ marginTop: '10px', display: 'flex', justifyContent: 'space-between' }}>
                   <Button variant="outline" size="sm" onClick={handleUploadDocument}>
                     <Upload className="h-4 w-4 mr-2" />

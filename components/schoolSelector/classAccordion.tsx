@@ -31,7 +31,33 @@ interface ClassAccordionProps {
   setNewRecord: (data: any) => void;
 }
 
-
+/**
+ * Renders an accordion for managing classes, students, tests, performances, and documents.
+ *
+ * This component provides a structured view of classes and their associated entities,
+ * such as students, tests, performances, and documents. It allows for the addition,
+ * updating, and removal of these entities, utilizing nested accordions for organization.
+ *
+ * Props:
+ * - classes (ClassData[]): An array of class data to be displayed in the accordion.
+ * - handleAddStudent (function): Function to add a student to a given class.
+ * - handleSelectingTest (function): Function to select a test for a given class.
+ * - handleAddViewIntervals (function): Function to add view intervals for a test.
+ * - handleUpdateStudent (function): Function to update student information.
+ * - setSelectedClassId (function): Function to set the currently selected class ID.
+ * - handleRemoveStudent (function): Function to remove a student from a class.
+ * - handleRemoveClass (function): Function to remove a class from the list.
+ * - handleRemoveTest (function): Function to remove a test from a class.
+ * - handleUploadDocument (function): Function to upload a document for a class.
+ * - handleRemoveDocument (function): Function to remove a document from a class.
+ * - handleDownloadDocument (function): Function to download a document from a class.
+ * - newRecord (any): The current state of the student details being entered.
+ * - setNewRecord (function): Function to update the student details state.
+ *
+ * Returns:
+ * - A JSX element representing the class accordion with nested components for students,
+ *   tests, performances, and documents.
+ */
 export default function ClassAccordion({
   classes,
   handleAddStudent,
@@ -87,7 +113,6 @@ export default function ClassAccordion({
                   newRecord={newRecord}
                   setNewRecord={setNewRecord}
                 />
-
                 {/* -- Performances -- */}
                 <PerformanceAccordion
                   performances={school_class.performances}
@@ -109,7 +134,6 @@ export default function ClassAccordion({
                   style={{ marginTop: '10px', display: 'flex', justifyContent: 'space-between' }}
                 >
                   <div>
-
                     <Button
                       variant="outline"
                       style={{ marginRight: '10px' }}

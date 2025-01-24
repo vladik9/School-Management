@@ -16,6 +16,27 @@ interface ViewEditDialogProps {
   cancelText?: string;
   confirmText?: string;
 }
+/**
+ * A dialog component for viewing and/or editing a record.
+ *
+ * This component renders a dialog with a title, description, and custom content.
+ * It includes a "Cancel" button and an optional "Save" button.
+ * The "Save" button is only present if `isViewOnly` is set to `false`.
+ * When the "Save" button is clicked, the `onSave` callback is called with the `id` and a dummy object as arguments.
+ * When the "Cancel" button is clicked, the dialog is simply closed.
+ *
+ * Props:
+ * - `title` (string): The title of the dialog.
+ * - `description` (string): The description text for the dialog.
+ * - `triggerButtonTitle` (string): The text to be displayed on the button that triggers the dialog.
+ * - `onOpen` (function): A callback function to be called when the dialog is opened.
+ * - `onSave` (function): A callback function to be called when the "Save" button is clicked.
+ * - `id` (number): An ID to be passed as an argument to the `onOpen` and `onSave` callbacks.
+ * - `children` (ReactNode): The content to be displayed inside the dialog.
+ * - `isViewOnly` (boolean, optional): Whether to display the "Save" button. Defaults to `true`.
+ * - `cancelText` (string, optional): The text to be displayed on the "Cancel" button. Defaults to "Cancel".
+ * - `confirmText` (string, optional): The text to be displayed on the "Save" button. Defaults to "Save".
+ */
 export default function ViewEditDialog({
   title,
   description,

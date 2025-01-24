@@ -19,6 +19,25 @@ interface TestsAccordionProps {
 
 const TESTS_PER_PAGE = paginationConstants.TESTS_PER_PAGE;
 
+/**
+ * Renders an accordion component for managing and displaying tests.
+ *
+ * This component provides a paginated view of tests, allowing users to
+ * navigate through different pages of tests. It organizes the data
+ * into an accordion format, separating tests by class and displaying
+ * detailed test information for each test. It also includes buttons
+ * for adding or removing view intervals and removing tests from a class.
+ *
+ * Props:
+ * - tests (TestData[]): An array of test data to display.
+ * - students (StudentData[]): An array of student data to display.
+ * - handleRemoveTest (function): Function to remove a test by its ID.
+ * - handleAddViewIntervals (function): Function to add view intervals for a test.
+ * - className (string): The name of the class to which the students belong.
+ *
+ * Returns:
+ * - A JSX element representing the test accordion with pagination controls.
+ */
 export default function TestAccordion({
   tests,
   students,
@@ -28,14 +47,36 @@ export default function TestAccordion({
 }: TestsAccordionProps) {
   const [currentStudentPage, setCurrentStudentPage] = useState(0);
 
+  /**
+   * Increments the current page number for student pagination.
+   *
+   * Updates the local state by incrementing the current page number by one.
+   * This is used to navigate to the next page of students.
+   */
   const handleNextStudentPage = () => {
     setCurrentStudentPage((prevPage) => prevPage + 1);
   };
 
+  /**
+    * Decrements the current page number for student pagination.
+    *
+    * Updates the local state by decrementing the current page number by one,
+    * but not below 0 (i.e., the first page). This is used to navigate to the
+    * previous page of students.
+    */
   const handlePreviousStudentPage = () => {
     setCurrentStudentPage((prevPage) => Math.max(prevPage - 1, 0));
   };
 
+  /**
+  * Paginates the given list of tests.
+  *
+  * This function takes a list of tests and returns a slice of it, based on the current page number.
+  * The number of items per page is determined by the TESTS_PER_PAGE constant.
+  *
+  * @param {TestData[]} studentList - The list of tests to paginate.
+  * @returns {TestData[]} - The paginated list of tests.
+  */
   const paginatedStudents = (studentList: TestData[]) => {
     const startIndex = currentStudentPage * TESTS_PER_PAGE;
     return studentList.slice(startIndex, startIndex + TESTS_PER_PAGE);

@@ -3,8 +3,14 @@ import Record from '../../../models/record.model';
 import Student from '../../../models/student.model';
 import checkToken from '../middleware/index';
 
-// Handle GET (read all records)
-// API Route to get records by intervalId
+/**
+ * Handles a GET request to fetch records for the given intervalId.
+ *
+ * It expects the intervalId to be provided in the query string.
+ * If the intervalId is not provided, it returns a 400 status with an error message.
+ * If no records are found for the given intervalId, it returns an empty array.
+ * Otherwise, it returns an array of records with their associated student data.
+ */
 const getRecord = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const { intervalId } = req.query;
@@ -40,9 +46,20 @@ const getRecord = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 };
 
+/**
+ * Handles POST requests to create a new record.
+ *
+ * This function extracts the value, studentId, intervalId, and studentGeneratedId
+ * from the request body to create a new record in the database. If successful,
+ * it returns the newly created record with a 201 status. In case of an error,
+ * it returns a 500 status with an error message.
+ *
+ * @param {NextApiRequest} req - The API request object containing the record details
+ * in the body.
+ * @param {NextApiResponse} res - The API response object used to return the status
+ * and JSON payload to the client.
+ */
 
-
-// Handle POST (create record)
 const createRecord = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const { value, studentId,  intervalId,studentGeneratedId } = req.body;
@@ -54,7 +71,19 @@ const createRecord = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 };
 
-// Handle PUT (update record)
+/**
+ * Handles PUT requests to update a record.
+ *
+ * This function extracts the id, value, studentId, and intervalId from the
+ * request body to update a record in the database. If successful, it returns
+ * a 200 status with a JSON message indicating the record was updated. In case
+ * of an error, it returns a 500 status with an error message.
+ *
+ * @param {NextApiRequest} req - The API request object containing the record
+ * details in the body.
+ * @param {NextApiResponse} res - The API response object used to return the
+ * status and JSON payload to the client.
+ */
 const updateRecord = async (req: NextApiRequest, res: NextApiResponse) => {
   const {id , value,  studentId,  intervalId } = req.body;
   try {
@@ -68,7 +97,21 @@ const updateRecord = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 };
 
-// Handle DELETE (delete record)
+/**
+ * Handles DELETE requests to delete a record.
+ *
+ * This function deletes a record from the database using the record ID
+ * provided in the query string. If the record is found and deleted
+ * successfully, a 200 status is returned with a JSON payload containing
+ * a success message. If the record is not found, a 404 status is returned
+ * with an error message. If an error occurs during the deletion, a 500
+ * status is returned with an error message.
+ *
+ * @param {NextApiRequest} req - The API request object, expected to contain
+ * the record ID in the query.
+ * @param {NextApiResponse} res - The API response object used to return the
+ * status and JSON payload to the client.
+ */
 const deleteRecord = async (req: NextApiRequest, res: NextApiResponse) => {
   const { id } = req.query;
 
@@ -83,8 +126,18 @@ const deleteRecord = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 };
 
-
-
+/**
+ * Handles API requests to the records endpoint.
+ *
+ * This function checks the request method and calls the appropriate handler
+ * function. If the method is not supported, it returns a 405 status with an
+ * "Allow" header listing the supported methods.
+ *
+ * @param {NextApiRequest} req - The API request object.
+ * @param {NextApiResponse} res - The API response object.
+ * @returns {Promise<void>} Sends a JSON response containing the result of the
+ * handler function or an error message.
+ */
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   checkToken(req, res, async () => {
   switch (req.method) {

@@ -715,6 +715,7 @@ export default function SchoolDashboard() {
     } finally {
       if (selectedTestId) {
         await fetchIntervals(selectedTestId);
+        await fetchClasses();
       }
     }
   };
@@ -741,6 +742,7 @@ export default function SchoolDashboard() {
     } finally {
       if (selectedIntervalId) {
         await fetchRecords(selectedIntervalId);
+        await fetchClasses();
       }
     }
   };
@@ -814,6 +816,7 @@ export default function SchoolDashboard() {
     } finally {
       if (selectedIntervalId) {
         await fetchRecords(selectedIntervalId);
+        await fetchClasses();
       }
     }
   };

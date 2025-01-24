@@ -68,7 +68,6 @@ type RecordData = {
 };
 type FetchStatuses = "default" | "success" | "error" | "loading";
 
-
 export type{
   YearData,
   ClassData,

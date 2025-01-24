@@ -9,12 +9,30 @@ import Record from '@/models/record.model';
 
 
 
+/**
+ * Compares two records and returns whether the newRecord is better than the oldRecord.
+ * A record is considered better if its performanceScore is greater than the oldRecord's.
+ * If oldRecord is null, newRecord is considered better by default.
+ * @param {object} oldRecord - The existing record to compare against. Can be null.
+ * @param {object} newRecord - The new record to compare.
+ * @returns {boolean} Whether the newRecord is better than the oldRecord.
+ */
 function isBetterRecord(oldRecord: any, newRecord: any) {
-  if (!oldRecord) return true; // If no record yet, new one is better by default
-  // Compare performanceScores, bigger is better
+  if (!oldRecord) return true;
   return Number(newRecord.performanceScore) > Number(oldRecord.performanceScore);
 }
 
+/**
+ * Given a list of performances, returns a new list with added details.
+ * The added details are:
+ * - best record for each student (by performanceScore)
+ * - separated by sex (B / F)
+ * - sorted by performanceScore descending
+ * - limited to top 5 records
+ *
+ * @param {object[]} performances - The list of performances to process.
+ * @returns {Promise<object[]>} The list of performances with added details.
+ */
 const getPerformancesWithDetails = async (performances: any) => {
   return Promise.all(
     performances.map(async (performance: any) => {
@@ -111,62 +129,22 @@ const getPerformancesWithDetails = async (performances: any) => {
   );
 };
 
-// const getPerformancesWithDetailsFirstFive = async (performances: any) => {
-//   const performancesWithDetails = await Promise.all(
-//     performances.map(async (performance: any) => {
-//       const intervals = await Interval.findAll({
-//         where: { testId: performance.testId },
-//       });
-//       const records = await Record.findAll({
-//         where: { intervalId: intervals.map((interval) => interval.id) },
-//         attributes: ['id', 'studentId', 'studentGeneratedId', 'value', 'intervalId'],
-//       });
 
-//       // Map records to their respective intervals and divide them into intervalB and intervalF
-//       const intervalsWithRecords = intervals.map((interval) => {
-//         const intervalB = records
-//           .filter((record) => record.intervalId === interval.id && record.studentGeneratedId.toString().startsWith('B'))
-//           .map((record) => ({
-//             id: record.id,
-//             studentId: record.studentId,
-//             studentGeneratedId: record.studentGeneratedId,
-//             score: record.value,
-//             intervalId: record.intervalId,
-//             performanceScore: record.value / performance.barem
-//           }))
-//           .sort((a, b) => b.performanceScore - a.performanceScore) // Sort by performanceScore descending
-//           .slice(0, 5); // Take top 5
-
-//         const intervalF = records
-//           .filter((record) => record.intervalId === interval.id && record.studentGeneratedId.toString().startsWith('F'))
-//           .map((record) => ({
-//             id: record.id,
-//             studentId: record.studentId,
-//             studentGeneratedId: record.studentGeneratedId,
-//             score: record.value,
-//             intervalId: record.intervalId,
-//             performanceScore: record.value / performance.barem
-//           }))
-//           .sort((a, b) => b.performanceScore - a.performanceScore) // Sort by performanceScore descending
-//           .slice(0, 5); // Take top 5
-
-//         return {
-//           ...interval.toJSON(),
-//           intervalB,
-//           intervalF
-//         };
-//       });
-
-//       return {
-//         ...performance,
-//         intervals: intervalsWithRecords,
-//       };
-//     })
-//   );
-//   return performancesWithDetails;
-// };
-
-// Handle GET (read all schools)
+/**
+ * Handles the GET request to fetch classes for the specified yearId.
+ *
+ * This function validates the provided yearId, fetches all classes
+ * associated with that yearId, and retrieves related tests, students,
+ * and documents for each class. It also processes performance details
+ * for each test associated with the classes.
+ *
+ * @param {NextApiRequest} req - The API request object.
+ * @param {NextApiResponse} res - The API response object.
+ * @returns {Promise<void>} Sends a JSON response containing the list of classes with details.
+ * If yearId is not provided, it returns a 400 status with an error message.
+ * If no classes are found for the provided yearId, it returns an empty array.
+ * Handles any errors by logging them and returning a 500 status with an error message.
+ */
 const getClasses = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const { yearId } = req.query;
@@ -236,9 +214,18 @@ const getClasses = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 };
 
-
-
-// Handle POST (create school)
+/**
+ * Handles the POST request to create a new class.
+ *
+ * This function extracts the name, teacher, and yearId from the request body
+ * to create a new class in the database. If successful, it returns the newly
+ * created class with a 201 status. In case of an error, it logs the error
+ * and returns a 500 status with an error message.
+ *
+ * @param {NextApiRequest} req - The API request object.
+ * @param {NextApiResponse} res - The API response object.
+ * @returns {Promise<void>} Sends a JSON response containing the created class or an error message.
+ */
 const createClass = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const { name, teacher, yearId } = req.body;
@@ -250,7 +237,18 @@ const createClass = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 };
 
-// Handle PUT (update school)
+/**
+ * Handles the PUT request to update a class.
+ *
+ * This function extracts the name and id from the request body and query string
+ * to update the class in the database. If successful, it returns the updated
+ * class with a 200 status. In case of an error, it logs the error and returns
+ * a 500 status with an error message.
+ *
+ * @param {NextApiRequest} req - The API request object.
+ * @param {NextApiResponse} res - The API response object.
+ * @returns {Promise<void>} Sends a JSON response containing the updated class or an error message.
+ */
 const updateClass = async (req: NextApiRequest, res: NextApiResponse) => {
   const { id } = req.query;
   const { name } = req.body;
@@ -267,7 +265,18 @@ const updateClass = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 };
 
-// Handle DELETE (delete school)
+/**
+ * Handles the DELETE request to delete a class.
+ *
+ * This function extracts the id from the request query and uses it to delete
+ * the class from the database. If successful, it returns a 200 status with a
+ * success message. In case of an error, it logs the error and returns a 500
+ * status with an error message.
+ *
+ * @param {NextApiRequest} req - The API request object.
+ * @param {NextApiResponse} res - The API response object.
+ * @returns {Promise<void>} Sends a JSON response containing a success message or an error message.
+ */
 const deleteClass = async (req: NextApiRequest, res: NextApiResponse) => {
   const { id } = req.query;
 
@@ -282,7 +291,18 @@ const deleteClass = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 };
 
-
+/**
+ * Handles API requests to the classes endpoint.
+ *
+ * This function checks the request method and calls the appropriate handler
+ * function. If the method is not supported, it returns a 405 status with an
+ * "Allow" header listing the supported methods.
+ *
+ * @param {NextApiRequest} req - The API request object.
+ * @param {NextApiResponse} res - The API response object.
+ * @returns {Promise<void>} Sends a JSON response containing the result of the
+ * handler function or an error message.
+ */
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   checkToken(req, res, async () => {
     switch (req.method) {

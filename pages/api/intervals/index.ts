@@ -2,8 +2,18 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import Interval from '@/models/interval.model';
 import checkToken from '../middleware';
 
-// Handle GET (read all schools)
-// API Route to get interval by testId
+/**
+ * Handles GET requests to the /api/intervals endpoint.
+ *
+ * This function is used to fetch all intervals associated with a given testId.
+ * It expects the testId to be provided as a query parameter.
+ * If the testId is not provided, a 400 status is returned with a JSON payload
+ * containing an error message.
+ * If intervals are found, they are returned as a JSON array.
+ * If no intervals are found, an empty array is returned.
+ * If an error occurs during the request, a 500 status is returned with a JSON
+ * payload containing an error message.
+ */
 const getInterval = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const { testId } = req.query;
@@ -29,7 +39,18 @@ const getInterval = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 };
 
-// Handle POST (create school)
+/**
+ * Handles POST requests to the /api/intervals endpoint.
+ *
+ * This function is used to create a new interval associated with a given testId.
+ * It expects the testId to be provided in the request body.
+ * If the testId is not provided, a 400 status is returned with a JSON payload
+ * containing an error message.
+ * If the interval is created successfully, a 201 status is returned with the
+ * newly created interval as a JSON payload.
+ * If an error occurs during the request, a 500 status is returned with a JSON
+ * payload containing an error message.
+ */
 const createInterval = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const { testId } = req.body;
@@ -40,7 +61,22 @@ const createInterval = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 };
 
-// Handle PUT (update interval)
+/**
+ * Handles PUT requests to the /api/intervals endpoint.
+ *
+ * This function updates an existing interval in the database. It expects
+ * the interval ID to be provided in the query parameters and the new name
+ * to be provided in the request body. If the interval is found and updated
+ * successfully, a JSON response containing the updated interval is returned
+ * with a 200 status. If the interval is not found, a 404 status is returned
+ * with an error message. If an error occurs during the update, a 500 status
+ * is returned with an error message.
+ *
+ * @param {NextApiRequest} req - The incoming request object, expected to contain
+ * the interval ID in the query and the new name in the body.
+ * @param {NextApiResponse} res - The response object used to return the status
+ * and JSON payload to the client.
+ */
 const updateInterval = async (req: NextApiRequest, res: NextApiResponse) => {
   const { id } = req.query;
   const { name } = req.body;
@@ -57,7 +93,21 @@ const updateInterval = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 };
 
-// Handle DELETE (delete interval)
+/**
+ * Handles DELETE requests to the /api/intervals endpoint.
+ *
+ * This function deletes an existing interval in the database. It expects
+ * the interval ID to be provided in the query parameters. If the interval
+ * is found and deleted successfully, a JSON response containing a success
+ * message is returned with a 200 status. If the interval is not found,
+ * a 404 status is returned with an error message. If an error occurs during
+ * the deletion, a 500 status is returned with an error message.
+ *
+ * @param {NextApiRequest} req - The incoming request object, expected to contain
+ * the interval ID in the query.
+ * @param {NextApiResponse} res - The response object used to return the status
+ * and JSON payload to the client.
+ */
 const deleteInterval = async (req: NextApiRequest, res: NextApiResponse) => {
 
   const { id } = req.query;
@@ -73,6 +123,18 @@ const deleteInterval = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 };
 
+/**
+ * Handles API requests to the /api/intervals endpoint.
+ *
+ * This function checks the request method and calls the appropriate handler
+ * function. If the method is not supported, it returns a 405 status with an
+ * "Allow" header listing the supported methods.
+ *
+ * @param {NextApiRequest} req - The API request object.
+ * @param {NextApiResponse} res - The API response object.
+ * @returns {Promise<void>} Sends a JSON response containing the result of the
+ * handler function or an error message.
+ */
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   checkToken(req, res, async () => {
   switch (req.method) {

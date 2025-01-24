@@ -2,8 +2,14 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import Student from '@/models/student.model';
 import checkToken from '../middleware';
 
-// Handle GET (read all schools)
-
+  /**
+   * Handles a GET request to fetch students for the given classId.
+   *
+   * It expects the classId to be provided in the query string.
+   * If the classId is not provided, it returns a 400 status with an error message.
+   * If no students are found for the given classId, it returns an empty array.
+   * Otherwise, it returns the list of students with their associated student data.
+   */
 const getStudents = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const { classId } = req.query;
@@ -33,7 +39,17 @@ const getStudents = async (req: NextApiRequest, res: NextApiResponse) => {
 
 
 
-// Handle POST (create school)
+  /**
+   * Handles a POST request to create a new student.
+   *
+   * This function expects the following properties in the request body: name, studentId, classId.
+   * The request body is expected to be a JSON object.
+   * If successful, it returns the newly created student with a 201 status.
+   * In case of an error, it returns a 500 status with an error message.
+   *
+   * @param {NextApiRequest} req - The API request object containing the student details in the body.
+   * @param {NextApiResponse} res - The API response object used to return the status and JSON payload to the client.
+   */
 const createStudent = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const { name, studentId,  classId } = req.body;
@@ -45,7 +61,18 @@ const createStudent = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 };
 
-// Handle PUT (update school)
+  /**
+   * Handles a PUT request to update a student.
+   *
+   * This function expects the following properties in the request body: name.
+   * The request body is expected to be a JSON object.
+   * It also expects the student ID to be provided in the query string.
+   * If successful, it returns the updated student with a 200 status.
+   * In case of an error, it returns a 500 status with an error message.
+   *
+   * @param {NextApiRequest} req - The API request object containing the student details in the body.
+   * @param {NextApiResponse} res - The API response object used to return the status and JSON payload to the client.
+   */
 const updateStudent = async (req: NextApiRequest, res: NextApiResponse) => {
   const { id } = req.query;
   const { name } = req.body;
@@ -62,7 +89,16 @@ const updateStudent = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 };
 
-// Handle DELETE (delete school)
+  /**
+   * Handles a DELETE request to delete a student.
+   *
+   * This function expects the student ID to be provided in the query string.
+   * If successful, it returns a 200 status with a JSON payload containing a success message.
+   * In case of an error, it returns a 500 status with an error message.
+   *
+   * @param {NextApiRequest} req - The API request object containing the student ID in the query string.
+   * @param {NextApiResponse} res - The API response object used to return the status and JSON payload to the client.
+   */
 const deleteStudent = async (req: NextApiRequest, res: NextApiResponse) => {
   const { id } = req.query;
   console.log("removing", id);
@@ -77,8 +113,18 @@ const deleteStudent = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 };
 
-
-
+  /**
+   * Handles API requests to the /api/students endpoint.
+   *
+   * This function checks the request method and calls the appropriate handler
+   * function. If the method is not supported, it returns a 405 status with an
+   * "Allow" header listing the supported methods.
+   *
+   * @param {NextApiRequest} req - The API request object.
+   * @param {NextApiResponse} res - The API response object.
+   * @returns {Promise<void>} Sends a JSON response containing the result of the
+   * handler function or an error message.
+   */
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   checkToken(req, res, async () => {
   switch (req.method) {

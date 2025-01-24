@@ -26,6 +26,30 @@ interface AddTestProps {
   }) => void;
 }
 
+/**
+ * A modal component for adding a new test.
+ *
+ * The component renders a form with three required fields: test name, barem type, and barem value.
+ * The barem value input type is determined by the selected barem type.
+ *
+ * The component also renders a "Save" button and a "Close" button. When the "Save" button is clicked,
+ * the `handleSaveModal` callback is called with the current `newRecord` state. If the form is not valid,
+ * the "Save" button is disabled.
+ *
+ * The component receives the following props:
+ *
+ * - `isModalOpen`: A boolean indicating whether the modal should be open or not.
+ * - `handleCloseModal`: A callback function to call when the modal is closed.
+ * - `handleSaveModal`: A callback function to call when the "Save" button is clicked.
+ * - `newRecord`: An object containing the current state of the form.
+ * - `setNewRecord`: A function to update the `newRecord` state.
+ *
+ * @param {boolean} isModalOpen - Whether the modal should be open or not.
+ * @param {() => void} handleCloseModal - A callback function to call when the modal is closed.
+ * @param {() => void} handleSaveModal - A callback function to call when the "Save" button is clicked.
+ * @param {{ name: string; baremType: number; barem: number }} newRecord - An object containing the current state of the form.
+ * @param {(data: { name: string; baremType: number; barem: number }) => void} setNewRecord - A function to update the `newRecord` state.
+ */
 export default function AddTest({
   isModalOpen,
   handleCloseModal,
@@ -33,13 +57,25 @@ export default function AddTest({
   newRecord,
   setNewRecord,
 }: AddTestProps) {
-  // Checks if all required fields have values:
+
+  /**
+   * Checks if the form is valid.
+   *
+   * The form is considered valid if all fields (name, baremType, and barem) are not empty.
+   * @returns {boolean} Whether the form is valid.
+   */
   const isFormValid = (): boolean => {
     const { name, baremType, barem } = newRecord;
     return !!(name && baremType && barem);
   };
 
-  // Update baremType when Select changes:
+  /**
+   * Handles a change in the barem type select field.
+   *
+   * Updates the `newRecord` state with the selected barem type.
+   *
+   * @param {string} value - The value of the selected barem type.
+   */
   const handleBaremTypeChange = (value: string) => {
     setNewRecord((prev) => ({
       ...prev,
@@ -47,6 +83,15 @@ export default function AddTest({
     }));
   };
 
+  /**
+   * Handles a change in the barem input field.
+   *
+   * Updates the `newRecord` state with the new barem value.
+   *
+   * The `value` parameter can be either a string or a React.ChangeEvent<HTMLInputElement>.
+   * If it is a string, it is a direct value (e.g., from TimePicker). Otherwise, it is an event target value (e.g., from Input).
+   * @param {string | React.ChangeEvent<HTMLInputElement>} value - The new barem value.
+   */
   const handleBaremChange = (value: string | React.ChangeEvent<HTMLInputElement>) => {
     if (typeof value === 'string') {
       // Direct string value (e.g., from TimePicker)
@@ -57,6 +102,12 @@ export default function AddTest({
     }
   };
 
+  /**
+   * Renders the correct input based on the selected barem type.
+   *
+   * @param {number} baremType - The currently selected barem type.
+   * @returns {React.ReactNode} The rendered input component.
+   */
   const inputBasedOnBaremType = (baremType: number) => {
     switch (baremType) {
       case 1:
@@ -135,7 +186,6 @@ export default function AddTest({
             }
           />
         </div>
-
         {/* Barem Type */}
         <div>
           <Label htmlFor="baremType">{translations.chooseBaremType}</Label>
@@ -155,7 +205,6 @@ export default function AddTest({
             </SelectContent>
           </Select>
         </div>
-
         {/* Barem Value */}
         <div>
           {inputBasedOnBaremType(newRecord.baremType)}

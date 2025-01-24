@@ -10,6 +10,17 @@ import { Label } from "@/components/ui/label";
 import { login } from '@/controllers/auth';
 import translations from '@/lib/translations';
 
+/**
+ * Handles user login.
+ *
+ * This page is accessible when the user is not authenticated. It renders a
+ * form with email and password fields, and a submit button. When the form is
+ * submitted, it calls the `login` function with the provided email and
+ * password. If the login is successful, it redirects the user to the
+ * dashboard page.
+ *
+ * @return {JSX.Element} The login page.
+ */
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -17,6 +28,16 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
 
+  /**
+   * Handles the form submission.
+   *
+   * This function is called when the user submits the login form. It prevents
+   * the default form submission behavior, resets the error message, and calls
+   * the `login` function with the provided email and password. If the login is
+   * successful, it redirects the user to the dashboard page. If the login fails,
+   * it displays an error message.
+   * @param {React.FormEvent} e - The form submission event.
+   */
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
@@ -31,6 +52,14 @@ export default function LoginPage() {
     }
   };
 
+  /**
+   * Toggles the visibility of the password field.
+   *
+   * This function is called when the user clicks on the eye icon in the
+   * password field. It toggles the value of the `showPassword` state variable,
+   * which determines whether the password is rendered as a text input or a
+   * password input.
+   */
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };

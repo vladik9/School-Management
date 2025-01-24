@@ -22,6 +22,27 @@ interface StudentsAccordionProps {
 
 const STUDENTS_PER_PAGE = 5;
 
+/**
+ * Renders an accordion component for managing and displaying students.
+ *
+ * This component provides a paginated view of students, allowing users to
+ * navigate through different pages of student data. It organizes the data
+ * into an accordion format, separating students by class and displaying
+ * detailed student information for each student. It also includes buttons
+ * for adding and removing students from a class.
+ *
+ * Props:
+ * - students (StudentData[]): An array of student data to display.
+ * - handleUpdateStudent (function): Function to update student information.
+ * - handleRemoveStudent (function): Function to remove a student from a class.
+ * - classId (number): The ID of the class to which the students belong.
+ * - className (string): The name of the class to which the students belong.
+ * - newRecord (StudentData): The current state of the student details being entered.
+ * - setNewRecord (function): Function to update the student details state.
+ *
+ * Returns:
+ * - A JSX element representing the student accordion with pagination controls.
+ */
 export default function StudentsAccordion({
   students,
   handleUpdateStudent: handleUpdateStudentGlobal,
@@ -34,18 +55,51 @@ export default function StudentsAccordion({
 
   const [currentStudentPage, setCurrentStudentPage] = useState(0);
   const [isStudentModalOpen, setIsStudentModalOpen] = useState(false);
+  /**
+   * Increments the current page number for student pagination.
+   *
+   * Updates the local state by incrementing the current page number by one.
+   * This is used to navigate to the next page of students.
+   */
   const handleNextStudentPage = () => {
     setCurrentStudentPage((prevPage) => prevPage + 1);
   };
 
+
+  /**
+   * Decrements the current page number for student pagination.
+   *
+   * Updates the local state by decrementing the current page number by one,
+   * but not below 0 (i.e., the first page). This is used to navigate to the
+   * previous page of students.
+   */
   const handlePreviousStudentPage = () => {
     setCurrentStudentPage((prevPage) => Math.max(prevPage - 1, 0));
   };
 
+  /**
+   * Paginates the given list of students.
+   *
+   * This function takes a list of students and returns a slice of it, based on the current page number.
+   * The number of items per page is determined by the STUDENTS_PER_PAGE constant.
+   *
+   * @param {StudentData[]} studentList - The list of students to paginate.
+   * @returns {StudentData[]} - The paginated list of students.
+   */
   const paginatedStudents = (studentList: StudentData[]) => {
     const startIndex = currentStudentPage * STUDENTS_PER_PAGE;
     return studentList.slice(startIndex, startIndex + STUDENTS_PER_PAGE);
   };
+
+  /**
+   * Handles updating a student.
+   *
+   * This function updates the student by calling
+   * `handleUpdateStudentGlobal` and then closes the student modal.
+   *
+   * @param {number} studentId - The ID of the student to be updated.
+   * @param {object} data - The data to be used for updating the student.
+   */
   const handleUpdateStudent = (studentId: number, data: object) => {
     handleUpdateStudentGlobal(studentId, data);
     setIsStudentModalOpen(false);

@@ -17,6 +17,27 @@ interface AddViewStudentProps {
   children?: React.ReactNode;
 }
 
+/**
+ * A modal component for adding a new student.
+ *
+ * This component renders a modal that allows users to input a new student's name.
+ * The modal utilizes the `GenericModal` component for consistent styling and behavior.
+ * It includes form validation to ensure that all required fields are filled
+ * before allowing the user to save the new student.
+ *
+ * Props:
+ * - `isModalOpen`: A boolean indicating whether the modal should be open or not.
+ * - `modalTitle`: The title of the modal.
+ * - `modalDescription`: The description of the modal.
+ * - `handleCloseModal`: A callback function to call when the modal is closed.
+ * - `handleSaveModal`: A callback function to call when the "Save" button is clicked.
+ * - `newRecord`: An object containing the current state of the student details being entered.
+ * - `setNewRecord`: A function to update the `newRecord` state.
+ * - `children`: An optional node to render as a child of the modal.
+ *
+ * Returns:
+ * - A JSX element representing the modal to add a new student.
+ */
 export default function AddViewStudent({
   isModalOpen,
   modalTitle = translations.addNewRecord,
@@ -27,6 +48,12 @@ export default function AddViewStudent({
   setNewRecord,
   children,
 }: AddViewStudentProps) {
+  /**
+   * Updates the `newRecord` state with a new student name.
+   *
+   * Called when the user types a new name in the input field.
+   * @param {string} name - The new student name.
+   */
   const onValueChange = (name: string) => {
     setNewRecord((prev: StudentData) => ({
       ...prev,
@@ -36,6 +63,13 @@ export default function AddViewStudent({
     }));
   };
 
+  /**
+   * Handles the saving of a new student.
+   *
+   * This function checks if both the student name and ID have been entered,
+   * and if so, calls `handleSaveModal` with the new student data.
+   * If either field is empty, a validation error is logged to the console.
+   */
   const onSave = () => {
     if (newRecord.studentId && newRecord.name) {
       handleSaveModal(newRecord.id, newRecord);
@@ -45,6 +79,12 @@ export default function AddViewStudent({
     }
   };
 
+  /**
+   * Checks if the form is valid.
+   *
+   * The form is considered valid when the student name is not empty.
+   * @returns {boolean} Whether the form is valid.
+   */
   const isFormValid = (): boolean => {
     const { name } = newRecord;
     return !!(name);

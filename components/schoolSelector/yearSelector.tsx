@@ -15,12 +15,21 @@ interface YearSelectorProps {
 
 }
 
-
+/**
+ * A component for selecting a year and adding/removing years.
+ *
+ * This component displays a select list of years, allowing the user to select a year.
+ * It also includes buttons to add a new year and remove the currently selected year.
+ *
+ * @param {YearData[]} years - An array of year data to display in the select list.
+ * @param {function(number)} onSelectYear - A function to be called when a year is selected. It receives the selected year's ID as a parameter.
+ * @param {function} onAddYear - A function to be called when the "Add Year" button is clicked.
+ * @param {function(number)} onRemoveYear - A function to be called when the "Remove Year" button is clicked. It receives the ID of the year to be removed as a parameter.
+ */
 export default function YearSelector({ years, onSelectYear, onAddYear, onRemoveYear, }: YearSelectorProps) {
 
   return (
     <div style={{ marginTop: '20px' }}>
-
       {years.length > 0 && (
         <>
           <Label htmlFor="year-select">{translations.chooseYear}</Label>

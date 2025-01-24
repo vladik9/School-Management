@@ -14,6 +14,25 @@ interface AddClassProps {
 }
 
 
+/**
+ * Component for adding a new class.
+ *
+ * This component renders a modal that allows users to input and save details
+ * for a new class, including the class name and teacher's name. The modal
+ * utilizes the `GenericModal` component for consistent styling and behavior.
+ * It includes form validation to ensure that all required fields are filled
+ * before allowing the user to save the new class.
+ *
+ * Props:
+ * - isModalOpen (boolean): Determines if the modal is open.
+ * - handleCloseModal (function): Function to close the modal.
+ * - handleSaveModal (function): Function to save the class details.
+ * - newRecord (object): The current state of the class details being entered.
+ * - setNewRecord (function): Function to update the class details state.
+ *
+ * Returns:
+ * - A JSX element representing the modal to add a new class.
+ */
 export default function AddClass({ isModalOpen, handleCloseModal, handleSaveModal, newRecord, setNewRecord }: AddClassProps) {
   const isFormValid = (): boolean => {
     const { name, teacher } = newRecord;

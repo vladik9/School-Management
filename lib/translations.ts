@@ -168,8 +168,8 @@ const translations = {
   performancesList: "Lista de performanțe",
   boysPerformanceList: "Lista de performanțe baieți",
   girlsPerformanceList: "Lista de performanțe fete",
-  noGirlsAdded: "Nu sunt fete adăugate",
-  noBoysAdded: "Nu sunt baieci adăugate",
+  noGirlsAdded: "Nu sunt note fete adăugate",
+  noBoysAdded: "Nu sunt note baieți adăugați",
 
   //Common
   action: "Acțiune",

@@ -5,8 +5,15 @@ import { serialize } from 'cookie';
 import jwt from 'jsonwebtoken';
 import checkToken from '../middleware/index';
 
-const SECRET_KEY = process.env.JWT_SECRET_KEY || 'no-secret-here-default-app-school';
+const SECRET_KEY = process.env.JWT_SECRET_KEY || 'no-secret-here-default-app-school-secret';
 
+/**
+ * Handles login requests.
+ *
+ * @param {NextApiRequest} req - The API request object containing the email and password in the body.
+ * @param {NextApiResponse} res - The API response object.
+ * @returns {Promise<void>} Sends a JSON response with a valid JWT token or an error message.
+ */
 const login = async (req: NextApiRequest, res: NextApiResponse) => {
   const { email, password } = req.body;
   try {
@@ -47,6 +54,18 @@ const login = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 };
 
+/**
+ * Logs out the user by removing the authentication token from the database
+ * and the cookies in the response. If the user is not found, it silently
+ * proceeds without making changes. Upon successful logout, a 200 status
+ * is returned with a JSON payload containing a success message.
+ *
+ * @param {NextApiRequest} req - The API request object, expected to contain
+ * the authenticated user's information.
+ * @param {NextApiResponse} res - The API response object used to return the
+ * status and JSON payload to the client.
+ * @returns {Promise<void>} Sends a JSON response indicating successful logout.
+ */
 const logout = async (req: NextApiRequest, res: NextApiResponse) => {
 
    //Remove token from the database
@@ -69,6 +88,18 @@ const logout = async (req: NextApiRequest, res: NextApiResponse) => {
   res.status(200).json({ message: 'Logged out successfully' });
 };
 
+/**
+ * Handles API requests to the users endpoint.
+ *
+ * This function checks the request method and calls the appropriate handler
+ * function. If the method is not supported, it returns a 405 status with an
+ * "Allow" header listing the supported methods.
+ *
+ * @param {NextApiRequest} req - The API request object.
+ * @param {NextApiResponse} res - The API response object.
+ * @returns {Promise<void>} Sends a JSON response containing the result of the
+ * handler function or an error message.
+ */
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   switch (req.method) {
     case 'POST':

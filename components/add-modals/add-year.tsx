@@ -12,7 +12,22 @@ interface AddYearProps {
   setNewRecord: (data: { year: number; }) => void;
 }
 
-
+/**
+ * A modal component for adding a new year.
+ *
+ * The component renders a form with a single required field: year.
+ * The component also renders a "Save" button and a "Close" button. When the "Save" button is clicked,
+ * the `handleSaveModal` callback is called with the current `newRecord` state. If the form is not valid,
+ * the "Save" button is disabled.
+ *
+ * The component receives the following props:
+ *
+ * - `isModalOpen`: A boolean indicating whether the modal should be open or not.
+ * - `handleCloseModal`: A callback function to call when the modal is closed.
+ * - `handleSaveModal`: A callback function to call when the "Save" button is clicked.
+ * - `newRecord`: An object containing the current state of the form.
+ * - `setNewRecord`: A function to update the `newRecord` state.
+ */
 export default function AddYear({ isModalOpen, handleCloseModal, handleSaveModal, newRecord, setNewRecord }: AddYearProps) {
   const isFormValid = (): boolean => {
     const { year } = newRecord;

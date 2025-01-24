@@ -44,7 +44,7 @@ const getPerformancesWithDetails = async (performances: any) => {
           const numericValue = Number(record.value);
           const numericBarem = Number(performance.barem);
           if (!isNaN(numericValue) && !isNaN(numericBarem)) {
-            performanceScore = numericValue / numericBarem;
+            performanceScore = (numericValue / numericBarem).toFixed(2);
           }
         }
         if (performance.baremType === 3) {

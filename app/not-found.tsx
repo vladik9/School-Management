@@ -4,6 +4,14 @@ import { Button } from "@/components/ui/button";
 import { AlertTriangle, Home } from 'lucide-react';
 import translations from "@/lib/translations";
 
+/**
+ * The NotFound component is a fallback page rendered when Next.js is unable
+ * to find a route matching the current URL.
+ *
+ * It displays a centered card with a bold title, a short paragraph of text
+ * explaining that the page was not found, and a button to go back to the
+ * homepage.
+ */
 export default function NotFound() {
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">

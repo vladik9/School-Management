@@ -9,8 +9,6 @@ import PaginationButtons from '../ui/pagination-buttons';
 
 interface PerformanceAccordionProps {
   performances: PerformanceData[];
-  // handleRemoveTest: (testID: number) => void;
-  // handleAddViewIntervals: (testId: number) => void;
   className: string;
 }
 
@@ -20,7 +18,6 @@ export default function PerformanceAccordion({
   performances,
   className,
 }: PerformanceAccordionProps) {
-  console.log("🚀 ~ performances:", performances);
 
   const [currentPerformancePage, setCurrentPerformancePage] = useState(0);
 
@@ -90,7 +87,7 @@ export default function PerformanceAccordion({
                                     </TableBody>
                                   </Table>
                                 ) : (
-                                  <div className="text-center w-full pt-10">{translations.noGirlsAdded}</div>
+                                  <div className="text-center w-full pt-10">{translations.noBoysAdded}</div>
                                 )}
                               </div>
                               <div>

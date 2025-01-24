@@ -91,8 +91,6 @@ export default function ClassAccordion({
                 {/* -- Performances -- */}
                 <PerformanceAccordion
                   performances={school_class.performances}
-                  // handleAddViewIntervals={handleAddViewIntervals}
-                  // handleRemoveTest={handleRemoveTest}
                   className={school_class.name}
                 />
                 {/* -- Documents -- */}
@@ -104,10 +102,14 @@ export default function ClassAccordion({
                   className={school_class.name}
                 />
                 {/* Buttons for adding a student or test */}
+                <div className="mt-4">
+                  <hr />
+                </div>
                 <div
                   style={{ marginTop: '10px', display: 'flex', justifyContent: 'space-between' }}
                 >
                   <div>
+
                     <Button
                       variant="outline"
                       style={{ marginRight: '10px' }}

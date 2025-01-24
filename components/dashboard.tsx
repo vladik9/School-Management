@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { logout } from '@/controllers/auth';
+import { checkAuth, logout } from '@/controllers/auth';
 import { useRouter } from 'next/navigation';
 import translations from "@/lib/translations";
 
@@ -76,8 +76,13 @@ import AddTest from "@/components/add-modals/add-test";
 import AddViewIntervals from "@/components/add-modals/add-view-intervals";
 import UploadDocument from '@/components/add-modals/upload-document';
 
-
-
+/**
+ * The SchoolDashboard component is the main entry point for the
+ * application. It handles authentication, navigation and the display
+ * of data.
+ *
+ * @returns The rendered SchoolDashboard component
+ */
 export default function SchoolDashboard() {
   const [schools, setSchools] = useState<SchoolData[]>([]);
   const [selectedSchoolId, setSelectedSchoolId] = useState<SchoolData | null>(null);
@@ -109,20 +114,37 @@ export default function SchoolDashboard() {
 
   const router = useRouter();
 
-  // Status Modal functions
+  /**
+   * Show the status modal with a message and a variant.
+   *
+   * @param {string} message The message to show in the modal.
+   * @param {FetchStatuses} variant The variant of the message, which determines the color of the modal.
+   */
   const showStatusModal = (message: string, variant: FetchStatuses) => {
     setStatusModal({ isVisible: true, message, variant });
   };
 
+  /**
+   * Hides the status modal.
+   *
+   * This is a function only to make it easy to call when the user clicks outside of the modal.
+   */
   const hideStatusModal = () => {
     setStatusModal((prev) => ({ ...prev, isVisible: false }));
   };
 
-  // Logout Handler
+  /**
+   * Handles the logout process.
+   *
+   * This function is called when the user clicks on the logout button.
+   * It logs the user out and redirects them to the login page.
+   */
   const handleLogout = async () => {
     await logout();
     router.push('/');
   };
+
+  useEffect(() => { if (!checkAuth()) router.push('/'); }, []);
 
   // Fetch schools on mount
   useEffect(() => {
@@ -153,6 +175,12 @@ export default function SchoolDashboard() {
   // =========================
   // Data fetching functions
   // =========================
+
+  /**
+   * Fetches the list of schools from the server and sets the local state.
+   *
+   * @returns {Promise<void>} A promise that resolves when the schools have been fetched.
+   */
   const fetchSchools = async () => {
     try {
       // showStatusModal(statusMessages.fetchingSchools, fetchStatuses.loading);
@@ -164,6 +192,13 @@ export default function SchoolDashboard() {
     }
   };
 
+  /**
+   * Fetches the list of years for the currently selected school from the server and sets the local state.
+   *
+   * This function is called when the selected school changes.
+   *
+   * @returns {Promise<void>} A promise that resolves when the years have been fetched.
+   */
   const fetchYears = async () => {
     if (!selectedSchoolId) return;
     // showStatusModal(statusMessages.fetchingYears, fetchStatuses.loading);
@@ -176,6 +211,13 @@ export default function SchoolDashboard() {
     }
   };
 
+  /**
+   * Fetches the list of classes for the currently selected year from the server and sets the local state.
+   *
+   * This function is called when the selected year changes.
+   *
+   * @returns {Promise<void>} A promise that resolves when the classes have been fetched.
+   */
   const fetchClasses = async () => {
     if (!selectedYearId) return;
     // showStatusModal(statusMessages.fetchingClasses, fetchStatuses.loading);
@@ -188,7 +230,14 @@ export default function SchoolDashboard() {
     }
   };
 
-
+  /**
+   * Fetches the list of intervals for the given testId from the server and sets the local state.
+   *
+   * This function is called when the selected test changes.
+   *
+   * @param {number} testId The id of the test for which to fetch intervals.
+   * @returns {Promise<void>} A promise that resolves when the intervals have been fetched.
+   */
   const fetchIntervals = async (testId: number) => {
     if (!testId) return;
     // showStatusModal(statusMessages.fetchingIntervals, fetchStatuses.loading);
@@ -201,6 +250,14 @@ export default function SchoolDashboard() {
     }
   };
 
+  /**
+   * Fetches the list of records for the given intervalId from the server and updates the local state.
+   *
+   * This function is called when the selected interval changes.
+   *
+   * @param {number} intervalId The id of the interval for which to fetch records.
+   * @returns {Promise<void>} A promise that resolves when the records have been fetched.
+   */
   const fetchRecords = async (intervalId: number) => {
     // showStatusModal(statusMessages.fetchingRecords, fetchStatuses.loading);
     try {
@@ -212,10 +269,17 @@ export default function SchoolDashboard() {
     }
   };
 
-
   // =========================
   // Selection Handlers
   // =========================
+
+  /**
+   * Handles a change in the selected school.
+   *
+   * When a different school is selected, the selected year and list of classes are reset.
+   *
+   * @param {number} schoolId The id of the newly selected school.
+   */
   const handleSchoolChange = (schoolId: number) => {
     const school = schools.find((s) => s.id === schoolId);
     if (school) {
@@ -225,6 +289,13 @@ export default function SchoolDashboard() {
     }
   };
 
+  /**
+   * Handles a change in the selected year.
+   *
+   * When a different year is selected, the list of classes is reset.
+   *
+   * @param {number} yearId The id of the newly selected year.
+   */
   const handleYearChange = (yearId: number) => {
     setSelectedYearId(yearId);
     setClasses([]);
@@ -233,6 +304,14 @@ export default function SchoolDashboard() {
   // =========================
   // Creation Handlers
   // =========================
+
+  /**
+   * Handles saving a new school.
+   *
+   * When a new school is saved, the list of schools is updated.
+   *
+   * @returns {Promise<void>} A promise that resolves when the school has been saved.
+   */
   const handleSchoolSave = async () => {
     // showStatusModal(statusMessages.creatingSchool, fetchStatuses.loading);
     try {
@@ -246,6 +325,16 @@ export default function SchoolDashboard() {
     }
   };
 
+  /**
+   * Handles the saving of a new year for the selected school.
+   *
+   * This function triggers the creation of a new year using the provided data,
+   * closes the year modal, resets the newRecord state, and refreshes the list
+   * of years. If an error occurs during the process, an error status modal
+   * is displayed.
+   *
+   * @returns {Promise<void>} A promise that resolves when the year has been processed.
+   */
   const handleYearSave = async () => {
     if (!selectedSchoolId) return;
     // showStatusModal(statusMessages.creatingYear, fetchStatuses.loading);
@@ -260,6 +349,16 @@ export default function SchoolDashboard() {
     }
   };
 
+  /**
+   * Handles the saving of a new class for the selected year.
+   *
+   * This function triggers the creation of a new class using the provided data,
+   * closes the class modal, resets the newRecord state, and refreshes the list
+   * of classes. If an error occurs during the process, an error status modal
+   * is displayed.
+   *
+   * @returns {Promise<void>} A promise that resolves when the class has been processed.
+   */
   const handleClassSave = async () => {
     if (!selectedYearId) return;
     // showStatusModal(statusMessages.creatingClass, fetchStatuses.loading);
@@ -274,6 +373,16 @@ export default function SchoolDashboard() {
     }
   };
 
+  /**
+   * Handles the saving of a new student for the selected class.
+   *
+   * This function triggers the creation of a new student using the provided data,
+   * closes the student modal, resets the newRecord state, and refreshes the list
+   * of classes. If an error occurs during the process, an error status modal
+   * is displayed.
+   *
+   * @returns {Promise<void>} A promise that resolves when the student has been processed.
+   */
   const handleStudentSave = async () => {
     if (!selectedClassId) return;
     // showStatusModal(statusMessages.creatingStudent, fetchStatuses.loading);
@@ -288,6 +397,16 @@ export default function SchoolDashboard() {
     }
   };
 
+  /**
+   * Handles saving a new test.
+   *
+   * When a new test is saved, the processCreateTest function is called with the
+   * newRecord and selectedClassId. If the process is successful, the test modal
+   * is closed, the newRecord state is reset, and the list of classes is refreshed.
+   * If an error occurs, an error status modal is displayed.
+   *
+   * @returns {Promise<void>} A promise that resolves when the test has been saved.
+   */
   const handleTestSave = async () => {
     if (!selectedClassId) return;
     // showStatusModal(statusMessages.creatingTest, fetchStatuses.loading);
@@ -302,6 +421,17 @@ export default function SchoolDashboard() {
     }
   };
 
+  /**
+   * Handles saving a new interval.
+   *
+   * When a new interval is saved, the processCreateInterval function is called
+   * with the selectedTestId. If the process is successful, the list of classes
+   * and intervals is refreshed, the newRecord state is reset, and a success
+   * status modal is displayed. If an error occurs, an error status modal is
+   * displayed.
+   *
+   * @returns {Promise<void>} A promise that resolves when the interval has been saved.
+   */
   const handleIntervalSave = async () => {
     if (!selectedTestId) return;
     // showStatusModal(statusMessages.creatingInterval, fetchStatuses.loading);
@@ -316,18 +446,43 @@ export default function SchoolDashboard() {
     }
   };
 
+  /**
+   * Handles saving a new record for the selected interval.
+   *
+   * This function initiates the creation of a new record using the provided newRecord
+   * data and the selected interval ID. Upon successful record creation, it closes the
+   * new record modal, resets the newRecord state, refreshes the lists of records
+   * and classes, and displays a success status modal. If an error occurs during the
+   * process, an error status modal is shown.
+   *
+   * @returns {Promise<void>} A promise that resolves when the new record has been processed.
+   */
   const handleSaveNewRecord = async () => {
+    console.log('newRecord', newRecord);
     try {
       // showStatusModal(statusMessages.creatingRecord, fetchStatuses.loading);
       await processCreateRecord(newRecord, selectedIntervalId || 0);
       setIsNewRecordModalOpen(false);
       setNewRecord({});
       await fetchRecords(selectedIntervalId || 0);
+      await fetchClasses();
       showStatusModal(statusMessages.recordCreated, fetchStatuses.success);
     } catch (error) {
       showStatusModal(statusMessages.errorCreatingRecord, fetchStatuses.error);
     }
   };
+
+  /**
+   * Handles saving a new document for the selected class.
+   *
+   * This function initiates the creation of a new document using the provided newRecord
+   * data and the selected class ID. Upon successful document creation, it closes the
+   * new document modal, resets the newRecord state, refreshes the list of classes,
+   * and displays a success status modal. If an error occurs during the process, an
+   * error status modal is shown.
+   *
+   * @returns {Promise<void>} A promise that resolves when the new document has been processed.
+   */
   const handleSaveDocument = async () => {
     try {
       const formData = new FormData();
@@ -349,6 +504,17 @@ export default function SchoolDashboard() {
   // =========================
   // Viewing / Editing Handlers
   // =========================
+
+  /**
+   * Handles opening the "Add/View Intervals" modal.
+   *
+   * This function is called when the user clicks on the "Add/View Intervals" button
+   * associated with a test. It sets the selected test ID, fetches the test's intervals,
+   * opens the "Add/View Intervals" modal, and resets the newRecord state.
+   *
+   * @param {number} testId The ID of the test whose intervals should be displayed.
+   * @returns {Promise<void>} A promise that resolves when the intervals have been fetched.
+   */
   const handleAddViewIntervals = async (testId: number) => {
     setSelectedTestId(testId);
     await fetchIntervals(testId);
@@ -356,6 +522,15 @@ export default function SchoolDashboard() {
     setNewRecord({});
   };
 
+  /**
+   * Handles fetching and viewing records for a specified interval.
+   *
+   * This function sets the selected interval ID, fetches the records
+   * associated with that interval, and resets the newRecord state.
+   *
+   * @param {number} intervalId - The ID of the interval whose records are to be fetched.
+   * @returns {Promise<void>} A promise that resolves when the records have been fetched.
+   */
   const handleViewEditRecords = async (intervalId: number) => {
     setSelectedIntervalId(intervalId);
     await fetchRecords(intervalId);
@@ -363,6 +538,21 @@ export default function SchoolDashboard() {
   };
 
   const handleUpdateStudent = async (studentId: number, data: object) => {
+    /**
+     * Handles updating a student using the provided data and student ID.
+     *
+     * This function is called when the user clicks on the "Update" button
+     * associated with a student in the student list. It displays a loading
+     * status modal, updates the student using the provided data, and
+     * resets the newRecord state. Upon successful update, it displays a
+     * success status modal. If an error occurs during the process, an
+     * error status modal is shown. Finally, if the user was viewing a
+     * specific interval's records, it refreshes the list of classes.
+     *
+     * @param {number} studentId The ID of the student to be updated.
+     * @param {object} data The data to be used for updating the student.
+     * @returns {Promise<void>} A promise that resolves when the student has been updated.
+     */
     showStatusModal(statusMessages.updatingStudent, fetchStatuses.loading);
     try {
       await processUpdateStudent(data, studentId,);
@@ -380,6 +570,21 @@ export default function SchoolDashboard() {
   // =========================
   // Removal Handlers (UPDATED)
   // =========================
+
+  /**
+   * Handles removing a school from the database.
+   *
+   * This function is called when the user clicks on the "Remove" button associated
+   * with a school in the school list. It displays a loading status modal, removes
+   * the school using the provided ID, and resets the newRecord state. Upon
+   * successful removal, it displays a success status modal. If an error occurs
+   * during the process, an error status modal is shown. Finally, it refreshes the
+   * list of schools.
+   *
+   * @param {number} schoolId The ID of the school to be removed.
+   * @returns {Promise<void>} A promise that resolves when the school has been removed.
+   */
+
   const handleRemoveSchool = async (schoolId: number) => {
     showStatusModal(statusMessages.deletingSchool, fetchStatuses.loading);
     try {
@@ -392,6 +597,18 @@ export default function SchoolDashboard() {
     }
   };
 
+  /**
+   * Handles removing a year from the database.
+   *
+   * This function is called when the user initiates the removal of a year.
+   * It displays a loading status modal, removes the year using the provided ID,
+   * and upon successful removal, displays a success status modal. If an error
+   * occurs during the process, an error status modal is shown. Finally, it
+   * refreshes the list of years.
+   *
+   * @param {number} yearId The ID of the year to be removed.
+   * @returns {Promise<void>} A promise that resolves when the year has been removed.
+   */
   const handleRemoveYear = async (yearId: number) => {
     showStatusModal(statusMessages.deletingYear, fetchStatuses.loading);
     try {
@@ -404,6 +621,18 @@ export default function SchoolDashboard() {
     }
   };
 
+  /**
+   * Handles removing a class from the database.
+   *
+   * This function is called when the user initiates the removal of a class.
+   * It displays a loading status modal, removes the class using the provided
+   * ID, and upon successful removal, displays a success status modal. If an
+   * error occurs during the process, an error status modal is shown. Finally,
+   * it refreshes the list of classes.
+   *
+   * @param {number} classId The ID of the class to be removed.
+   * @returns {Promise<void>} A promise that resolves when the class has been removed.
+   */
   const handleRemoveClass = async (classId: number) => {
     showStatusModal(statusMessages.deletingClass, fetchStatuses.loading);
     try {
@@ -416,6 +645,18 @@ export default function SchoolDashboard() {
     }
   };
 
+  /**
+   * Handles removing a student from the database.
+   *
+   * This function is called when the user initiates the removal of a student.
+   * It displays a loading status modal, removes the student using the provided
+   * ID, and upon successful removal, displays a success status modal. If an
+   * error occurs during the process, an error status modal is shown. Finally,
+   * it refreshes the list of classes.
+   *
+   * @param {number} studentId The ID of the student to be removed.
+   * @returns {Promise<void>} A promise that resolves when the student has been removed.
+   */
   const handleRemoveStudent = async (studentId: number) => {
     showStatusModal(statusMessages.deletingStudent, fetchStatuses.loading);
     try {
@@ -428,6 +669,18 @@ export default function SchoolDashboard() {
     }
   };
 
+  /**
+   * Handles removing a test from the database.
+   *
+   * This function is called when the user initiates the removal of a test.
+   * It displays a loading status modal, removes the test using the provided
+   * ID, and upon successful removal, displays a success status modal. If an
+   * error occurs during the process, an error status modal is shown. Finally,
+   * it refreshes the list of classes.
+   *
+   * @param {number} testId The ID of the test to be removed.
+   * @returns {Promise<void>} A promise that resolves when the test has been removed.
+   */
   const handleRemoveTest = async (testId: number) => {
     showStatusModal(statusMessages.deletingTest, fetchStatuses.loading);
     try {
@@ -440,6 +693,18 @@ export default function SchoolDashboard() {
     }
   };
 
+  /**
+   * Handles removing an interval from the database.
+   *
+   * This function is called when the user initiates the removal of an interval.
+   * It displays a loading status modal, removes the interval using the provided
+   * ID, and upon successful removal, displays a success status modal. If an
+   * error occurs during the process, an error status modal is shown. Finally,
+   * it refreshes the list of intervals for the selected test.
+   *
+   * @param {number} intervalId The ID of the interval to be removed.
+   * @returns {Promise<void>} A promise that resolves when the interval has been removed.
+   */
   const handleRemoveInterval = async (intervalId: number) => {
     showStatusModal(statusMessages.deletingInterval, fetchStatuses.loading);
     try {
@@ -454,6 +719,18 @@ export default function SchoolDashboard() {
     }
   };
 
+  /**
+   * Handles removing a record from the database.
+   *
+   * This function is called when the user initiates the removal of a record.
+   * It displays a loading status modal, removes the record using the provided
+   * ID, and upon successful removal, displays a success status modal. If an
+   * error occurs during the process, an error status modal is shown. Finally,
+   * it refreshes the list of records for the selected interval.
+   *
+   * @param {number} recordId The ID of the record to be removed.
+   * @returns {Promise<void>} A promise that resolves when the record has been removed.
+   */
   const handleRemoveRecord = async (recordId: number) => {
     showStatusModal(statusMessages.deletingRecord, fetchStatuses.loading);
     try {
@@ -467,6 +744,19 @@ export default function SchoolDashboard() {
       }
     }
   };
+
+  /**
+   * Handles removing a document from the database.
+   *
+   * This function is called when the user initiates the removal of a document.
+   * It displays a loading status modal, removes the document using the provided
+   * ID, and upon successful removal, displays a success status modal. If an
+   * error occurs during the process, an error status modal is shown. Finally,
+   * it refreshes the list of classes.
+   *
+   * @param {number} documentId The ID of the document to be removed.
+   * @returns {Promise<void>} A promise that resolves when the document has been removed.
+   */
   const handleRemoveDocument = async (documentId: number) => {
     showStatusModal(statusMessages.deletingDocument, fetchStatuses.loading);
     try {
@@ -478,6 +768,18 @@ export default function SchoolDashboard() {
       await fetchClasses();
     }
   };
+
+  /**
+   * Handles downloading a document from the database.
+   *
+   * This function is called when the user initiates the download of a document.
+   * It displays a loading status modal, downloads the document using the provided
+   * ID, and upon successful download, displays a success status modal. If an
+   * error occurs during the process, an error status modal is shown.
+   *
+   * @param {number} documentId The ID of the document to be downloaded.
+   * @returns {Promise<void>} A promise that resolves when the document has been downloaded.
+   */
   const handleDownloadDocument = async (documentId: number) => {
     showStatusModal(statusMessages.downloadingDocument, fetchStatuses.loading);
     try {
@@ -487,6 +789,20 @@ export default function SchoolDashboard() {
       showStatusModal(statusMessages.errorDownloadingDocument, fetchStatuses.error);
     }
   };
+
+  /**
+   * Handles updating a record from the database.
+   *
+   * This function is called when the user initiates the update of a record.
+   * It displays a loading status modal, updates the record using the provided
+   * data and record ID, and upon successful update, displays a success status
+   * modal. If an error occurs during the process, an error status modal is
+   * shown. Finally, it refreshes the list of records for the selected interval.
+   *
+   * @param {number} recordId The ID of the record to be updated.
+   * @param {object} data The data to be used for updating the record.
+   * @returns {Promise<void>} A promise that resolves when the record has been updated.
+   */
   const handleUpdateRecord = async (recordId: number, data: object) => {
     showStatusModal(statusMessages.updatingRecord, fetchStatuses.loading);
     try {
@@ -567,7 +883,6 @@ export default function SchoolDashboard() {
               </div>
             </div>
           )}
-
           {/* Modals */}
           <AddSchool
             isModalOpen={isSchoolModalOpen}
@@ -579,7 +894,6 @@ export default function SchoolDashboard() {
             setNewRecord={setNewRecord}
             newRecord={newRecord}
           />
-
           <AddYear
             isModalOpen={isYearModalOpen}
             handleCloseModal={() => {
@@ -590,7 +904,6 @@ export default function SchoolDashboard() {
             setNewRecord={setNewRecord}
             newRecord={newRecord}
           />
-
           <AddClass
             isModalOpen={isClassModalOpen}
             handleCloseModal={() => {
@@ -601,7 +914,6 @@ export default function SchoolDashboard() {
             setNewRecord={setNewRecord}
             newRecord={newRecord}
           />
-
           <AddTest
             isModalOpen={isTestModalOpen}
             handleCloseModal={() => {
@@ -612,7 +924,6 @@ export default function SchoolDashboard() {
             setNewRecord={setNewRecord}
             newRecord={newRecord}
           />
-
           <AddViewIntervals
             intervals={intervals}
             isModalOpen={isIntervalModalOpen}
@@ -638,7 +949,6 @@ export default function SchoolDashboard() {
             tests={(classes.length > 0 && classes.find((c) => c.id === selectedClassId)?.tests) || []}
             testId={selectedTestId || 0}
           />
-
           <AddStudent
             isModalOpen={isStudentModalOpen}
             handleCloseModal={() => {
@@ -661,7 +971,6 @@ export default function SchoolDashboard() {
             setNewRecord={setNewRecord}
             handleSaveModal={handleSaveDocument}
           />
-
           <StatusModal
             isVisible={statusModal.isVisible}
             message={statusModal.message}

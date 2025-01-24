@@ -1,26 +1,22 @@
 import type { Metadata } from "next";
-// import localFont from "next/font/local";
 import "./globals.css";
 import { Inter } from 'next/font/google';
 
 const inter = Inter({ subsets: ['latin'] });
 
-// const geistSans = localFont({
-//   src: "./fonts/GeistVF.woff",
-//   variable: "--font-geist-sans",
-//   weight: "100 900",
-// });
-// const geistMono = localFont({
-//   src: "./fonts/GeistMonoVF.woff",
-//   variable: "--font-geist-mono",
-//   weight: "100 900",
-// });
-
 export const metadata: Metadata = {
-  title: 'School Management System',
-  description: 'A comprehensive school management system',
+  title: 'Sistemul de management al școlii',
+  description: 'Un sistem cuprinzător de management al școlii',
 };
 
+/**
+ * The root layout component. This component is the top-level component
+ * that is rendered by Next.js for every page. It is responsible for
+ * rendering the HTML skeleton and the child components.
+ *
+ * @param children - The child components of the root layout.
+ * @returns The root layout component.
+ */
 export default function RootLayout({
   children,
 }: Readonly<{

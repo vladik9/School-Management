@@ -1,4 +1,3 @@
-'use client';
 import React, { useState, useEffect } from 'react';
 import GenericModal from '@/components/generic/generic-modal';
 import { Input } from '@/components/ui/input';
@@ -23,20 +22,60 @@ interface AddStudentProps {
   years: YearData[];
 }
 
-export default function AddStudent({ isModalOpen, handleCloseModal, handleSaveModal, setNewRecord, selectedYear, newRecord, years }: AddStudentProps) {
+/**
+ * Component for adding a new student.
+ *
+ * This component renders a modal that allows users to input and save details
+ * for a new student, including the student name, order number, sex, and class.
+ * The modal utilizes the `GenericModal` component for consistent styling and
+ * behavior. It includes form validation to ensure that all required fields are
+ * filled before allowing the user to save the new student.
+ *
+ * Props:
+ * - isModalOpen (boolean): Determines if the modal is open.
+ * - handleCloseModal (function): Function to close the modal.
+ * - handleSaveModal (function): Function to save the student details.
+ * - setNewRecord (function): Function to update the student details state.
+ * - newRecord (object): The current state of the student details being entered.
+ * - selectedYear (number | null): The currently selected year.
+ * - years (array): An array of year data.
+ *
+ * Returns:
+ * - A JSX element representing the modal to add a new student.
+ */
+export default function AddStudent({ isModalOpen, handleCloseModal, handleSaveModal, setNewRecord, newRecord, selectedYear, years }: AddStudentProps) {
   const [generatedId, setGeneratedId] = useState('');
 
   useEffect(() => {
     handleIdGeneration();
   }, [newRecord.orderNb, newRecord.sex, newRecord.study_class, selectedYear]);
 
-  const handleInputChange = (field: string, value: string) => {
+  /**
+   * Handles input change events for the student form fields.
+   *
+   * This function updates the state of the `newRecord` object with the new
+   * value from the input field. The field name is used as the key in the
+   * `newRecord` object, and the value is the new value from the input field.
+   *
+   * @param {string} field - The field name for the input field that triggered
+   * the change event.
+   * @param {string | number} value - The new value from the input field.
+   */
+  const handleInputChange = (field: string, value: string | number) => {
     setNewRecord((prev) => ({
       ...prev,
       [field]: value,
     }));
   };
 
+  /**
+   * Generates a student ID based on the entered order number, sex, and class.
+   *
+   * This function takes the entered order number, sex, and class, and combines
+   * them to form a student ID. The generated student ID is then set as the
+   * value of the `studentId` field in the `newRecord` object. If any of the
+   * required fields are empty, the generated student ID is cleared.
+   */
   const handleIdGeneration = () => {
     const { orderNb, sex, study_class } = newRecord;
     if (orderNb && sex && study_class) {
@@ -48,6 +87,19 @@ export default function AddStudent({ isModalOpen, handleCloseModal, handleSaveMo
     }
   };
 
+  /**
+   * Checks if all required fields have values.
+   *
+   * This function checks that the following fields have values:
+   * - `name`
+   * - `orderNb`
+   * - `sex`
+   * - `study_class`
+   *
+   * If any of the required fields are empty, the function returns `false`.
+   *
+   * @returns {boolean} `true` if all required fields have values, `false` otherwise.
+   */
   const isFormValid = (): boolean => {
     const { name, orderNb, sex, study_class } = newRecord;
     return !!(name && orderNb && sex && study_class);
@@ -90,6 +142,7 @@ export default function AddStudent({ isModalOpen, handleCloseModal, handleSaveMo
             onValueChange={(value) => {
               handleInputChange('sex', value);
             }}
+            value={newRecord.sex}
           >
             <SelectTrigger id="sex">
               <SelectValue placeholder={translations.sex} />
@@ -106,6 +159,7 @@ export default function AddStudent({ isModalOpen, handleCloseModal, handleSaveMo
             onValueChange={(value) => {
               handleInputChange('study_class', value);
             }}
+            value={newRecord.study_class}
           >
             <SelectTrigger id="class">
               <SelectValue placeholder={translations.class} />

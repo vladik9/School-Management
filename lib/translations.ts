@@ -87,6 +87,7 @@ const translations = {
   removeStudent: "Șterge elev",
   confirmRemoveStudent: "Sigur dorești să ștergi elevul?",
   studentsList: "Elevi atribuiți clasei",
+  studentScore: "Scor elev",
 
   //Test
   tasks: "Teme",
@@ -214,6 +215,8 @@ const translations = {
   dragDropFileHere: "Trage și dă click aici pentru a încărca fișierul",
   allowedFileFormats: "Formatele de fișier permise e.g. PDF, DOC, JPG, PNG...",
   fileNameUploaded: "Numele fișierului încărcat",
+  shareDocumentLink: "Partajează documentul",
+  share: "Partajează",
 };
 
 export default translations;

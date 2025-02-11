@@ -68,7 +68,7 @@ const getPerformancesWithDetails = async (performances: any) => {
         if (performance.baremType === 3) {
           const [rM, rS] = record.value.split(':').map(Number);
           const [bM, bS] = performance.barem.split(':').map(Number);
-
+// TODO - fix this add milliseconds in calculation as this should be shown on performance table as well
           // Convert them to total seconds
           const totalResultSeconds = rM * 60 + rS;
           const totalBaremSeconds = bM * 60 + bS;

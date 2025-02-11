@@ -4,11 +4,12 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import translations from "@/lib/translations";
 import { DocumentData } from "@/types/types";
 import { Button } from '../ui/button';
-import RemoveDialog from '../generic/remove-dialog';
-import { Download, Upload } from 'lucide-react';
+import ShareDialog from '../generic/share-dialog';
+import { Download, Share, Upload } from 'lucide-react';
 import { Card } from '../ui/card';
 import { paginationConstants } from '@/utils/dataEnums';
 import PaginationButtons from '../ui/pagination-buttons';
+import RemoveDialog from '../generic/remove-dialog';
 
 interface DocumentAccordionProps {
   documents: DocumentData[];
@@ -80,6 +81,9 @@ export default function DocumentAccordion({
     const startIndex = currentDocumentPage * DOCUMENTS_PER_PAGE;
     return documents.slice(startIndex, startIndex + DOCUMENTS_PER_PAGE);
   };
+  const handleDocumentShare = (documentId: number) => {
+    navigator.clipboard.writeText(`${window.location.origin}/document/${documentId}`);
+  };
 
   return (
     <div style={{ marginTop: '20px' }}>
@@ -113,6 +117,8 @@ export default function DocumentAccordion({
                       <TableHead>{translations.docName}</TableHead>
                       <TableHead>{translations.download}</TableHead>
                       <TableHead>{translations.removeDocument}</TableHead>
+                      {/* //NOTE - enable this when client what this feature */}
+                      {/* <TableHead>{translations.shareDocumentLink}</TableHead> */}
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -137,6 +143,10 @@ export default function DocumentAccordion({
                             removeMessage={translations.removeDocument}
                           />
                         </TableCell>
+                        {/* <TableCell>
+
+                          <ShareDialog title={translations.share} description={translations.shareDocumentLink} confirmText={translations.share} cancelText={translations.cancel} onShare={() => handleDocumentShare(document.id)} id={document.id} shareMessage={translations.share} />
+                        </TableCell> */}
                       </TableRow>
                     ))}
                   </TableBody>

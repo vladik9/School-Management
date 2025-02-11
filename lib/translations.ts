@@ -87,6 +87,7 @@ const translations = {
   removeStudent: "Șterge elev",
   confirmRemoveStudent: "Sigur dorești să ștergi elevul?",
   studentsList: "Elevi atribuiți clasei",
+  studentScore: "Scor elev",
 
   //Test
   tasks: "Teme",
@@ -121,6 +122,7 @@ const translations = {
   removeInterval: "Șterge interval",
   confirmRemoveInterval: "Sigur dorești să ștergi intervalul?",
   result: "Rezultat",
+  timeSelected: "Timp selectat",
 
   //Records
   addNewRecord: "Adaugă o notă nouă",
@@ -155,6 +157,7 @@ const translations = {
   selectTime: "Selectează timp",
   selectedTime: "Timp selectat",
   noTimeSelected: "Niciun timp selectat",
+  milliseconds: "Milisecunde",
   seconds: "Secunde",
   minutes: "Minute",
   time: "Timp",
@@ -214,6 +217,8 @@ const translations = {
   dragDropFileHere: "Trage și dă click aici pentru a încărca fișierul",
   allowedFileFormats: "Formatele de fișier permise e.g. PDF, DOC, JPG, PNG...",
   fileNameUploaded: "Numele fișierului încărcat",
+  shareDocumentLink: "Partajează documentul",
+  share: "Partajează",
 };
 
 export default translations;

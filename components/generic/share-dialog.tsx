@@ -3,7 +3,7 @@ import { Dialog, DialogContent, DialogClose, DialogHeader, DialogTitle, DialogTr
 import { Button } from "@/components/ui/button";
 import translations from '@/lib/translations';
 import { Share } from 'lucide-react';
-
+import ShareLink from '../shareLink';
 interface ShareDialogProps {
   title: string,
   description: string,
@@ -12,8 +12,11 @@ interface ShareDialogProps {
   shareMessage?: string;
   onShare: (id: number) => void,
   id: number;
-
 }
+//TODO - implement this to generate a share link for document existing in DB so i cane share it with others and show to user
+// const onShareLink = (id: number) => {
+//   console.log(`Sharing document with ID: ${id}`);
+// };
 
 export default function ShareDialog({
   title,
@@ -37,6 +40,9 @@ export default function ShareDialog({
           <DialogTitle>{title}</DialogTitle>
         </DialogHeader>
         <p>{description}</p>
+        {/* //TODO - add share link component here */}
+        {/* Link component */}
+        <ShareLink link="Link" />
         <DialogFooter className="space-x-2">
           <DialogClose asChild>
             <Button variant="outline" >
@@ -45,7 +51,7 @@ export default function ShareDialog({
           </DialogClose>
           <DialogClose asChild>
             <Button
-              variant="destructive"
+              variant="default"
               onClick={() => onShare(id)}
             >
               {confirmText}

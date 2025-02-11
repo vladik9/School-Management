@@ -122,6 +122,7 @@ const translations = {
   removeInterval: "Șterge interval",
   confirmRemoveInterval: "Sigur dorești să ștergi intervalul?",
   result: "Rezultat",
+  timeSelected: "Timp selectat",
 
   //Records
   addNewRecord: "Adaugă o notă nouă",
@@ -156,6 +157,7 @@ const translations = {
   selectTime: "Selectează timp",
   selectedTime: "Timp selectat",
   noTimeSelected: "Niciun timp selectat",
+  milliseconds: "Milisecunde",
   seconds: "Secunde",
   minutes: "Minute",
   time: "Timp",

@@ -1,107 +1,120 @@
-'use client';
+"use client";
 
 import * as React from "react";
-import { Clock } from 'lucide-react';
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import translations from "@/lib/translations";
 
 interface TimePickerProps {
   label: string;
   onChange: (time: string) => void;
   id: string;
-  value?: Date | string | number;
+  value?: string;
 }
 
-export default function TimePicker({ label, id, onChange, value }: TimePickerProps) {
-  const [time, setTime] = React.useState<string>(value || "");
-  const [popoverOpen, setPopoverOpen] = React.useState(false);
+export default function TimePicker({ label, id, onChange, value = "00:00,000" }: TimePickerProps) {
+  const [time, setTime] = React.useState(value);
 
-  const minutes = Array.from({ length: 60 }, (_, i) => i.toString().padStart(2, '0'));
-  const seconds = Array.from({ length: 60 }, (_, i) => i.toString().padStart(2, '0'));
-
-  const handleTimeChange = (type: 'minute' | 'second', value: string) => {
-    const [currentMinute, currentSecond] = time.split(':');
-    const newTime = type === 'minute'
-      ? `${value}:${currentSecond || '00'}`
-      : `${currentMinute || '00'}:${value}`;
+  const handleTimeChange = (newTime: string) => {
     setTime(newTime);
     onChange(newTime);
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const [minutes, seconds] = e.target.value.split(':');
-    const newTime = minutes && seconds
-      ? `${minutes.padStart(2, '0')}:${seconds.padStart(2, '0')}`
-      : e.target.value;
-    setTime(newTime);
-    onChange(newTime);
+  const adjustTime = (unit: "minutes" | "seconds" | "milliseconds", increment: boolean) => {
+    const [minutesSeconds, milliseconds] = time.split(",");
+    const [minutes, seconds] = minutesSeconds.split(":");
+    let newMinutes = Number.parseInt(minutes, 10);
+    let newSeconds = Number.parseInt(seconds, 10);
+    let newMilliseconds = Number.parseInt(milliseconds, 10);
+
+    switch (unit) {
+      case "minutes":
+        newMinutes = (newMinutes + (increment ? 1 : -1) + 60) % 60;
+        break;
+      case "seconds":
+        newSeconds = (newSeconds + (increment ? 1 : -1) + 60) % 60;
+        break;
+      case "milliseconds":
+        newMilliseconds = (newMilliseconds + (increment ? 10 : -10) + 1000) % 1000;
+        break;
+    }
+
+    handleTimeChange(
+      `${newMinutes.toString().padStart(2, "0")}:${newSeconds.toString().padStart(2, "0")},${newMilliseconds.toString().padStart(3, "0")}`,
+    );
   };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>, unit: "minutes" | "seconds" | "milliseconds") => {
+    const value = e.target.value;
+    const [minutesSeconds, milliseconds] = time.split(",");
+    const [minutes, seconds] = minutesSeconds.split(":");
+    let newTime = "";
+
+    switch (unit) {
+      case "minutes":
+        newTime = `${value.padStart(2, "0")}:${seconds},${milliseconds}`;
+        break;
+      case "seconds":
+        newTime = `${minutes}:${value.padStart(2, "0")},${milliseconds}`;
+        break;
+      case "milliseconds":
+        newTime = `${minutes}:${seconds},${value.padStart(3, "0")}`;
+        break;
+    }
+
+    if (/^[0-5][0-9]:[0-5][0-9],[0-9]{3}$/.test(newTime)) {
+      handleTimeChange(newTime);
+    }
+  };
+
+  const TimeUnit = ({ unit, value }: { unit: "minutes" | "seconds" | "milliseconds"; value: string; }) => (
+    <div className="flex flex-col items-center">
+      <Button
+        size="sm"
+        variant="outline"
+        onClick={() => adjustTime(unit, true)}
+        aria-label={`Increment ${unit}`}
+        className="px-2 py-0 h-6"
+      >
+        ▲
+      </Button>
+      <Input
+        type="text"
+        id={`${id}-${unit}`}
+        value={value}
+        onChange={(e) => handleInputChange(e, unit)}
+        className={`text-center p-0 h-8 ${unit === "milliseconds" ? "w-16" : "w-12"}`}
+        maxLength={unit === "milliseconds" ? 3 : 2}
+        aria-label={unit.charAt(0).toUpperCase() + unit.slice(1)}
+      />
+      <Button
+        size="sm"
+        variant="outline"
+        onClick={() => adjustTime(unit, false)}
+        aria-label={`Decrement ${unit}`}
+        className="px-2 py-0 h-6"
+      >
+        ▼
+      </Button>
+    </div>
+  );
 
   return (
     <div className="w-full max-w-sm space-y-2">
       <Label htmlFor={id}>{label}</Label>
-      <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
-        <PopoverTrigger asChild>
-          <Button
-            variant="outline"
-            className={`w-full justify-start text-left font-normal ${!time && "text-muted-foreground"}`}
-          >
-            <Clock className="mr-2 h-4 w-4" />
-            {time ? time : translations.selectTime}
-          </Button>
-        </PopoverTrigger>
-        <PopoverContent className="w-80" portal={false}>
-          <div className="flex flex-col space-y-4">
-            <div className="flex space-x-2">
-              <Select onValueChange={(value) => handleTimeChange('minute', value)}>
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder={translations.minutes} />
-                </SelectTrigger>
-                <SelectContent>
-                  {minutes.map((minute) => (
-                    <SelectItem key={minute} value={minute}>
-                      {minute}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <Select onValueChange={(value) => handleTimeChange('second', value)}>
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder={translations.seconds} />
-                </SelectTrigger>
-                <SelectContent>
-                  {seconds.map((second) => (
-                    <SelectItem key={second} value={second}>
-                      {second}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            <Input
-              type="text"
-              id={id}
-              value={time}
-              onChange={handleInputChange}
-              placeholder="MM:SS"
-              pattern="[0-5][0-9]:[0-5][0-9]"
-              className="w-full"
-            />
-          </div>
-          <div className="mt-4 flex justify-end">
-            <Button
-              onClick={() => setPopoverOpen(false)} // Close the popover on "OK" click
-            >
-              {translations.confirm}
-            </Button>
-          </div>
-        </PopoverContent>
-      </Popover>
-      <p className="text-sm text-muted-foreground">{translations.selectedTime}: {time || translations.noTimeSelected}</p>
+      <div className="flex items-center justify-center space-x-2">
+        <div className="flex items-center space-x-1 pt-2 pb-2">
+          <TimeUnit unit="minutes" value={time.split(":")[0]} />
+          <span className="text-xl">:</span>
+          <TimeUnit unit="seconds" value={time.split(":")[1].split(",")[0]} />
+          <span className="text-xl">,</span>
+          <TimeUnit unit="milliseconds" value={time.split(",")[1]} />
+        </div>
+      </div>
+      <p className="text-sm text-muted-foreground flex flex-row-reverse pr-10 ">
+        {translations.timeSelected}: {time}
+      </p>
     </div>
   );
 }

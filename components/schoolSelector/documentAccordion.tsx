@@ -117,7 +117,8 @@ export default function DocumentAccordion({
                       <TableHead>{translations.docName}</TableHead>
                       <TableHead>{translations.download}</TableHead>
                       <TableHead>{translations.removeDocument}</TableHead>
-                      <TableHead>{translations.shareDocumentLink}</TableHead>
+                      {/* //NOTE - enable this when client what this feature */}
+                      {/* <TableHead>{translations.shareDocumentLink}</TableHead> */}
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -142,13 +143,10 @@ export default function DocumentAccordion({
                             removeMessage={translations.removeDocument}
                           />
                         </TableCell>
-                        <TableCell>
-                          {/* <Button variant="outline" size="sm" onClick={() => handleDocumentShare(document.id)}>
-                            <Share className="h-4 w-4 mr-2" />
-                            {translations.share}
-                          </Button> */}
+                        {/* <TableCell>
+
                           <ShareDialog title={translations.share} description={translations.shareDocumentLink} confirmText={translations.share} cancelText={translations.cancel} onShare={() => handleDocumentShare(document.id)} id={document.id} shareMessage={translations.share} />
-                        </TableCell>
+                        </TableCell> */}
                       </TableRow>
                     ))}
                   </TableBody>

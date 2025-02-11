@@ -330,7 +330,7 @@ export default function AddViewIntervals({
                               <TableHead>{translations.studentId}</TableHead>
                               <TableHead>{translations.result}</TableHead>
                               <TableHead>{translations.barem}</TableHead>
-                              <TableHead>{translations.score}</TableHead>
+                              {/* <TableHead>{translations.score}</TableHead> */}
                               <TableHead>{translations.edit}</TableHead>
                               <TableHead>{translations.removeRecord}</TableHead>
                             </TableRow>
@@ -342,9 +342,9 @@ export default function AddViewIntervals({
                                   <TableCell>{int.studentGeneratedId}</TableCell>
                                   <TableCell>{int.value}</TableCell>
                                   <TableCell>{barem}</TableCell>
-                                  <TableCell>
+                                  {/* <TableCell>
                                     {averageBasedOnBaremType(baremType, int.value, barem)}
-                                  </TableCell>
+                                  </TableCell> */}
                                   <TableCell>
                                     <Button
                                       variant="outline"

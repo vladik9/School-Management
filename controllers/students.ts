@@ -20,6 +20,7 @@ export const processGetStudents = async (classId: string) => {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
+        'authorization': `${localStorage.getItem('token')}`,
       },
     });
 
@@ -57,6 +58,7 @@ export const processCreateStudent = async (data: object, classId: string) => {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      'authorization': `${localStorage.getItem('token')}`,
     },
     body: JSON.stringify({ ...filteredData, classId: classId }),
   });
@@ -89,6 +91,7 @@ export const processRemoveStudent = async (studentId: number) => {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
+        'authorization': `${localStorage.getItem('token')}`,
       },
     });
     if (!response.ok) {
@@ -122,6 +125,7 @@ export const processUpdateStudent = async (data: object, studentId: number) => {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
+        'authorization': `${localStorage.getItem('token')}`,
       },
       body: JSON.stringify(data),
     });

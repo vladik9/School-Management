@@ -11,7 +11,7 @@ import jwt from 'jsonwebtoken';
  * @param {Function} next - The next middleware or route handler.
  */
 const checkToken = (req: NextApiRequest, res: NextApiResponse, next: Function) => {
-  const token = req.cookies.token;
+  const token = req.headers.authorization;
 
   if (!token) {
     return res.status(401).json({ message: 'Unauthorized' });

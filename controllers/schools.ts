@@ -14,11 +14,12 @@ import statusMessages from '@/lib/statusMessages';
  * @throws {Error} If the fetch fails, it throws an error with the message of errorFetchingSchools from statusMessages.
  */
  export const processGetSchools = async () => {
-  try {
+   try {
     const response = await fetch(`${urlEnum.school}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
+        'authorization': `${localStorage.getItem('token')}`,
       },
     });
     if (!response.ok) {
@@ -55,6 +56,7 @@ export const processCreateSchool = async (data: object) => {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      'authorization': `${localStorage.getItem('token')}`,
     },
     body: JSON.stringify({ data }),
   });
@@ -89,6 +91,7 @@ export const processRemoveSchool = async (schoolId: number) => {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
+        'authorization': `${localStorage.getItem('token')}`,
       },
     });
     if (!response.ok) {

@@ -21,6 +21,7 @@ export const processGetTests = async (classId: string) => {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
+        'authorization': `${localStorage.getItem('token')}`,
       },
     });
 
@@ -55,6 +56,7 @@ export const processCreateTest = async (data: object, classId: string) => {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      'authorization': `${localStorage.getItem('token')}`,
     },
     body: JSON.stringify({ ...data, classId }),
   });
@@ -88,6 +90,7 @@ export const processRemoveTest = async (testId: number) => {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
+        'authorization': `${localStorage.getItem('token')}`,
       },
     });
     if (!response.ok) {

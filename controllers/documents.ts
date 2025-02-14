@@ -15,6 +15,7 @@ export const processGetDocuments = async (classId: number) => {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
+        'authorization': `${localStorage.getItem('token')}`,
       },
     });
 
@@ -44,6 +45,10 @@ export const processGetDocument = async (documentId: number) => {
   try {
     const response = await fetch(`${urlEnum.documents}?id=${documentId}`, {
       method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'authorization': `${localStorage.getItem('token')}`,
+      },
     });
 
     if (!response.ok) {
@@ -87,6 +92,10 @@ export const processCreateDocument = async (formData: FormData, classId: number)
     const response = await fetch(`${urlEnum.documents}`, {
       method: 'POST',
       body: formData,
+      headers: {
+        'Content-Type': 'application/json',
+        'authorization': `${localStorage.getItem('token')}`,
+      },
     });
 
     if (!response.ok) {
@@ -119,6 +128,7 @@ export const processRemoveDocument = async (documentId: number) => {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
+        'authorization': `${localStorage.getItem('token')}`,
       },
     });
     if (!response.ok) {

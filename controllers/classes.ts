@@ -14,6 +14,7 @@ export const processGetClasses = async (yearId: string) => {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
+        'authorization': `${localStorage.getItem('token')}`,
       },
     });
     if (!response.ok) {
@@ -42,6 +43,7 @@ export const processCreateClass = async (data: object, yearId: string) => {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      'authorization': `${localStorage.getItem('token')}`,
     },
     body: JSON.stringify({ ...data, yearId }),
    });
@@ -73,6 +75,7 @@ export const processRemoveClass = async (classId: number) => {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
+        'authorization': `${localStorage.getItem('token')}`,
       },
     });
     if (!response.ok) {

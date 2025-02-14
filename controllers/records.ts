@@ -21,6 +21,7 @@ export const processGetRecords = async (intervalId: number) => {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
+        'authorization': `${localStorage.getItem('token')}`,
       },
     });
 
@@ -56,6 +57,7 @@ export const processCreateRecord = async (data: object, intervalId: number) => {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      'authorization': `${localStorage.getItem('token')}`,
     },
     body: JSON.stringify({ ...data, intervalId }),
   });
@@ -89,6 +91,7 @@ export const processRemoveRecord = async (recordId: number) => {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
+        'authorization': `${localStorage.getItem('token')}`,
       },
     });
     if (!response.ok) {
@@ -122,6 +125,7 @@ export const processUpdateRecord = async (data: object, recordId: number) => {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
+        'authorization': `${localStorage.getItem('token')}`,
       },
       body: JSON.stringify(data),
     });

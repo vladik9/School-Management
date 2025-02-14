@@ -17,6 +17,7 @@ export const processGetYears = async (schoolId: number) => {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
+        'authorization': `${localStorage.getItem('token')}`,
       },
     });
 
@@ -53,6 +54,7 @@ try {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      'authorization': `${localStorage.getItem('token')}`,
     },
     body: JSON.stringify({ ...data, schoolId }),
   });
@@ -86,6 +88,7 @@ export const processRemoveYear = async (yearId: number) => {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
+        'authorization': `${localStorage.getItem('token')}`,
       },
     });
     if (!response.ok) {

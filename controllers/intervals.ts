@@ -14,6 +14,7 @@ export const processGetIntervals = async (testId: number) => {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
+        'authorization': `${localStorage.getItem('token')}`,
       },
     });
     if (!response.ok) {
@@ -47,6 +48,7 @@ export const processCreateInterval = async (testId: number) => {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      'authorization': `${localStorage.getItem('token')}`,
     },
     body: JSON.stringify({ testId }),
    });
@@ -77,6 +79,7 @@ export const processRemoveInterval = async (intervalId: number) => {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
+        'authorization': `${localStorage.getItem('token')}`,
       },
     });
     if (!response.ok) {

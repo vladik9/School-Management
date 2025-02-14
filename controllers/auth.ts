@@ -52,6 +52,7 @@ export const logout = async (): Promise<void> => {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
+        'authorization': `${localStorage.getItem('token')}`,
       }
     });
 

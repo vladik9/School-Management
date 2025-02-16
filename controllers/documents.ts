@@ -93,7 +93,6 @@ export const processCreateDocument = async (formData: FormData, classId: number)
       method: 'POST',
       body: formData,
       headers: {
-        'Content-Type': 'application/json',
         'authorization': `${localStorage.getItem('token')}`,
       },
     });

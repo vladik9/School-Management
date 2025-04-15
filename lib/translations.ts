@@ -36,7 +36,7 @@ const translations = {
 
   //Year
   addYear: "Adaugă an",
-  chooseYear: "Alege anul",
+  chooseYear: "Alege clasa",
   addANewYear: "Adaugă un an nou",
   noYears: "Nu sunt ani adăugați",
   removeYear: "Șterge an",
@@ -78,8 +78,8 @@ const translations = {
   sex: "Sex",
   sexF: "Fată",
   sexB: "Băiat",
-  class: "Clasa",
-  controlB: "Control",
+  class: "Grupa",
+  controlB: "Martor",
   experimentA: "Experiment",
   idNotGenerated: "Id-ul nu a fost generat",
   chooseStudent: "Alege elev",

@@ -36,7 +36,7 @@ const translations = {
 
   //Year
   addYear: "Adaugă an",
-  chooseYear: "Alege clasa",
+  chooseYear: "Alege anul",
   addANewYear: "Adaugă un an nou",
   noYears: "Nu sunt ani adăugați",
   removeYear: "Șterge an",
@@ -220,5 +220,4 @@ const translations = {
   shareDocumentLink: "Partajează documentul",
   share: "Partajează",
 };
-
 export default translations;

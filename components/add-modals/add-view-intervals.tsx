@@ -82,8 +82,10 @@ export default function AddViewIntervals({
 }: AddViewIntervalsProps) {
   const [isViewEditRecordsModalOpen, setIsViewEditRecordsModalOpen] = React.useState(false);
   const [currentIntervalPage, setCurrentIntervalPage] = useState(0);
+  const [currentRecordsPage, setCurrentRecordsPage] = useState(0);
 
   const INTERVALS_PER_PAGE = paginationConstants.INTERVALS_PER_PAGE;
+  const RECORDS_PER_PAGE = paginationConstants.RECORDS_PER_PAGE;
 
   /**
    * Advances to the next page of intervals.
@@ -95,6 +97,7 @@ export default function AddViewIntervals({
     setCurrentIntervalPage((prevPage) => prevPage + 1);
   };
 
+
   /**
    * Moves to the previous page of intervals.
    *
@@ -104,6 +107,29 @@ export default function AddViewIntervals({
    */
   const handlePreviousIntervalPage = () => {
     setCurrentIntervalPage((prevPage) => Math.max(prevPage - 1, 0));
+  };
+
+
+  /**
+   * Advances to the next page of records.
+   *
+   * This function increments the current records page state,
+   * allowing the user to navigate to the next set of records in the list.
+   */
+
+  const handleNextRecordsPage = () => {
+    setCurrentRecordsPage((prevPage) => prevPage + 1);
+  };
+
+  /**
+   * Moves to the previous page of intervals.
+   *
+   * This function decrements the current interval page state, allowing
+   * the user to navigate to the previous set of intervals in the list.
+   * If the current interval page is 0, it does not change the state.
+   */
+  const handlePreviousRecordsPage = () => {
+    setCurrentRecordsPage((prevPage) => Math.max(prevPage - 1, 0));
   };
 
   /**
@@ -118,6 +144,11 @@ export default function AddViewIntervals({
   const paginatedInterval = (studentList: IntervalData[]) => {
     const startIndex = currentIntervalPage * INTERVALS_PER_PAGE;
     return studentList.slice(startIndex, startIndex + INTERVALS_PER_PAGE);
+  };
+
+  const paginatedRecords = (studentList: RecordData[]) => {
+    const startIndex = currentRecordsPage * RECORDS_PER_PAGE;
+    return studentList.slice(startIndex, startIndex + RECORDS_PER_PAGE);
   };
 
   /**
@@ -336,15 +367,15 @@ export default function AddViewIntervals({
                             </TableRow>
                           </TableHeader>
                           <TableBody>
-                            {records && records.length > 0 ? (
-                              records.map((int: any) => (
+                            {paginatedRecords(records).length > 0 ? (
+                              paginatedRecords(records).map((int: any) => (
                                 <TableRow key={int.id}>
                                   <TableCell>{int.studentGeneratedId}</TableCell>
                                   <TableCell>{int.value}</TableCell>
                                   <TableCell>{barem}</TableCell>
                                   {/* <TableCell>
-                                    {averageBasedOnBaremType(baremType, int.value, barem)}
-                                  </TableCell> */}
+                                {averageBasedOnBaremType(baremType, int.value, barem)}
+                                </TableCell> */}
                                   <TableCell>
                                     <Button
                                       variant="outline"
@@ -385,12 +416,14 @@ export default function AddViewIntervals({
                               </TableRow>
                             )}
                           </TableBody>
+
                         </Table>
                         <div style={{ marginTop: '10px', textAlign: 'right' }}>
                           <Button variant="outline" onClick={() => handleAddNewRecord(interval.id)}>
                             {translations.addRecord} <span>+</span>
                           </Button>
                         </div>
+                        <PaginationButtons itemSize={records.length} itemsPerPage={RECORDS_PER_PAGE} currentPage={currentRecordsPage} handlePreviousPage={handlePreviousRecordsPage} handleNextPage={handleNextRecordsPage} />
                       </SimpleDialog>
                     </TableCell>
                     <TableCell>
@@ -429,7 +462,6 @@ export default function AddViewIntervals({
       >
         {inputBasedOnBaremType(baremType)}
       </AddViewRecord>
-
     </GenericModal>
   );
 };

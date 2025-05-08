@@ -21,7 +21,8 @@ const checkToken = (req: NextApiRequest, res: NextApiResponse, next: Function) =
     req.user = decoded;
 
   } catch (error) {
-    return res.status(401).json({ message: 'Unauthorized' });
+    console.log(error)
+    return res.status(401).json({ message: 'Unauthorized', error });
   }
   next();
 };

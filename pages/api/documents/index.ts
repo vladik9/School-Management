@@ -39,7 +39,10 @@ const getDocument = async (req: NextApiRequest, res: NextApiResponse) => {
     const filePath = document.filePath;
     const fileName = path.basename(filePath);
 
-    res.setHeader('Content-Disposition', `attachment; filename=${fileName}`);
+    res.setHeader(
+      'Content-Disposition',
+      `attachment; filename="${fileName}"`
+    );
     res.setHeader('Content-Type', 'application/octet-stream');
 
     const fileStream = fs.createReadStream(filePath);

@@ -219,5 +219,7 @@ const translations = {
   fileNameUploaded: "Numele fișierului încărcat",
   shareDocumentLink: "Partajează documentul",
   share: "Partajează",
+  generateLink: "Generează",
+  yourLinkWillBeHere  : "Linkul tău va fi aici",
 };
 export default translations;

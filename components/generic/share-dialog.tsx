@@ -13,10 +13,6 @@ interface ShareDialogProps {
   onShare: (id: number) => void,
   id: number;
 }
-//TODO - implement this to generate a share link for document existing in DB so i cane share it with others and show to user
-// const onShareLink = (id: number) => {
-//   console.log(`Sharing document with ID: ${id}`);
-// };
 
 export default function ShareDialog({
   title,
@@ -40,9 +36,8 @@ export default function ShareDialog({
           <DialogTitle>{title}</DialogTitle>
         </DialogHeader>
         <p>{description}</p>
-        {/* //TODO - add share link component here */}
         {/* Link component */}
-        <ShareLink link="Link" />
+        <ShareLink link="Link243234" />
         <DialogFooter className="space-x-2">
           <DialogClose asChild>
             <Button variant="outline" >

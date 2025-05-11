@@ -16,6 +16,7 @@ interface DocumentAccordionProps {
   handleRemoveDocument: (documentId: number) => void;
   handleDownloadDocument: (documentId: number) => void;
   handleUploadDocument: () => void;
+  handleUpdateDocument: (documentId: number, sharableLink: string) => void;
   className?: string;
 }
 
@@ -43,6 +44,7 @@ export default function DocumentAccordion({
   handleRemoveDocument,
   handleDownloadDocument,
   handleUploadDocument,
+  handleUpdateDocument,
   className = 'document name',
 }: DocumentAccordionProps) {
   const [currentDocumentPage, setCurrentDocumentPage] = useState(0);
@@ -82,16 +84,10 @@ export default function DocumentAccordion({
     return documents.slice(startIndex, startIndex + DOCUMENTS_PER_PAGE);
   };
 
-  //TODO - implement this to generate a share link for document existing in DB so i cane share it with others and show to user
-  // const onShareLink = (id: number) => {
-  //   // Logic to generate a share link for the document with the given ID
-  //   // This could involve making an API call to your backend to create a shareable link
-  //   // and returning the link to the user.
-  //   console.log(`Sharing document with ID: ${id}`);
-  // };
-  const handleDocumentShare = (documentId: number) => {
-    // navigator.clipboard.writeText(`${window.location.origin}/document/${documentId}`);
-    console.log(`Document with ID ${documentId} shared!`);
+  const handleDocumentShare = (documentId: number, sharableLink: string) => {
+
+    handleUpdateDocument(documentId, sharableLink);
+
   };
 
   return (
@@ -126,7 +122,6 @@ export default function DocumentAccordion({
                       <TableHead>{translations.docName}</TableHead>
                       <TableHead>{translations.download}</TableHead>
                       <TableHead>{translations.removeDocument}</TableHead>
-                      {/* //NOTE - enable this when client what this feature */}
                       <TableHead>{translations.shareDocumentLink}</TableHead>
                     </TableRow>
                   </TableHeader>
@@ -153,7 +148,7 @@ export default function DocumentAccordion({
                           />
                         </TableCell>
                         <TableCell>
-                          <ShareDialog title={translations.share} description={translations.shareDocumentLink} confirmText={translations.confirm} cancelText={translations.cancel} onShare={() => handleDocumentShare(document.id)} id={document.id} shareMessage={translations.share} />
+                          <ShareDialog title={translations.share} description={translations.shareDocumentLink} confirmText={translations.confirm} cancelText={translations.cancel} onShare={handleDocumentShare} id={document.id} shareMessage={translations.share} />
                         </TableCell>
                       </TableRow>
                     ))}

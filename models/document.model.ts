@@ -7,6 +7,7 @@ interface DocumentsAttributes {
   name: string;
   classId: number;
   filePath: string;
+  sharableLink  : string;
 }
 
 interface DocumentsCreationAttributes extends Optional<DocumentsAttributes, 'id'> {}
@@ -16,6 +17,7 @@ class Document extends Model<DocumentsAttributes, DocumentsCreationAttributes> i
   public name!: string;
   public classId!: number;
   public filePath!: string;
+  public sharableLink!  : string;
 }
 
 Document.init(
@@ -40,6 +42,10 @@ Document.init(
       type: DataTypes.STRING,
       allowNull: false,
     },
+    sharableLink:{
+      type: DataTypes.STRING,
+      allowNull: false,
+    }
   },
   {
     sequelize,

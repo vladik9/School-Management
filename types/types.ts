@@ -53,6 +53,7 @@ type DocumentData = {
   id: number;
   filePath: string;
   name: string;
+  sharableLink: string;
 };
 
 type SchoolData = {

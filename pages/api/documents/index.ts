@@ -69,6 +69,7 @@ const getDocument = async (req: NextApiRequest, res: NextApiResponse) => {
  * and JSON payload to the client.
  */
 const createDocument = async (req: NextApiRequest, res: NextApiResponse) => {
+  console.log("🚀 ~ createDocument path~ req:", req.body)
   try {
     const { fields, files }: any = await parseForm(req);
     const { name ,classId } = fields;
@@ -116,6 +117,38 @@ const deleteDocument = async (req: NextApiRequest, res: NextApiResponse) => {
 };
 
 /**
+ * Handles PUT requests to the /api/documents endpoint.
+ *
+ * This function updates a document in the database using the provided
+ * document ID and new data. If the document is not found, a 404 status
+ * is returned with a JSON payload containing an error message. If the
+ * update is successful, a 200 status is returned with a JSON payload
+ * containing a message indicating that the document was updated. If an
+ * error occurs during the request, a 500 status is returned with a JSON
+ * payload containing an error message.
+ *
+ * @param {NextApiRequest} req - The incoming request object, expected to contain
+ * a document ID as a query parameter and new data in the request body.
+ * @param {NextApiResponse} res - The response object used to return the status
+ * and JSON payload to the client.
+ */
+const updateDocument = async (req: NextApiRequest, res: NextApiResponse) => {
+  console.log("🚀 ~ updateDocument path~ req:", req.body)
+  const { id } = req.query;
+//TODO : fix this once you ready to do it, no idea why is not destructuring
+  const { data } = req.body;
+  try {
+    const document = await Document.findByPk(id as string);
+    if (!document) return res.status(404).json({ message: 'Document not found' });
+
+    await document.update({ sharableLink: data });
+    res.status(200).json({ message: 'Document updated' });
+  } catch (error) {
+    res.status(500).json({ message: 'Error updating document', error });
+  }
+};
+
+/**
  * Handles API requests to the documents endpoint.
  *
  * This function checks the request method and calls the appropriate handler
@@ -134,10 +167,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return getDocument(req, res);
     case 'POST':
       return createDocument(req, res);
+    case 'PUT':
+      return updateDocument(req, res);
     case 'DELETE':
       return deleteDocument(req, res);
     default:
-      res.setHeader('Allow', ['POST', 'GET', 'DELETE']);
+      res.setHeader('Allow', ['POST', 'PUT', 'GET', 'DELETE']);
       res.status(405).end(`Method ${req.method} Not Allowed`);
   }
 });

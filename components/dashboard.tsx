@@ -46,7 +46,8 @@ import {
 import {
   processCreateDocument,
   processGetDocument,
-  processRemoveDocument
+  processRemoveDocument,
+  processUpdateDocument
 } from '@/controllers/documents';
 
 import { School } from 'lucide-react';
@@ -501,6 +502,18 @@ export default function SchoolDashboard() {
     }
   };
 
+
+  const handleUpdateDocument = async (documentId: number, link: string) => {
+    try {
+      await processUpdateDocument({ link }, documentId);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+
+
+
   // =========================
   // Viewing / Editing Handlers
   // =========================
@@ -537,25 +550,26 @@ export default function SchoolDashboard() {
     setNewRecord({});
   };
 
+  /**
+      * Handles updating a student using the provided data and student ID.
+      *
+      * This function is called when the user clicks on the "Update" button
+      * associated with a student in the student list. It displays a loading
+      * status modal, updates the student using the provided data, and
+      * resets the newRecord state. Upon successful update, it displays a
+      * success status modal. If an error occurs during the process, an
+      * error status modal is shown. Finally, if the user was viewing a
+      * specific interval's records, it refreshes the list of classes.
+      *
+      * @param {number} studentId The ID of the student to be updated.
+      * @param {object} data The data to be used for updating the student.
+      * @returns {Promise<void>} A promise that resolves when the student has been updated.
+      */
   const handleUpdateStudent = async (studentId: number, data: object) => {
-    /**
-     * Handles updating a student using the provided data and student ID.
-     *
-     * This function is called when the user clicks on the "Update" button
-     * associated with a student in the student list. It displays a loading
-     * status modal, updates the student using the provided data, and
-     * resets the newRecord state. Upon successful update, it displays a
-     * success status modal. If an error occurs during the process, an
-     * error status modal is shown. Finally, if the user was viewing a
-     * specific interval's records, it refreshes the list of classes.
-     *
-     * @param {number} studentId The ID of the student to be updated.
-     * @param {object} data The data to be used for updating the student.
-     * @returns {Promise<void>} A promise that resolves when the student has been updated.
-     */
+
     showStatusModal(statusMessages.updatingStudent, fetchStatuses.loading);
     try {
-      await processUpdateStudent(data, studentId,);
+      await processUpdateStudent(data, studentId);
       showStatusModal(statusMessages.studentUpdated, fetchStatuses.success);
       setNewRecord({});
     } catch (error) {
@@ -868,6 +882,7 @@ export default function SchoolDashboard() {
                 handleDownloadDocument={handleDownloadDocument}
                 newRecord={newRecord}
                 setNewRecord={setNewRecord}
+                handleUpdateDocument={handleUpdateDocument}
               />
             </div>
           )}

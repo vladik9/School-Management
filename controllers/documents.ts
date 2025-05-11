@@ -108,6 +108,30 @@ export const processCreateDocument = async (formData: FormData, classId: number)
   }
 };
 
+
+
+export const processUpdateDocument = async ( data: object, documentId: number ) => {
+
+  try {
+    const response = await fetch(`${urlEnum.documents}?id=${documentId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'authorization': `${localStorage.getItem('token')}`,
+      },
+      body: JSON.stringify({data}),
+
+    });
+    if (!response.ok) {
+      throw new Error(statusMessages.errorUpdatingDocument);
+    }
+    return response;
+  } catch (error) {
+    console.error(error);
+    throw new Error(statusMessages.errorUpdatingDocument);
+  }
+}
+
 /**
  * Removes a document from the server based on the provided document ID.
  *

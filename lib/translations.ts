@@ -220,6 +220,9 @@ const translations = {
   shareDocumentLink: "Partajează documentul",
   share: "Partajează",
   generateLink: "Generează",
-  yourLinkWillBeHere  : "Linkul tău va fi aici",
+  yourLinkWillBeHere: "Linkul tău va fi aici",
+  documentShared: "Acest document a fost partajat, dă click pe link pentru a descărca documentul.",
+  documentReady: "Documentul este gata pentru a fi descărcat.",
+
 };
 export default translations;

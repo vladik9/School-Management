@@ -10,8 +10,9 @@ interface ShareDialogProps {
   confirmText: string,
   cancelText: string;
   shareMessage?: string;
-  onShare: (id: number) => void,
+  onShare: (id: number, link: string) => void,
   id: number;
+
 }
 
 export default function ShareDialog({
@@ -21,8 +22,10 @@ export default function ShareDialog({
   cancelText,
   onShare,
   id,
-  shareMessage = translations.share
+  shareMessage = translations.share,
 }: ShareDialogProps) {
+
+
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -37,7 +40,7 @@ export default function ShareDialog({
         </DialogHeader>
         <p>{description}</p>
         {/* Link component */}
-        <ShareLink link="Link243234" />
+        <ShareLink id={id} onGenerate={onShare} />
         <DialogFooter className="space-x-2">
           <DialogClose asChild>
             <Button variant="outline" >
@@ -47,7 +50,6 @@ export default function ShareDialog({
           <DialogClose asChild>
             <Button
               variant="default"
-              onClick={() => onShare(id)}
             >
               {confirmText}
             </Button>

@@ -107,6 +107,7 @@ const statusMessages = {
   downloadingDocument: 'Descărcarea documentului...',
   documentDownloaded: 'Documentul a fost descărcat cu succes',
   errorFetchingDocument: 'Eroare la încărcarea documentului',
+  errorUpdatingDocument: 'Eroare la actualizarea documentului',
 
   // Common
   loading: 'Încărcare...',

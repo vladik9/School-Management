@@ -8,25 +8,23 @@ import { cn } from "@/lib/utils";
 import translations from "@/lib/translations";
 
 interface ShareLinkProps {
-  link?: string;
-  onGenerate?: () => string;
+  id: number;
+  onGenerate: (id: number, link: string) => void,
+
 }
 
-export default function ShareLink({ link = translations.yourLinkWillBeHere, onGenerate }: ShareLinkProps) {
+export default function ShareLink({ id, onGenerate }: ShareLinkProps) {
   const [copied, setCopied] = useState(false);
-  const [currentLink, setCurrentLink] = useState(link);
-  //TODO - add a logic to control how link is generated
+  const [currentLink, setCurrentLink] = useState('');
   const generateLink = () => {
-    if (onGenerate) {
-      const newLink = onGenerate();
-      setCurrentLink(newLink);
-    } else {
-      // Default implementation if no onGenerate function is provided
-      const randomString = Math.random().toString(36).substring(2, 10);
-      const newLink = `https://example.com/share/${randomString}`;
-      setCurrentLink(newLink);
-    }
+
+    // Default implementation if no onGenerate function is provided
+    const randomString = Math.random().toString(36).substring(2, 10);
+    const newLink = `${process.env.NEXT_PUBLIC_BASE_URL}/share/${randomString}`;
+    setCurrentLink(newLink);
     setCopied(false);
+
+    onGenerate(id, randomString); // Call the onGenerate function with the new link
   };
 
   const copyToClipboard = async () => {
@@ -40,29 +38,31 @@ export default function ShareLink({ link = translations.yourLinkWillBeHere, onGe
   };
 
   return (
-    <div className="flex w-full max-w-md items-center space-x-2">
-      <div className="relative flex-1">
-        <Input
-          value={currentLink}
-          readOnly
-          placeholder="Generated link will appear here"
-          className="pr-10 font-medium text-sm"
-          onClick={(e) => (e.target as HTMLInputElement).select()}
-        />
+    <div className="flex w-full max-w-md flex-col space-y-2">
+      <div className="flex w-full items-center space-x-2">
+        <div className="relative flex-1">
+          <Input
+            value={currentLink}
+            readOnly
+            placeholder={translations.yourLinkWillBeHere}
+            className="pr-10 font-medium text-sm"
+            onClick={(e) => (e.target as HTMLInputElement).select()}
+          />
+        </div>
+        <Button
+          onClick={copyToClipboard}
+          size="icon"
+          className={cn("flex-shrink-0 transition-all", copied ? "bg-green-600 hover:bg-green-700" : "")}
+          aria-label={copied ? "Copied" : "Copy to clipboard"}
+          disabled={!currentLink}
+        >
+          {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+          <span className="sr-only">{copied ? "Copied" : "Copy to clipboard"}</span>
+        </Button>
       </div>
-      <Button onClick={generateLink} className="flex-shrink-0" aria-label="Generate link">
+      <Button onClick={generateLink} className="w-full" aria-label="Generate link">
         <Link className="h-4 w-4 mr-2" />
         {translations.generateLink}
-      </Button>
-      <Button
-        onClick={copyToClipboard}
-        size="icon"
-        className={cn("flex-shrink-0 transition-all", copied ? "bg-green-600 hover:bg-green-700" : "")}
-        aria-label={copied ? "Copied" : "Copy to clipboard"}
-        disabled={!currentLink}
-      >
-        {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
-        <span className="sr-only">{copied ? "Copied" : "Copy to clipboard"}</span>
       </Button>
     </div>
   );

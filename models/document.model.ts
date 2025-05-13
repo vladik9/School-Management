@@ -7,7 +7,7 @@ interface DocumentsAttributes {
   name: string;
   classId: number;
   filePath: string;
-  sharableLink  : string;
+  sharableLink : string;
 }
 
 interface DocumentsCreationAttributes extends Optional<DocumentsAttributes, 'id'> {}

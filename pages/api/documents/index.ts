@@ -1,15 +1,10 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { saveFile, parseForm } from '@/lib/fileSaving';
 import Document from '@/models/document.model';
 import fs from 'fs';
 import path from 'path';
 import checkToken from '../middleware';
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
-
+import { stripTimestamp } from '@/utils/functions';
+import mime from 'mime-types'
 /**
  * Handles GET requests to the /api/documents endpoint.
  *
@@ -29,7 +24,6 @@ const getDocument = async (req: NextApiRequest, res: NextApiResponse) => {
     if (!id) {
       return res.status(400).json({ message: 'DocumentId is required for the given documents' });
     }
-
     const document = await Document.findByPk(id as string);
 
     if (!document) {
@@ -37,53 +31,20 @@ const getDocument = async (req: NextApiRequest, res: NextApiResponse) => {
     }
 
     const filePath = document.filePath;
-    const fileName = path.basename(filePath);
-
+    const storedFileName = path.basename(filePath);
+    const downloadName = stripTimestamp(storedFileName);
+    const contentType = mime.lookup(storedFileName) || 'application/octet-stream';
     res.setHeader(
       'Content-Disposition',
-      `attachment; filename="${fileName}"`
+      `attachment; filename="${encodeURIComponent(downloadName)}"`
     );
-    res.setHeader('Content-Type', 'application/octet-stream');
 
-    const fileStream = fs.createReadStream(filePath);
-    fileStream.pipe(res);
+    res.setHeader('Content-Type', contentType);
+
+    fs.createReadStream(filePath).pipe(res);
   } catch (error) {
     console.error('Error fetching document:', error);
     res.status(500).json({ message: 'Error fetching document', error });
-  }
-};
-
-/**
- * Handles POST requests to the /api/documents endpoint.
- *
- * This function creates a new document in the database using the provided
- * form data, which includes the document's name, classId, and file. The file
- * is saved on the server, and its path is stored in the database. If the
- * creation is successful, a 201 status is returned with the newly created
- * document as a JSON payload. If an error occurs during the request, a 500
- * status is returned with a JSON payload containing an error message.
- *
- * @param {NextApiRequest} req - The incoming request object, expected to contain
- * form data with fields 'name' and 'classId', and a file under the key 'file'.
- * @param {NextApiResponse} res - The response object used to return the status
- * and JSON payload to the client.
- */
-const createDocument = async (req: NextApiRequest, res: NextApiResponse) => {
-  console.log("🚀 ~ createDocument path~ req:", req.body)
-  try {
-    const { fields, files }: any = await parseForm(req);
-    const { name ,classId } = fields;
-    const file = files.file[0];
-    const filePath = await saveFile(file, file.originalFilename);
-    const [fileName] = name;
-    const [classIdExtracted] = classId;
-
-    const newDocument = await Document.create({  name : fileName , classId: classIdExtracted, filePath });
-
-    res.status(201).json(newDocument);
-  } catch (error) {
-    console.error('Error creating document:', error);
-    res.status(500).json({ message: 'Error creating document', error });
   }
 };
 
@@ -133,15 +94,14 @@ const deleteDocument = async (req: NextApiRequest, res: NextApiResponse) => {
  * and JSON payload to the client.
  */
 const updateDocument = async (req: NextApiRequest, res: NextApiResponse) => {
-  console.log("🚀 ~ updateDocument path~ req:", req.body)
+
   const { id } = req.query;
-//TODO : fix this once you ready to do it, no idea why is not destructuring
-  const { data } = req.body;
+  const { sharableLink } = req.body.data;
   try {
     const document = await Document.findByPk(id as string);
     if (!document) return res.status(404).json({ message: 'Document not found' });
 
-    await document.update({ sharableLink: data });
+    await document.update({ sharableLink });
     res.status(200).json({ message: 'Document updated' });
   } catch (error) {
     res.status(500).json({ message: 'Error updating document', error });
@@ -165,14 +125,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   switch (req.method) {
     case 'GET':
       return getDocument(req, res);
-    case 'POST':
-      return createDocument(req, res);
     case 'PUT':
       return updateDocument(req, res);
     case 'DELETE':
       return deleteDocument(req, res);
     default:
-      res.setHeader('Allow', ['POST', 'PUT', 'GET', 'DELETE']);
+      res.setHeader('Allow', [ 'PUT', 'GET', 'DELETE']);
       res.status(405).end(`Method ${req.method} Not Allowed`);
   }
 });

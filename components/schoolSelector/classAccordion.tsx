@@ -22,7 +22,7 @@ interface ClassAccordionProps {
   handleRemoveStudent: (studentId: number) => void;
   handleRemoveClass: (classId: number) => void;
   handleRemoveTest: (testId: number) => void;
-  handleUpdateDocument: (documentId: number, link: string) => void;
+  handleUpdateDocument: (documentId: number, link: object) => void;
 
   /** Document-related props */
   handleUploadDocument: () => void;

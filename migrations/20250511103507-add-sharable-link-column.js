@@ -18,7 +18,7 @@ module.exports = {
       'sharableLink',   // new column name (camelCase to match your other columns)
       {
         type: Sequelize.STRING,
-        allowNull: true,  // nullable by default
+        allowNull: '',  // nullable by default
       }
     );
   },

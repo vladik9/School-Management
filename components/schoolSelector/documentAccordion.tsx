@@ -16,7 +16,7 @@ interface DocumentAccordionProps {
   handleRemoveDocument: (documentId: number) => void;
   handleDownloadDocument: (documentId: number) => void;
   handleUploadDocument: () => void;
-  handleUpdateDocument: (documentId: number, sharableLink: string) => void;
+  handleUpdateDocument: (documentId: number, sharableLink: object) => void;
   className?: string;
 }
 
@@ -85,8 +85,7 @@ export default function DocumentAccordion({
   };
 
   const handleDocumentShare = (documentId: number, sharableLink: string) => {
-
-    handleUpdateDocument(documentId, sharableLink);
+    handleUpdateDocument(documentId, { sharableLink });
 
   };
 

@@ -503,15 +503,16 @@ export default function SchoolDashboard() {
   };
 
 
-  const handleUpdateDocument = async (documentId: number, link: string) => {
+
+
+  const handleUpdateDocument = async (documentId: number, data: object) => {
     try {
-      await processUpdateDocument({ link }, documentId);
+      await processUpdateDocument(data, documentId);
     } catch (error) {
       console.error(error);
     }
+
   };
-
-
 
 
   // =========================

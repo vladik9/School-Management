@@ -223,6 +223,8 @@ const translations = {
   yourLinkWillBeHere: "Linkul tău va fi aici",
   documentShared: "Acest document a fost partajat, dă click pe link pentru a descărca documentul.",
   documentReady: "Documentul este gata pentru a fi descărcat.",
+  noneDocument: "Niciun document",
+  noneType: "Niciun tip",
 
 };
 export default translations;

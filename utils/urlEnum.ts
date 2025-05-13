@@ -11,6 +11,9 @@ export const urlEnum = {
   interval: '/api/intervals',
   record: '/api/records',
   documents: '/api/documents',
+  uploadDocuments: '/api/uploadDocuments',
+  shareDocumentInfo: '/api/shareDocument/info',
+  shareDocument: '/api/shareDocument',
 };
 
 export const basicOperationsEnum = {

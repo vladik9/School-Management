@@ -19,11 +19,10 @@ export default function ShareLink({ id, onGenerate }: ShareLinkProps) {
   const generateLink = () => {
 
     // Default implementation if no onGenerate function is provided
-    const randomString = Math.random().toString(36).substring(2, 10);
+    const randomString = Math.random().toString(36).substring(2, 40);
     const newLink = `${process.env.NEXT_PUBLIC_BASE_URL}/share/${randomString}`;
     setCurrentLink(newLink);
     setCopied(false);
-
     onGenerate(id, randomString); // Call the onGenerate function with the new link
   };
 

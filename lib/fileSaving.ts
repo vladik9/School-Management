@@ -18,9 +18,10 @@ import path from 'path';
  */
 export const saveFile = async (file: any, filename: string) => {
   const timestamp = Date.now();
-  const extension = path.extname(filename);
-  const baseName = path.basename(filename, extension);
-  const newFilename = `${baseName}-${timestamp}${extension}`;
+  const extension = path.extname(filename).toLowerCase();
+  const baseName = path.basename(filename, extension).replace(/[^a-z0-9_\-.]/gi, '_');
+  const newFilename    = `${baseName}_${timestamp}${extension}`;
+
 
   const data = fs.readFileSync(file.filepath);
   const uploadDir = path.join(process.cwd(), 'uploadedDocuments');

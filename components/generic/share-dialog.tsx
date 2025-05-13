@@ -10,13 +10,10 @@ interface ShareDialogProps {
   confirmText: string,
   cancelText: string;
   shareMessage?: string;
-  onShare: (id: number) => void,
+  onShare: (id: number, link: string) => void,
   id: number;
+
 }
-//TODO - implement this to generate a share link for document existing in DB so i cane share it with others and show to user
-// const onShareLink = (id: number) => {
-//   console.log(`Sharing document with ID: ${id}`);
-// };
 
 export default function ShareDialog({
   title,
@@ -25,8 +22,10 @@ export default function ShareDialog({
   cancelText,
   onShare,
   id,
-  shareMessage = translations.share
+  shareMessage = translations.share,
 }: ShareDialogProps) {
+
+
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -40,9 +39,8 @@ export default function ShareDialog({
           <DialogTitle>{title}</DialogTitle>
         </DialogHeader>
         <p>{description}</p>
-        {/* //TODO - add share link component here */}
         {/* Link component */}
-        <ShareLink link="Link" />
+        <ShareLink id={id} onGenerate={onShare} />
         <DialogFooter className="space-x-2">
           <DialogClose asChild>
             <Button variant="outline" >
@@ -52,7 +50,6 @@ export default function ShareDialog({
           <DialogClose asChild>
             <Button
               variant="default"
-              onClick={() => onShare(id)}
             >
               {confirmText}
             </Button>

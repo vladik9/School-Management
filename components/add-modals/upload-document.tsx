@@ -234,7 +234,7 @@ export default function UploadDocument({
         </div>
         {/* File Upload Feedback */}
         <p className="text-sm text-gray-500 mt-2">
-          {uploadedFileName ? `${translations.fileNameUploaded}: ${uploadedFileName}` : `${translations.noDocuments}.`}
+          {uploadedFileName ? `${translations.fileNameUploaded}: ${uploadedFileName.slice(0, 40)}...${uploadedFileName.slice(-20)}` : `${translations.noDocuments}.`}
         </p>
         <input
           ref={fileInputRef}

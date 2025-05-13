@@ -22,6 +22,7 @@ interface ClassAccordionProps {
   handleRemoveStudent: (studentId: number) => void;
   handleRemoveClass: (classId: number) => void;
   handleRemoveTest: (testId: number) => void;
+  handleUpdateDocument: (documentId: number, link: object) => void;
 
   /** Document-related props */
   handleUploadDocument: () => void;
@@ -71,6 +72,7 @@ export default function ClassAccordion({
   handleUploadDocument,
   handleRemoveDocument,
   handleDownloadDocument,
+  handleUpdateDocument,
   newRecord,
   setNewRecord
 }: ClassAccordionProps) {
@@ -125,6 +127,7 @@ export default function ClassAccordion({
                   handleRemoveDocument={handleRemoveDocument}
                   handleDownloadDocument={handleDownloadDocument}
                   className={school_class.name}
+                  handleUpdateDocument={handleUpdateDocument}
                 />
                 {/* Buttons for adding a student or test */}
                 <div className="mt-4">

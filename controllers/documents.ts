@@ -89,7 +89,7 @@ export const processCreateDocument = async (formData: FormData, classId: number)
   try {
     formData.append('classId', classId.toString());
 
-    const response = await fetch(`${urlEnum.documents}`, {
+    const response = await fetch(`${urlEnum.uploadDocuments}`, {
       method: 'POST',
       body: formData,
       headers: {
@@ -107,6 +107,30 @@ export const processCreateDocument = async (formData: FormData, classId: number)
     throw new Error(statusMessages.errorCreatingDocument);
   }
 };
+
+
+
+export const processUpdateDocument = async ( data: object, documentId: number ) => {
+
+  try {
+    const response = await fetch(`${urlEnum.documents}?id=${documentId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'authorization': `${localStorage.getItem('token')}`,
+      },
+      body: JSON.stringify({data}),
+
+    });
+    if (!response.ok) {
+      throw new Error(statusMessages.errorUpdatingDocument);
+    }
+    return response;
+  } catch (error) {
+    console.error(error);
+    throw new Error(statusMessages.errorUpdatingDocument);
+  }
+}
 
 /**
  * Removes a document from the server based on the provided document ID.
@@ -137,5 +161,34 @@ export const processRemoveDocument = async (documentId: number) => {
   } catch (error) {
     console.error(error);
     throw new Error(statusMessages.errorDeletingDocument);
+  }
+};
+
+
+export const processGetDocumentByShareLink = async (shareLink: string) => {
+  try {
+    const response = await fetch(`${urlEnum.shareDocument}?shareLink=${shareLink}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(statusMessages.errorFetchingDocument);
+    }
+
+    const blob = await response.blob();
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = response.headers.get('Content-Disposition')?.split('filename=')[1] || 'document';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    window.URL.revokeObjectURL(url);
+  } catch (error) {
+    console.error(error);
+    throw new Error(statusMessages.errorFetchingDocument);
   }
 };

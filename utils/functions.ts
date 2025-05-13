@@ -1,4 +1,5 @@
 import { romanNumerals } from "./dataEnums";
+import path from 'path';
 /**
  * Converts an arabic numeral to a roman numeral.
  *
@@ -21,4 +22,14 @@ function arabicToRoman(num: number): string {
   }
   return result;
 }
-export { arabicToRoman };
+
+
+
+function  stripTimestamp  (filename: string)  {
+  // splits "foo_bar_1234567890.pdf" into ["foo_bar", "1234567890", ".pdf"]
+  const parsed = path.parse(filename);
+  // remove a trailing _<digits> from the name
+  const cleanName = parsed.name.replace(/_(\d+)$/, '');
+  return cleanName + parsed.ext;
+};
+export { arabicToRoman, stripTimestamp };

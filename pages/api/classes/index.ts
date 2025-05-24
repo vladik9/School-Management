@@ -58,7 +58,7 @@ const getPerformancesWithDetails = async (performances: any) => {
         const isGirl = currentStudentId.startsWith('F');
 
         // Pick barem based on sex
-        let barem = performance.barem;
+        let barem = null;
         if (isBoy && performance.barem_B) {
           barem = performance.barem_B;
         } else if (isGirl && performance.barem_F) {

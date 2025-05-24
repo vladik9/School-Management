@@ -100,11 +100,15 @@ const translations = {
   testName: "Nume test",
   noTestAdded: "Nu sunt teste adăugate",
   barem: "Valoare Barem",
-  addBarem: "Adaugă barem",
+  baremBoys: "Barem Băieți",
+  baremGirls: "Barem Fete",
+  addBarem: "Adaugă Bărem",
   deleteATest: "Șterge testul",
   removeTest: "Șterge test",
   confirmRemoveTest: "Sigur dorești să ștergi testul?",
   testsList: "Teste adăugate",
+  boys: "băieți",
+  girls: "fete",
 
   //Interval
   viewIntervals: "Vizualizare intervale",

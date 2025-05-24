@@ -43,7 +43,6 @@ export default function LoginPage() {
     setError('');
     try {
       const response = await login(email, password);
-      console.log(response);
       if (response) {
         router.push('/dashboard');
       }

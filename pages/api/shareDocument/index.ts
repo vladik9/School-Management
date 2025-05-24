@@ -2,9 +2,6 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import Document from '@/models/document.model';
 import fs from 'fs';
 import path from 'path';
-import { stripTimestamp } from '@/utils/functions';
-import mime from 'mime-types'
-
 
 /**
  * Handles GET requests to the /api/shareDocument endpoint.

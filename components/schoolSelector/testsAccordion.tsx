@@ -110,7 +110,8 @@ export default function TestAccordion({
                         <TableRow>
                           <TableHead>{translations.count}</TableHead>
                           <TableHead>{translations.name}</TableHead>
-                          <TableHead>{translations.barem}</TableHead>
+                          <TableHead>{translations.baremBoys} </TableHead>
+                          <TableHead>{translations.baremGirls}  </TableHead>
                           <TableHead>{translations.viewOrEdit}</TableHead>
                           <TableHead>{translations.removeTest}</TableHead>
                         </TableRow>
@@ -120,7 +121,8 @@ export default function TestAccordion({
                           <TableRow key={test.id}>
                             <TableCell>{index + 1}</TableCell>
                             <TableCell>{test.name}</TableCell>
-                            <TableCell>{test.barem}</TableCell>
+                            <TableCell>{test.barem_B}</TableCell>
+                            <TableCell>{test.barem_F}</TableCell>
                             <TableCell className="flex justify-center space-x-2">
                               {/* View/Edit Dialog */}
                               <Button

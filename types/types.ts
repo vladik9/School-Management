@@ -15,7 +15,8 @@ type TestData = {
   id: number;
   name: string;
   baremType: string;
-  barem: string;
+  barem_B: string;
+  barem_F: string;
   intervals: IntervalData[];
 };
 
@@ -46,7 +47,8 @@ type PerformanceData = {
   score: number;
   boys: Array<RecordData>;
   girls: Array<RecordData>;
-  barem: string;
+  barem_B: string;
+  barem_F: string;
 };
 
 type DocumentData = {

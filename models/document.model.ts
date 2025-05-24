@@ -44,7 +44,7 @@ Document.init(
     },
     sharableLink:{
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     }
   },
   {

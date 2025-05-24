@@ -106,7 +106,7 @@ export const processCreateDocument = async (formData: FormData, classId: number)
     console.error(error);
     throw new Error(statusMessages.errorCreatingDocument);
   }
-};
+}
 
 
 

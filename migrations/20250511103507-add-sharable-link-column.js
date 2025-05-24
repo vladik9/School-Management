@@ -15,10 +15,10 @@ module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.addColumn(
       'documents',      // name of the existing table
-      'sharableLink',   // new column name (camelCase to match your other columns)
+      'sharableLink',   // new column name for document sharing link
       {
         type: Sequelize.STRING,
-        allowNull: '',  // nullable by default
+        allowNull: true,
       }
     );
   },

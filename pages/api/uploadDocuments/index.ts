@@ -1,12 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { saveFile, parseForm } from '@/lib/fileSaving';
 import Document from '@/models/document.model';
-import fs from 'fs';
-import path from 'path';
 import checkToken from '../middleware';
-import { stripTimestamp } from '@/utils/functions';
-import mime from 'mime-types'
-// TODO: fix this as it should be used for post only
 export const config = {
   api: {
     bodyParser: false,
@@ -45,7 +40,6 @@ const createDocument = async (req: NextApiRequest, res: NextApiResponse) => {
     res.status(500).json({ message: 'Error creating document', error });
   }
 };
-
 
 
 /**

@@ -106,8 +106,7 @@ export const processCreateDocument = async (formData: FormData, classId: number)
     console.error(error);
     throw new Error(statusMessages.errorCreatingDocument);
   }
-}
-
+};
 
 
 export const processUpdateDocument = async ( data: object, documentId: number ) => {
@@ -165,12 +164,42 @@ export const processRemoveDocument = async (documentId: number) => {
 };
 
 
-export const processGetDocumentByShareLink = async (shareLink: string) => {
+export const processGetDocumentByShareLink2 = async (shareLink: string) => {
   try {
     const response = await fetch(`${urlEnum.shareDocument}?shareLink=${shareLink}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(statusMessages.errorFetchingDocument);
+    }
+
+    const blob = await response.blob();
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = response.headers.get('Content-Disposition')?.split('filename=')[1] || 'document';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    window.URL.revokeObjectURL(url);
+  } catch (error) {
+    console.error(error);
+    throw new Error(statusMessages.errorFetchingDocument);
+  }
+};
+
+
+export const processGetDocumentByShareLink = async (shareLink: string) => {
+  try {
+     const response = await fetch(`${urlEnum.shareDocument}?shareLink=${shareLink}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'authorization': `${localStorage.getItem('token')}`,
       },
     });
 

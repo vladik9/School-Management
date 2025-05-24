@@ -31,17 +31,12 @@ const getDocumentByShareLink = async (req: NextApiRequest, res: NextApiResponse)
     }
 
     const filePath = document.filePath;
-    const storedFileName = path.basename(filePath);
-    const downloadName = stripTimestamp(storedFileName);
-    const contentType = mime.lookup(storedFileName) || 'application/octet-stream';
-    res.setHeader(
-      'Content-Disposition',
-      `attachment; filename="${encodeURIComponent(downloadName)}"`
-    );
+    const fileName = path.basename(filePath);
+     res.setHeader('Content-Disposition', `attachment; filename=${fileName}`);
+     res.setHeader('Content-Type', 'application/octet-stream');
 
-    res.setHeader('Content-Type', contentType);
-
-    fs.createReadStream(filePath).pipe(res);
+        const fileStream = fs.createReadStream(filePath);
+        fileStream.pipe(res);
   } catch (error) {
     console.error('Error fetching document:', error);
     res.status(500).json({ message: 'Error fetching document', error });

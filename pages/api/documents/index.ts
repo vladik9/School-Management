@@ -3,8 +3,7 @@ import Document from '@/models/document.model';
 import fs from 'fs';
 import path from 'path';
 import checkToken from '../middleware';
-import { stripTimestamp } from '@/utils/functions';
-import mime from 'mime-types'
+
 /**
  * Handles GET requests to the /api/documents endpoint.
  *
@@ -24,6 +23,7 @@ const getDocument = async (req: NextApiRequest, res: NextApiResponse) => {
     if (!id) {
       return res.status(400).json({ message: 'DocumentId is required for the given documents' });
     }
+
     const document = await Document.findByPk(id as string);
 
     if (!document) {
@@ -31,17 +31,13 @@ const getDocument = async (req: NextApiRequest, res: NextApiResponse) => {
     }
 
     const filePath = document.filePath;
-    const storedFileName = path.basename(filePath);
-    const downloadName = stripTimestamp(storedFileName);
-    const contentType = mime.lookup(storedFileName) || 'application/octet-stream';
-    res.setHeader(
-      'Content-Disposition',
-      `attachment; filename="${encodeURIComponent(downloadName)}"`
-    );
+    const fileName = path.basename(filePath);
 
-    res.setHeader('Content-Type', contentType);
+    res.setHeader('Content-Disposition', `attachment; filename=${fileName}`);
+    res.setHeader('Content-Type', 'application/octet-stream');
 
-    fs.createReadStream(filePath).pipe(res);
+    const fileStream = fs.createReadStream(filePath);
+    fileStream.pipe(res);
   } catch (error) {
     console.error('Error fetching document:', error);
     res.status(500).json({ message: 'Error fetching document', error });

@@ -22,7 +22,8 @@ interface AddTestProps {
   setNewRecord: (data: {
     name: string;
     baremType: number;
-    barem: number;
+    barem_B: number;
+    barem_F: number;
   }) => void;
 }
 
@@ -65,8 +66,8 @@ export default function AddTest({
    * @returns {boolean} Whether the form is valid.
    */
   const isFormValid = (): boolean => {
-    const { name, baremType, barem } = newRecord;
-    return !!(name && baremType && barem);
+    const { name, baremType, barem_B, barem_F } = newRecord;
+    return !!(name && baremType && barem_B && barem_F);
   };
 
   /**
@@ -92,16 +93,25 @@ export default function AddTest({
    * If it is a string, it is a direct value (e.g., from TimePicker). Otherwise, it is an event target value (e.g., from Input).
    * @param {string | React.ChangeEvent<HTMLInputElement>} value - The new barem value.
    */
-  const handleBaremChange = (value: string | React.ChangeEvent<HTMLInputElement>) => {
+  const handleBaremChange_B = (value: string | React.ChangeEvent<HTMLInputElement>) => {
     if (typeof value === 'string') {
       // Direct string value (e.g., from TimePicker)
-      setNewRecord((prev) => ({ ...prev, barem: value }));
+      setNewRecord((prev) => ({ ...prev, barem_B: value }));
     } else {
       // Event target value (e.g., from Input)
-      setNewRecord((prev) => ({ ...prev, barem: value.target.value }));
+      setNewRecord((prev) => ({ ...prev, barem_B: value.target.value }));
     }
   };
 
+  const handleBaremChange_F = (value: string | React.ChangeEvent<HTMLInputElement>) => {
+    if (typeof value === 'string') {
+      // Direct string value (e.g., from TimePicker)
+      setNewRecord((prev) => ({ ...prev, barem_F: value }));
+    } else {
+      // Event target value (e.g., from Input)
+      setNewRecord((prev) => ({ ...prev, barem_F: value.target.value }));
+    }
+  };
   /**
    * Renders the correct input based on the selected barem type.
    *
@@ -113,50 +123,84 @@ export default function AddTest({
       case 1:
         return (
           <>
-            <Label className="mb-5" htmlFor="meters">{translations.enterBaremForMetersMeasurement}</Label>
+            <Label className="mb-5" htmlFor="meters">{translations.enterBaremForMetersMeasurement} : {translations.boys} </Label>
             <Input
               id="meters"
               type="number"
               placeholder={translations.enterNumberOfMetresPlaceholder}
-              value={newRecord.barem || ''}
-              onChange={handleBaremChange}
+              value={newRecord.barem_B || ''}
+              onChange={handleBaremChange_B}
+            />
+            <Label className="mb-5" htmlFor="meters">{translations.enterBaremForMetersMeasurement} : {translations.girls} </Label>
+            <Input
+              id="meters"
+              type="number"
+              placeholder={translations.enterNumberOfMetresPlaceholder}
+              value={newRecord.barem_F || ''}
+              onChange={handleBaremChange_F}
             />
           </>
         );
       case 2:
         return (
           <>
-            <Label className="mb-5" htmlFor="centimeters">{translations.enterBaremForCentimetersMeasurement}</Label>
+            <Label className="mb-5" htmlFor="centimeters">{translations.enterBaremForCentimetersMeasurement} : {translations.boys}</Label>
             <Input
               id="centimeters"
               type="number"
               placeholder={translations.eneterNumberOfCentimetersPlaceholder}
-              value={newRecord.barem || ''}
-              onChange={handleBaremChange}
+              value={newRecord.barem_B || ''}
+              onChange={handleBaremChange_B}
+            />
+            <Label className="mb-5" htmlFor="centimeters">{translations.enterBaremForCentimetersMeasurement} : {translations.girls}</Label>
+            <Input
+              id="centimeters"
+              type="number"
+              placeholder={translations.eneterNumberOfCentimetersPlaceholder}
+              value={newRecord.barem_F || ''}
+              onChange={handleBaremChange_F}
             />
           </>
         );
       case 3:
         return (
-          <TimePicker
-            label={translations.enterBaremForTimeMeasurement}
-            id="startTime"
-            value={newRecord.barem} // Ensure TimePicker takes this as input
-            onChange={(timeValue: string) =>
-              handleBaremChange(timeValue) // Pass timeValue directly
-            }
-          />
+          <>
+            <TimePicker
+              label={`${translations.enterBaremForTimeMeasurement} : ${translations.boys}`}
+              id="startTime"
+              value={newRecord.barem_B} // Ensure TimePicker takes this as input
+              onChange={(timeValue: string) =>
+                handleBaremChange_B(timeValue) // Pass timeValue directly
+              }
+            />
+            <TimePicker
+              label={`${translations.enterBaremForTimeMeasurement} : ${translations.girls}`}
+              id="startTime"
+              value={newRecord.barem_F} // Ensure TimePicker takes this as input
+              onChange={(timeValue: string) =>
+                handleBaremChange_F(timeValue) // Pass timeValue directly
+              }
+            />
+          </>
         );
       case 4:
         return (
           <>
-            <Label className="mb-5" htmlFor="number">{translations.enterBaremForNumberMeasurement}</Label>
+            <Label className="mb-5" htmlFor="number">{translations.enterBaremForNumberMeasurement} : {translations.boys}</Label>
             <Input
               id="number"
               type="number"
               placeholder={translations.enterNumberPlaceholder}
-              value={newRecord.barem || ''}
-              onChange={handleBaremChange}
+              value={newRecord.barem_B || ''}
+              onChange={handleBaremChange_B}
+            />
+            <Label className="mb-5" htmlFor="number">{translations.enterBaremForNumberMeasurement} : {translations.girls}</Label>
+            <Input
+              id="number"
+              type="number"
+              placeholder={translations.enterNumberPlaceholder}
+              value={newRecord.barem_F || ''}
+              onChange={handleBaremChange_F}
             />
           </>
         );

@@ -43,7 +43,11 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
       },
-      barem: {
+      barem_B: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      barem_F: {
         type: Sequelize.STRING,
         allowNull: false,
       },

@@ -46,40 +46,48 @@ const getPerformancesWithDetails = async (performances: any) => {
         where: { intervalId: intervalIds },
         attributes: ['id', 'studentId', 'studentGeneratedId', 'value', 'intervalId'],
       });
+
       // 3. Compute performanceScore and group by student
-      //    We'll store best record in a dictionary keyed by studentGeneratedId.
-      const bestRecordsByStudent = {};
+      // We'll store best record in a dictionary keyed by studentGeneratedId.
+      const bestRecordsByStudent: { [key: string]: any } = {};
 
       for (const record of records) {
+        // Determine if student is boy or girl
+        const currentStudentId = record.studentGeneratedId;
+        const isBoy = currentStudentId.startsWith('B');
+        const isGirl = currentStudentId.startsWith('F');
+
+        // Pick barem based on sex
+        let barem = performance.barem;
+        if (isBoy && performance.barem_B) {
+          barem = performance.barem_B;
+        } else if (isGirl && performance.barem_F) {
+          barem = performance.barem_F;
+        }
+
         // Compute performanceScore
-        // For demonstration, let's assume numeric data => record.value / performance.barem
-        // You might need to adapt if it's time-based, etc.
         let performanceScore = null;
 
         // Simple numeric scenario:
         if (performance.baremType === 1 || performance.baremType === 2 || performance.baremType === 4) {
-          // Convert to number for safety
           const numericValue = Number(record.value);
-          const numericBarem = Number(performance.barem);
+          const numericBarem = Number(barem);
           if (!isNaN(numericValue) && !isNaN(numericBarem)) {
             performanceScore = (numericValue / numericBarem).toFixed(2);
           }
         }
         if (performance.baremType === 3) {
           const [rM, rS] = record.value.split(':').map(Number);
-          const [bM, bS] = performance.barem.split(':').map(Number);
-// TODO - fix this add milliseconds in calculation as this should be shown on performance table as well
+          const [bM, bS] = String(barem).split(':').map(Number);
+
           // Convert them to total seconds
           const totalResultSeconds = rM * 60 + rS;
           const totalBaremSeconds = bM * 60 + bS;
 
           // Calculate the difference
           const difference = totalResultSeconds / totalBaremSeconds;
-          performanceScore = record.value;
-          // Assign the performance score
           performanceScore = Number(difference.toFixed(2));
         }
-        const currentStudentId = record.studentGeneratedId;
 
         // Construct a partial object for the student's record:
         const recordObj = {
@@ -92,8 +100,10 @@ const getPerformancesWithDetails = async (performances: any) => {
         };
 
         // 4. Check if this is better than the best we have so far
-        if (!bestRecordsByStudent[currentStudentId] ||
-          isBetterRecord(bestRecordsByStudent[currentStudentId], recordObj)) {
+        if (
+          !bestRecordsByStudent[currentStudentId] ||
+          isBetterRecord(bestRecordsByStudent[currentStudentId], recordObj)
+        ) {
           bestRecordsByStudent[currentStudentId] = recordObj;
         }
       }
@@ -112,8 +122,8 @@ const getPerformancesWithDetails = async (performances: any) => {
       });
 
       // Sort boys and girls by performanceScore descending
-      boys.sort((a, b) => b.performanceScore - a.performanceScore);
-      girls.sort((a, b) => b.performanceScore - a.performanceScore);
+      boys.sort((a: any, b: any) => b.performanceScore - a.performanceScore);
+      girls.sort((a: any, b: any) => b.performanceScore - a.performanceScore);
 
       // Limit to top 5 records
       const topBoys = boys.slice(0, 5);
@@ -172,7 +182,7 @@ const getClasses = async (req: NextApiRequest, res: NextApiResponse) => {
         const [tests, students, documents] = await Promise.all([
           Test.findAll({
             where: { classId: classData.id }, // Use classId to fetch related tests
-            attributes: ['id', 'name', 'baremType', 'barem'], // Select relevant fields
+            attributes: ['id', 'name', 'baremType', 'barem_B', 'barem_F'], // Select relevant fields
           }),
           Student.findAll({
             where: { classId: classData.id }, // Use classId to fetch related students
@@ -189,7 +199,8 @@ const getClasses = async (req: NextApiRequest, res: NextApiResponse) => {
             testId: test.id,
             testName: test.name,
             baremType: test.baremType,
-            barem: test.barem
+            barem_B: test.barem_B,
+            barem_F: test.barem_F
 
           };
         });

@@ -119,7 +119,7 @@ export default function PerformanceAccordion({
                                         <TableRow key={int.id}>
                                           <TableCell>{index + 1}</TableCell>
                                           <TableCell>{int.studentGeneratedId}</TableCell>
-                                          <TableCell>{performance.barem}</TableCell>
+                                          <TableCell>{performance.barem_B}</TableCell>
                                           <TableCell>{int.score}</TableCell>
                                         </TableRow>
                                       ))}
@@ -146,7 +146,7 @@ export default function PerformanceAccordion({
                                         <TableRow key={int.id}>
                                           <TableCell>{index + 1}</TableCell>
                                           <TableCell>{int.studentGeneratedId}</TableCell>
-                                          <TableCell>{performance.barem}</TableCell>
+                                          <TableCell>{performance.barem_F}</TableCell>
                                           <TableCell>{int.score}</TableCell>
                                         </TableRow>
                                       ))}

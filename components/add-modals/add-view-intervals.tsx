@@ -175,7 +175,8 @@ export default function AddViewIntervals({
   const handleViewOrEditRecord = (id: number) => {
     handleViewEditRecords(id);
   };
-  const { baremType, barem = translations.none } = tests.find((test) => test.id === testId) || {};
+  const { baremType, barem_B, barem_F = translations.none } = tests.find((test) =>
+    test.id === testId) || {};
 
   /**
    * Handles updating a record from the database.
@@ -233,7 +234,7 @@ export default function AddViewIntervals({
    * @param {number} baremType - The barem type.
    * @returns {React.ReactNode} The rendered input component.
    */
-  const inputBasedOnBaremType = (baremType: number,) => {
+  const inputBasedOnBaremType = (baremType: number) => {
     switch (baremType) {
       case 1:
         return (
@@ -285,42 +286,19 @@ export default function AddViewIntervals({
         return (null);
     }
   };
-  /**
-   * Computes the average based on the barem type.
-   *
-   * Given a barem type, a result, and a barem, this function computes the average
-   * and returns it as a string with 2 decimal places.
-   * @param {number} baremType - The barem type.
-   * @param {string | number} result - The result value.
-   * @param {string | number} barem - The barem value.
-   * @returns {string | null} The computed average, or null if the barem type is unknown.
-   */
-  const averageBasedOnBaremType = (baremType: number, result: any, barem: any) => {
-    switch (baremType) {
-      case 1:
-        return (result / barem).toFixed(2);
-      case 2:
-        return (result / barem).toFixed(2);
-      case 3:
-        // Extract [minutes, seconds] from both values
-        const [rM, rS] = result.split(':').map(Number);
-        const [bM, bS] = barem.split(':').map(Number);
 
-        // Convert them to total seconds
-        const totalResultSeconds = rM * 60 + rS;
-        const totalBaremSeconds = bM * 60 + bS;
-
-        // Calculate the difference
-        const difference = totalResultSeconds / totalBaremSeconds;
-
-        // Return a float with 2 decimal places
-        return Number(difference.toFixed(2));
-      case 4:
-        return (result / barem).toFixed(2);
+  const baremValueBasedOnSex = (id: string) => {
+    const gendre = id.slice(0, 1);
+    switch (gendre) {
+      case "B":
+        return barem_B;
+      case "F":
+        return barem_F;
       default:
-        return null;
+        return translations.none;
     }
   };
+
   return (
     <GenericModal
       isOpen={isModalOpen}
@@ -372,10 +350,7 @@ export default function AddViewIntervals({
                                 <TableRow key={int.id}>
                                   <TableCell>{int.studentGeneratedId}</TableCell>
                                   <TableCell>{int.value}</TableCell>
-                                  <TableCell>{barem}</TableCell>
-                                  {/* <TableCell>
-                                {averageBasedOnBaremType(baremType, int.value, barem)}
-                                </TableCell> */}
+                                  <TableCell>{baremValueBasedOnSex(int.studentGeneratedId)}</TableCell>
                                   <TableCell>
                                     <Button
                                       variant="outline"

@@ -322,6 +322,7 @@ export default function SchoolDashboard() {
       await fetchSchools();
       showStatusModal(statusMessages.schoolCreated, fetchStatuses.success);
     } catch (error) {
+      console.error(error);
       showStatusModal(statusMessages.errorCreatingSchool, fetchStatuses.error);
     }
   };
@@ -346,6 +347,7 @@ export default function SchoolDashboard() {
       await fetchYears();
       showStatusModal(statusMessages.yearCreated, fetchStatuses.success);
     } catch (error) {
+      console.error(error);
       showStatusModal(statusMessages.errorCreatingYear, fetchStatuses.error);
     }
   };
@@ -370,6 +372,7 @@ export default function SchoolDashboard() {
       await fetchClasses();
       showStatusModal(statusMessages.classCreated, fetchStatuses.success);
     } catch (error) {
+      console.error(error);
       showStatusModal(statusMessages.errorCreatingClass, fetchStatuses.error);
     }
   };
@@ -394,6 +397,7 @@ export default function SchoolDashboard() {
       await fetchClasses();
       showStatusModal(statusMessages.studentCreated, fetchStatuses.success);
     } catch (error) {
+      console.error(error);
       showStatusModal(statusMessages.errorCreatingStudent, fetchStatuses.error);
     }
   };
@@ -418,6 +422,7 @@ export default function SchoolDashboard() {
       await fetchClasses();
       showStatusModal(statusMessages.testCreated, fetchStatuses.success);
     } catch (error) {
+      console.error(error);
       showStatusModal(statusMessages.errorCreatingTest, fetchStatuses.error);
     }
   };
@@ -443,6 +448,7 @@ export default function SchoolDashboard() {
       setNewRecord({});
       showStatusModal(statusMessages.intervalCreated, fetchStatuses.success);
     } catch (error) {
+      console.error(error);
       showStatusModal(statusMessages.errorCreatingInterval, fetchStatuses.error);
     }
   };
@@ -459,7 +465,6 @@ export default function SchoolDashboard() {
    * @returns {Promise<void>} A promise that resolves when the new record has been processed.
    */
   const handleSaveNewRecord = async () => {
-    console.log('newRecord', newRecord);
     try {
       // showStatusModal(statusMessages.creatingRecord, fetchStatuses.loading);
       await processCreateRecord(newRecord, selectedIntervalId || 0);
@@ -469,6 +474,7 @@ export default function SchoolDashboard() {
       await fetchClasses();
       showStatusModal(statusMessages.recordCreated, fetchStatuses.success);
     } catch (error) {
+      console.error(error);
       showStatusModal(statusMessages.errorCreatingRecord, fetchStatuses.error);
     }
   };
@@ -491,18 +497,16 @@ export default function SchoolDashboard() {
       if (newRecord.doc) {
         formData.append('file', newRecord.doc);
       }
-
       await processCreateDocument(formData, selectedClassId || 0);
       setIsDocumentModalOpen(false);
       setNewRecord({});
       await fetchClasses();
       showStatusModal(statusMessages.documentCreated, fetchStatuses.success);
     } catch (error) {
+      console.error(error);
       showStatusModal(statusMessages.errorCreatingDocument, fetchStatuses.error);
     }
   };
-
-
 
 
   const handleUpdateDocument = async (documentId: number, data: object) => {
@@ -513,7 +517,6 @@ export default function SchoolDashboard() {
     }
 
   };
-
 
   // =========================
   // Viewing / Editing Handlers
@@ -606,6 +609,7 @@ export default function SchoolDashboard() {
       await processRemoveSchool(schoolId);
       showStatusModal(statusMessages.schoolDeleted, fetchStatuses.success);
     } catch (error) {
+      console.error(error);
       showStatusModal(statusMessages.errorDeletingSchool, fetchStatuses.error);
     } finally {
       await fetchSchools();
@@ -678,6 +682,7 @@ export default function SchoolDashboard() {
       await processRemoveStudent(studentId);
       showStatusModal(statusMessages.studentDeleted, fetchStatuses.success);
     } catch (error) {
+      console.error(error);
       showStatusModal(statusMessages.errorDeletingStudent, fetchStatuses.error);
     } finally {
       await fetchClasses();
@@ -702,6 +707,7 @@ export default function SchoolDashboard() {
       await processRemoveTest(testId);
       showStatusModal(statusMessages.testDeleted, fetchStatuses.success);
     } catch (error) {
+      console.error(error);
       showStatusModal(statusMessages.errorDeletingTest, fetchStatuses.error);
     } finally {
       await fetchClasses();
@@ -726,6 +732,7 @@ export default function SchoolDashboard() {
       await processRemoveInterval(intervalId);
       showStatusModal(statusMessages.intervalDeleted, fetchStatuses.success);
     } catch (error) {
+      console.error(error);
       showStatusModal(statusMessages.errorDeletingInterval, fetchStatuses.error);
     } finally {
       if (selectedTestId) {
@@ -753,6 +760,7 @@ export default function SchoolDashboard() {
       await processRemoveRecord(recordId);
       showStatusModal(statusMessages.recordDeleted, fetchStatuses.success);
     } catch (error) {
+      console.error(error);
       showStatusModal(statusMessages.errorDeletingRecord, fetchStatuses.error);
     } finally {
       if (selectedIntervalId) {
@@ -780,6 +788,7 @@ export default function SchoolDashboard() {
       await processRemoveDocument(documentId);
       showStatusModal(statusMessages.documentDeleted, fetchStatuses.success);
     } catch (error) {
+      console.error(error);
       showStatusModal(statusMessages.errorDeletingDocument, fetchStatuses.error);
     } finally {
       await fetchClasses();
@@ -803,6 +812,7 @@ export default function SchoolDashboard() {
       await processGetDocument(documentId);
       showStatusModal(statusMessages.documentDownloaded, fetchStatuses.success);
     } catch (error) {
+      console.error(error);
       showStatusModal(statusMessages.errorDownloadingDocument, fetchStatuses.error);
     }
   };

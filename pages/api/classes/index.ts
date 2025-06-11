@@ -17,10 +17,15 @@ import Record from '@/models/record.model';
  * @param {object} newRecord - The new record to compare.
  * @returns {boolean} Whether the newRecord is better than the oldRecord.
  */
-function isBetterRecord(oldRecord: any, newRecord: any) {
+function isBetterRecord(oldRecord: any, newRecord: any, comparator:any) {
   if (!oldRecord) return true;
+  if(comparator==='time'){
+    return Number(newRecord.performanceScore) < Number(oldRecord.performanceScore);
+  }
   return Number(newRecord.performanceScore) > Number(oldRecord.performanceScore);
 }
+
+
 
 /**
  * Given a list of performances, returns a new list with added details.
@@ -67,25 +72,42 @@ const getPerformancesWithDetails = async (performances: any) => {
 
         // Compute performanceScore
         let performanceScore = null;
-
+        let comparator = '';
         // Simple numeric scenario:
         if (performance.baremType === 1 || performance.baremType === 2 || performance.baremType === 4) {
+          comparator = "";
           const numericValue = Number(record.value);
           const numericBarem = Number(barem);
           if (!isNaN(numericValue) && !isNaN(numericBarem)) {
             performanceScore = (numericValue / numericBarem).toFixed(2);
           }
         }
+
         if (performance.baremType === 3) {
-          const [rM, rS] = record.value.split(':').map(Number);
-          const [bM, bS] = String(barem).split(':').map(Number);
+          comparator = 'time';
+            // Support formats like '00:15,000' (minutes:seconds,milliseconds)
+            // Normalize both record.value and barem to 'mm:ss,SSS'
+            const parseTime = (timeStr: string) => {
+            // Replace comma with dot for milliseconds, then split
+            const [minSec, ms = '0'] = timeStr.replace(',', '.').split(/[.,]/);
+            const [m, s] = minSec.split(':').map(Number);
+            const milliseconds = Number(ms.padEnd(3, '0')); // pad to 3 digits
+            return (m * 60) + s + milliseconds / 1000;
+            };
+
+            const totalResultSeconds = parseTime(record.value);
+            const totalBaremSeconds = parseTime(String(barem));
+
+            // Calculate the difference
+            const difference = totalResultSeconds / totalBaremSeconds;
+            performanceScore = Number(difference.toFixed(2));
 
           // Convert them to total seconds
-          const totalResultSeconds = rM * 60 + rS;
-          const totalBaremSeconds = bM * 60 + bS;
+          // const totalResultSeconds = rM * 60 + rS;
+          // const totalBaremSeconds = bM * 60 + bS;
 
           // Calculate the difference
-          const difference = totalResultSeconds / totalBaremSeconds;
+          // const difference = totalResultSeconds / totalBaremSeconds;
           performanceScore = Number(difference.toFixed(2));
         }
 
@@ -102,7 +124,7 @@ const getPerformancesWithDetails = async (performances: any) => {
         // 4. Check if this is better than the best we have so far
         if (
           !bestRecordsByStudent[currentStudentId] ||
-          isBetterRecord(bestRecordsByStudent[currentStudentId], recordObj)
+          isBetterRecord(bestRecordsByStudent[currentStudentId], recordObj, comparator)
         ) {
           bestRecordsByStudent[currentStudentId] = recordObj;
         }

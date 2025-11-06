@@ -1,3 +1,12 @@
+
+
+<div align="center">
+  <img src="./public/images/mac.gif" alt="App" width="400"/>
+</div>
+
+
+
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
@@ -60,7 +69,6 @@ npx sequelize-cli db:migrate:undo
 ```
 
 ## Creating db and user in db
-
 
 #### Step 1: Create the database
 
